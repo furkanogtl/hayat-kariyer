@@ -25,6 +25,13 @@ abstract class PiyasaDurumu with _$PiyasaDurumu {
 
     /// Son turda gerçekleşen aylık enflasyon (0.03 = %3).
     @Default(0.0) double sonAylikEnflasyon,
+
+    /// Kaç kez paradan sıfır atıldığı. Motor HAM TL ile çalışmaya devam eder;
+    /// bu yalnızca gösterim ölçeğidir (bkz. [paraOlcegi]).
+    @Default(0) int paraReformuSayisi,
+
+    /// Sıfır atma bu turda mı oldu. UI/olay kartı bunu duyurmak için okur.
+    @Default(false) bool paraReformuYapildi,
   }) = _PiyasaDurumu;
 
   factory PiyasaDurumu.fromJson(Map<String, dynamic> json) =>
@@ -43,4 +50,31 @@ abstract class PiyasaDurumu with _$PiyasaDurumu {
 
   /// Rejim değişimi için asgari süre doldu mu.
   bool get rejimDegisebilir => rejimSuresi >= rejimEnAzSure;
+
+  /// Gösterim böleni. Her para reformunda [paraReformuSifirSayisi] sıfır
+  /// atılır, yani bölen o kadar büyür.
+  double get paraOlcegi =>
+      math.pow(10, paraReformuSifirSayisi * paraReformuSayisi).toDouble();
+
+  /// Oyuncunun ekranda gördüğü fiyat seviyesi. Reform sonrası 1'e yakın
+  /// bir yerden devam eder.
+  double get gosterimEndeksi => enflasyonEndeksi / paraOlcegi;
+
+  /// Ham TL tutarını ekranda gösterilecek tutara çevirir.
+  /// Motor içindeki hesaplar HAM tutarla yapılır; bu yalnızca sunum içindir.
+  double gosterimTutari(int hamTutar) => hamTutar / paraOlcegi;
+
+  /// Sıfır atma zamanı geldi mi.
+  bool get paraReformuGerekli => gosterimEndeksi > paraReformuEsigi;
 }
+
+/// Sıfır atma eşiği: gösterim endeksi bunu aşınca para reformu yapılır.
+const double paraReformuEsigi = 1000;
+
+/// Her reformda atılan sıfır sayısı.
+///
+/// Tarihsel olarak 2005'te ALTI sıfır atıldı. Oyunda üç sıfır kullanılıyor:
+/// 40 yıllık bir oyunda endeks medyanı ~78.000x, yani altı sıfırlık reform
+/// ya hiç tetiklenmez ya da aşırı düzeltir. Üç sıfırla tipik bir oyunda
+/// bir kez reform olur ve rakamlar okunabilir kalır.
+const int paraReformuSifirSayisi = 3;

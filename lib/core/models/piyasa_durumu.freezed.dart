@@ -20,7 +20,10 @@ mixin _$PiyasaDurumu {
 /// Taban TL cinsinden yazılmış her tutar (maaş, kira, gider) bununla
 /// çarpılarak o turun nominal değerine çevrilir.
  double get enflasyonEndeksi;/// Son turda gerçekleşen aylık enflasyon (0.03 = %3).
- double get sonAylikEnflasyon;
+ double get sonAylikEnflasyon;/// Kaç kez paradan sıfır atıldığı. Motor HAM TL ile çalışmaya devam eder;
+/// bu yalnızca gösterim ölçeğidir (bkz. [paraOlcegi]).
+ int get paraReformuSayisi;/// Sıfır atma bu turda mı oldu. UI/olay kartı bunu duyurmak için okur.
+ bool get paraReformuYapildi;
 /// Create a copy of PiyasaDurumu
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -33,16 +36,16 @@ $PiyasaDurumuCopyWith<PiyasaDurumu> get copyWith => _$PiyasaDurumuCopyWithImpl<P
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PiyasaDurumu&&(identical(other.rejim, rejim) || other.rejim == rejim)&&(identical(other.rejimSuresi, rejimSuresi) || other.rejimSuresi == rejimSuresi)&&(identical(other.enflasyonEndeksi, enflasyonEndeksi) || other.enflasyonEndeksi == enflasyonEndeksi)&&(identical(other.sonAylikEnflasyon, sonAylikEnflasyon) || other.sonAylikEnflasyon == sonAylikEnflasyon));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PiyasaDurumu&&(identical(other.rejim, rejim) || other.rejim == rejim)&&(identical(other.rejimSuresi, rejimSuresi) || other.rejimSuresi == rejimSuresi)&&(identical(other.enflasyonEndeksi, enflasyonEndeksi) || other.enflasyonEndeksi == enflasyonEndeksi)&&(identical(other.sonAylikEnflasyon, sonAylikEnflasyon) || other.sonAylikEnflasyon == sonAylikEnflasyon)&&(identical(other.paraReformuSayisi, paraReformuSayisi) || other.paraReformuSayisi == paraReformuSayisi)&&(identical(other.paraReformuYapildi, paraReformuYapildi) || other.paraReformuYapildi == paraReformuYapildi));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,rejim,rejimSuresi,enflasyonEndeksi,sonAylikEnflasyon);
+int get hashCode => Object.hash(runtimeType,rejim,rejimSuresi,enflasyonEndeksi,sonAylikEnflasyon,paraReformuSayisi,paraReformuYapildi);
 
 @override
 String toString() {
-  return 'PiyasaDurumu(rejim: $rejim, rejimSuresi: $rejimSuresi, enflasyonEndeksi: $enflasyonEndeksi, sonAylikEnflasyon: $sonAylikEnflasyon)';
+  return 'PiyasaDurumu(rejim: $rejim, rejimSuresi: $rejimSuresi, enflasyonEndeksi: $enflasyonEndeksi, sonAylikEnflasyon: $sonAylikEnflasyon, paraReformuSayisi: $paraReformuSayisi, paraReformuYapildi: $paraReformuYapildi)';
 }
 
 
@@ -53,7 +56,7 @@ abstract mixin class $PiyasaDurumuCopyWith<$Res>  {
   factory $PiyasaDurumuCopyWith(PiyasaDurumu value, $Res Function(PiyasaDurumu) _then) = _$PiyasaDurumuCopyWithImpl;
 @useResult
 $Res call({
- Rejim rejim, int rejimSuresi, double enflasyonEndeksi, double sonAylikEnflasyon
+ Rejim rejim, int rejimSuresi, double enflasyonEndeksi, double sonAylikEnflasyon, int paraReformuSayisi, bool paraReformuYapildi
 });
 
 
@@ -70,13 +73,15 @@ class _$PiyasaDurumuCopyWithImpl<$Res>
 
 /// Create a copy of PiyasaDurumu
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? rejim = null,Object? rejimSuresi = null,Object? enflasyonEndeksi = null,Object? sonAylikEnflasyon = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? rejim = null,Object? rejimSuresi = null,Object? enflasyonEndeksi = null,Object? sonAylikEnflasyon = null,Object? paraReformuSayisi = null,Object? paraReformuYapildi = null,}) {
   return _then(_self.copyWith(
 rejim: null == rejim ? _self.rejim : rejim // ignore: cast_nullable_to_non_nullable
 as Rejim,rejimSuresi: null == rejimSuresi ? _self.rejimSuresi : rejimSuresi // ignore: cast_nullable_to_non_nullable
 as int,enflasyonEndeksi: null == enflasyonEndeksi ? _self.enflasyonEndeksi : enflasyonEndeksi // ignore: cast_nullable_to_non_nullable
 as double,sonAylikEnflasyon: null == sonAylikEnflasyon ? _self.sonAylikEnflasyon : sonAylikEnflasyon // ignore: cast_nullable_to_non_nullable
-as double,
+as double,paraReformuSayisi: null == paraReformuSayisi ? _self.paraReformuSayisi : paraReformuSayisi // ignore: cast_nullable_to_non_nullable
+as int,paraReformuYapildi: null == paraReformuYapildi ? _self.paraReformuYapildi : paraReformuYapildi // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 
@@ -161,10 +166,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Rejim rejim,  int rejimSuresi,  double enflasyonEndeksi,  double sonAylikEnflasyon)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Rejim rejim,  int rejimSuresi,  double enflasyonEndeksi,  double sonAylikEnflasyon,  int paraReformuSayisi,  bool paraReformuYapildi)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _PiyasaDurumu() when $default != null:
-return $default(_that.rejim,_that.rejimSuresi,_that.enflasyonEndeksi,_that.sonAylikEnflasyon);case _:
+return $default(_that.rejim,_that.rejimSuresi,_that.enflasyonEndeksi,_that.sonAylikEnflasyon,_that.paraReformuSayisi,_that.paraReformuYapildi);case _:
   return orElse();
 
 }
@@ -182,10 +187,10 @@ return $default(_that.rejim,_that.rejimSuresi,_that.enflasyonEndeksi,_that.sonAy
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Rejim rejim,  int rejimSuresi,  double enflasyonEndeksi,  double sonAylikEnflasyon)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Rejim rejim,  int rejimSuresi,  double enflasyonEndeksi,  double sonAylikEnflasyon,  int paraReformuSayisi,  bool paraReformuYapildi)  $default,) {final _that = this;
 switch (_that) {
 case _PiyasaDurumu():
-return $default(_that.rejim,_that.rejimSuresi,_that.enflasyonEndeksi,_that.sonAylikEnflasyon);case _:
+return $default(_that.rejim,_that.rejimSuresi,_that.enflasyonEndeksi,_that.sonAylikEnflasyon,_that.paraReformuSayisi,_that.paraReformuYapildi);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -202,10 +207,10 @@ return $default(_that.rejim,_that.rejimSuresi,_that.enflasyonEndeksi,_that.sonAy
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Rejim rejim,  int rejimSuresi,  double enflasyonEndeksi,  double sonAylikEnflasyon)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Rejim rejim,  int rejimSuresi,  double enflasyonEndeksi,  double sonAylikEnflasyon,  int paraReformuSayisi,  bool paraReformuYapildi)?  $default,) {final _that = this;
 switch (_that) {
 case _PiyasaDurumu() when $default != null:
-return $default(_that.rejim,_that.rejimSuresi,_that.enflasyonEndeksi,_that.sonAylikEnflasyon);case _:
+return $default(_that.rejim,_that.rejimSuresi,_that.enflasyonEndeksi,_that.sonAylikEnflasyon,_that.paraReformuSayisi,_that.paraReformuYapildi);case _:
   return null;
 
 }
@@ -217,7 +222,7 @@ return $default(_that.rejim,_that.rejimSuresi,_that.enflasyonEndeksi,_that.sonAy
 @JsonSerializable()
 
 class _PiyasaDurumu extends PiyasaDurumu {
-  const _PiyasaDurumu({this.rejim = Rejim.buyume, this.rejimSuresi = 0, this.enflasyonEndeksi = 1.0, this.sonAylikEnflasyon = 0.0}): super._();
+  const _PiyasaDurumu({this.rejim = Rejim.buyume, this.rejimSuresi = 0, this.enflasyonEndeksi = 1.0, this.sonAylikEnflasyon = 0.0, this.paraReformuSayisi = 0, this.paraReformuYapildi = false}): super._();
   factory _PiyasaDurumu.fromJson(Map<String, dynamic> json) => _$PiyasaDurumuFromJson(json);
 
 @override@JsonKey() final  Rejim rejim;
@@ -229,6 +234,11 @@ class _PiyasaDurumu extends PiyasaDurumu {
 @override@JsonKey() final  double enflasyonEndeksi;
 /// Son turda gerçekleşen aylık enflasyon (0.03 = %3).
 @override@JsonKey() final  double sonAylikEnflasyon;
+/// Kaç kez paradan sıfır atıldığı. Motor HAM TL ile çalışmaya devam eder;
+/// bu yalnızca gösterim ölçeğidir (bkz. [paraOlcegi]).
+@override@JsonKey() final  int paraReformuSayisi;
+/// Sıfır atma bu turda mı oldu. UI/olay kartı bunu duyurmak için okur.
+@override@JsonKey() final  bool paraReformuYapildi;
 
 /// Create a copy of PiyasaDurumu
 /// with the given fields replaced by the non-null parameter values.
@@ -243,16 +253,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PiyasaDurumu&&(identical(other.rejim, rejim) || other.rejim == rejim)&&(identical(other.rejimSuresi, rejimSuresi) || other.rejimSuresi == rejimSuresi)&&(identical(other.enflasyonEndeksi, enflasyonEndeksi) || other.enflasyonEndeksi == enflasyonEndeksi)&&(identical(other.sonAylikEnflasyon, sonAylikEnflasyon) || other.sonAylikEnflasyon == sonAylikEnflasyon));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PiyasaDurumu&&(identical(other.rejim, rejim) || other.rejim == rejim)&&(identical(other.rejimSuresi, rejimSuresi) || other.rejimSuresi == rejimSuresi)&&(identical(other.enflasyonEndeksi, enflasyonEndeksi) || other.enflasyonEndeksi == enflasyonEndeksi)&&(identical(other.sonAylikEnflasyon, sonAylikEnflasyon) || other.sonAylikEnflasyon == sonAylikEnflasyon)&&(identical(other.paraReformuSayisi, paraReformuSayisi) || other.paraReformuSayisi == paraReformuSayisi)&&(identical(other.paraReformuYapildi, paraReformuYapildi) || other.paraReformuYapildi == paraReformuYapildi));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,rejim,rejimSuresi,enflasyonEndeksi,sonAylikEnflasyon);
+int get hashCode => Object.hash(runtimeType,rejim,rejimSuresi,enflasyonEndeksi,sonAylikEnflasyon,paraReformuSayisi,paraReformuYapildi);
 
 @override
 String toString() {
-  return 'PiyasaDurumu(rejim: $rejim, rejimSuresi: $rejimSuresi, enflasyonEndeksi: $enflasyonEndeksi, sonAylikEnflasyon: $sonAylikEnflasyon)';
+  return 'PiyasaDurumu(rejim: $rejim, rejimSuresi: $rejimSuresi, enflasyonEndeksi: $enflasyonEndeksi, sonAylikEnflasyon: $sonAylikEnflasyon, paraReformuSayisi: $paraReformuSayisi, paraReformuYapildi: $paraReformuYapildi)';
 }
 
 
@@ -263,7 +273,7 @@ abstract mixin class _$PiyasaDurumuCopyWith<$Res> implements $PiyasaDurumuCopyWi
   factory _$PiyasaDurumuCopyWith(_PiyasaDurumu value, $Res Function(_PiyasaDurumu) _then) = __$PiyasaDurumuCopyWithImpl;
 @override @useResult
 $Res call({
- Rejim rejim, int rejimSuresi, double enflasyonEndeksi, double sonAylikEnflasyon
+ Rejim rejim, int rejimSuresi, double enflasyonEndeksi, double sonAylikEnflasyon, int paraReformuSayisi, bool paraReformuYapildi
 });
 
 
@@ -280,13 +290,15 @@ class __$PiyasaDurumuCopyWithImpl<$Res>
 
 /// Create a copy of PiyasaDurumu
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? rejim = null,Object? rejimSuresi = null,Object? enflasyonEndeksi = null,Object? sonAylikEnflasyon = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? rejim = null,Object? rejimSuresi = null,Object? enflasyonEndeksi = null,Object? sonAylikEnflasyon = null,Object? paraReformuSayisi = null,Object? paraReformuYapildi = null,}) {
   return _then(_PiyasaDurumu(
 rejim: null == rejim ? _self.rejim : rejim // ignore: cast_nullable_to_non_nullable
 as Rejim,rejimSuresi: null == rejimSuresi ? _self.rejimSuresi : rejimSuresi // ignore: cast_nullable_to_non_nullable
 as int,enflasyonEndeksi: null == enflasyonEndeksi ? _self.enflasyonEndeksi : enflasyonEndeksi // ignore: cast_nullable_to_non_nullable
 as double,sonAylikEnflasyon: null == sonAylikEnflasyon ? _self.sonAylikEnflasyon : sonAylikEnflasyon // ignore: cast_nullable_to_non_nullable
-as double,
+as double,paraReformuSayisi: null == paraReformuSayisi ? _self.paraReformuSayisi : paraReformuSayisi // ignore: cast_nullable_to_non_nullable
+as int,paraReformuYapildi: null == paraReformuYapildi ? _self.paraReformuYapildi : paraReformuYapildi // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 

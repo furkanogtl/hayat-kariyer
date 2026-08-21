@@ -216,6 +216,74 @@ void main() {
     });
   });
 
+  group('Para reformu (sıfır atma)', () {
+    test('eşiğe gelmeden reform olmaz', () {
+      for (final d in simulasyon(5, 100)) {
+        expect(d.paraReformuSayisi, 0);
+        expect(d.paraReformuYapildi, isFalse);
+      }
+    });
+
+    test('uzun oyunda reform tetiklenir ve gösterim endeksi düşer', () {
+      final gecmis = simulasyon(5, 480);
+      final reformTuru = gecmis.indexWhere((d) => d.paraReformuYapildi);
+      expect(reformTuru, greaterThan(0), reason: '40 yılda reform beklenirdi');
+
+      final oncesi = gecmis[reformTuru - 1];
+      final sonrasi = gecmis[reformTuru];
+      expect(oncesi.gosterimEndeksi, greaterThan(500));
+      expect(sonrasi.gosterimEndeksi, lessThan(2));
+      // Ham endeks bozulmaz; reform yalnızca gösterim ölçeğidir.
+      expect(
+        sonrasi.enflasyonEndeksi,
+        greaterThan(oncesi.enflasyonEndeksi),
+      );
+    });
+
+    test('reform bayrağı yalnızca o tur açık kalır', () {
+      final gecmis = simulasyon(5, 480);
+      final reformTuru = gecmis.indexWhere((d) => d.paraReformuYapildi);
+      expect(gecmis[reformTuru + 1].paraReformuYapildi, isFalse);
+      expect(gecmis[reformTuru + 1].paraReformuSayisi, 1);
+    });
+
+    test('gösterim endeksi hiçbir turda eşiği aşılı kalmaz', () {
+      for (var tohum = 0; tohum < 25; tohum++) {
+        for (final d in simulasyon(tohum, 480)) {
+          expect(
+            d.gosterimEndeksi,
+            lessThanOrEqualTo(paraReformuEsigi * 1.1),
+            reason: 'tohum $tohum: rakamlar okunamaz büyüklükte kaldı',
+          );
+        }
+      }
+    });
+
+    test('reform sonrası maaş okunabilir büyüklükte kalır', () {
+      // 38.000 TL taban maaşlı memur, 40 yıl sonra.
+      for (var tohum = 0; tohum < 25; tohum++) {
+        final son = simulasyon(tohum, 480).last;
+        final gosterilen = son.gosterimTutari(son.endeksle(38000));
+        expect(
+          gosterilen,
+          lessThan(1e9),
+          reason: 'tohum $tohum: ekranda ${gosterilen.toStringAsFixed(0)} TL',
+        );
+      }
+    });
+
+    test('reform gösterim tutarını böler', () {
+      const oncesi = PiyasaDurumu(enflasyonEndeksi: 1000);
+      const sonrasi = PiyasaDurumu(
+        enflasyonEndeksi: 1000,
+        paraReformuSayisi: 1,
+      );
+      expect(oncesi.gosterimTutari(5000000), 5000000);
+      expect(sonrasi.gosterimTutari(5000000), 5000);
+      expect(sonrasi.paraOlcegi, 1000);
+    });
+  });
+
   group('Endeksleme', () {
     test('taban tutar nominale çevrilir', () {
       const durum = PiyasaDurumu(enflasyonEndeksi: 2.5);

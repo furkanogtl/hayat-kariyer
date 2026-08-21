@@ -12,6 +12,8 @@ _PiyasaDurumu _$PiyasaDurumuFromJson(Map<String, dynamic> json) =>
       rejimSuresi: (json['rejimSuresi'] as num?)?.toInt() ?? 0,
       enflasyonEndeksi: (json['enflasyonEndeksi'] as num?)?.toDouble() ?? 1.0,
       sonAylikEnflasyon: (json['sonAylikEnflasyon'] as num?)?.toDouble() ?? 0.0,
+      paraReformuSayisi: (json['paraReformuSayisi'] as num?)?.toInt() ?? 0,
+      paraReformuYapildi: json['paraReformuYapildi'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$PiyasaDurumuToJson(_PiyasaDurumu instance) =>
@@ -20,6 +22,8 @@ Map<String, dynamic> _$PiyasaDurumuToJson(_PiyasaDurumu instance) =>
       'rejimSuresi': instance.rejimSuresi,
       'enflasyonEndeksi': instance.enflasyonEndeksi,
       'sonAylikEnflasyon': instance.sonAylikEnflasyon,
+      'paraReformuSayisi': instance.paraReformuSayisi,
+      'paraReformuYapildi': instance.paraReformuYapildi,
     };
 
 const _$RejimEnumMap = {

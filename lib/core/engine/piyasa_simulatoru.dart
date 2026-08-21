@@ -33,12 +33,23 @@ class PiyasaSimulatoru {
     );
     if (aylik < enAzAylikEnflasyon) aylik = enAzAylikEnflasyon;
 
-    return onceki.copyWith(
+    final sonraki = onceki.copyWith(
       rejim: rejim,
       rejimSuresi: rejimDegisti ? 1 : onceki.rejimSuresi + 1,
       enflasyonEndeksi: onceki.enflasyonEndeksi * (1 + aylik),
       sonAylikEnflasyon: aylik,
+      paraReformuYapildi: false,
     );
+
+    // Sıfır atma: motorun hesapları değişmez, yalnızca gösterim ölçeği kayar.
+    // Fiyatlar ve nakit ham TL olarak tutulmaya devam eder.
+    if (sonraki.paraReformuGerekli) {
+      return sonraki.copyWith(
+        paraReformuSayisi: sonraki.paraReformuSayisi + 1,
+        paraReformuYapildi: true,
+      );
+    }
+    return sonraki;
   }
 
   Rejim _sonrakiRejim(PiyasaDurumu onceki, RastgeleAkis akis) {
