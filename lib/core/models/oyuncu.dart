@@ -2,6 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'egitim_seviyesi.dart';
 import 'kariyer_durumu.dart';
+import 'sehir.dart';
 import 'sektor.dart';
 
 part 'oyuncu.freezed.dart';
@@ -23,8 +24,8 @@ abstract class Oyuncu with _$Oyuncu {
   const factory Oyuncu({
     required String ad,
 
-    /// Oyuncunun yaşadığı şehir (İstanbul, Konya, Trabzon, Gaziantep, İzmir).
-    required String sehir,
+    /// Oyuncunun yaşadığı şehir. Yaşam gideri çarpanı buradan gelir.
+    required Sehir sehir,
 
     /// Oynanan tur sayısı. 1 tur = 1 ay. İlk tur 0'dır.
     @Default(0) int tur,
@@ -71,7 +72,7 @@ abstract class Oyuncu with _$Oyuncu {
   /// Yeni oyun başlangıcı.
   factory Oyuncu.yeni({
     required String ad,
-    required String sehir,
+    required Sehir sehir,
     Cinsiyet cinsiyet = Cinsiyet.erkek,
     EgitimSeviyesi egitim = EgitimSeviyesi.lise,
   }) =>

@@ -129,14 +129,20 @@ class KariyerMotoru {
     required PiyasaDurumu piyasa,
     required ZamanDagilimi zaman,
     required RastgeleAkis akis,
+
+    /// Maaşların bağlı olduğu fiyat endeksi. Enflasyon endeksinden AYRI
+    /// verilir: maaş yılda bir zamlanır, giderler her ay artar. Boş
+    /// bırakılırsa maaş anlık enflasyona endekslenir (test kolaylığı).
+    double? maasEndeksi,
   }) {
     final z = zaman.duzelt();
+    final endeks = maasEndeksi ?? piyasa.enflasyonEndeksi;
     return switch (oyuncu.kariyer) {
-      Calisan durum => _calisan(oyuncu, durum, katalog, piyasa, z, akis),
+      Calisan durum => _calisan(oyuncu, durum, katalog, piyasa, z, akis, endeks),
       Ogrenci durum => _ogrenci(oyuncu, durum, z, akis),
       Issiz() => _issiz(oyuncu, z, akis),
       Askerlik durum => _askerlik(oyuncu, durum),
-      Emekli durum => _emekli(oyuncu, durum, piyasa, z, akis),
+      Emekli durum => _emekli(oyuncu, durum, z, akis, endeks),
     };
   }
 
@@ -149,6 +155,7 @@ class KariyerMotoru {
     PiyasaDurumu piyasa,
     ZamanDagilimi z,
     RastgeleAkis akis,
+    double maasEndeksi,
   ) {
     final meslek = katalog.bul(durum.meslekId);
     if (meslek == null) {
@@ -163,7 +170,8 @@ class KariyerMotoru {
 
     final kademe = meslek.kademe(durum.kademeIndeksi);
     final performans = _performans(oyuncu, z);
-    final netGelir = _maas(meslek, kademe, durum, piyasa, performans, akis);
+    final netGelir =
+        _maas(meslek, kademe, durum, piyasa, performans, akis, maasEndeksi);
 
     var guncel = _ortakEtkiler(oyuncu, z, akis, meslek: meslek);
 
@@ -259,13 +267,14 @@ class KariyerMotoru {
   KariyerTurSonucu _emekli(
     Oyuncu oyuncu,
     Emekli durum,
-    PiyasaDurumu piyasa,
     ZamanDagilimi z,
     RastgeleAkis akis,
+    double maasEndeksi,
   ) =>
       KariyerTurSonucu(
         oyuncu: _ortakEtkiler(oyuncu, z, akis),
-        netGelir: piyasa.endeksle(durum.tabanAylik),
+        // Emekli aylığı da maaş gibi yılda bir zamlanır.
+        netGelir: (durum.tabanAylik * maasEndeksi).round(),
         performans: 1,
       );
 
@@ -294,9 +303,10 @@ class KariyerMotoru {
     PiyasaDurumu piyasa,
     double performans,
     RastgeleAkis akis,
+    double maasEndeksi,
   ) {
     final kurEndeksi = _kurEndeksi(piyasa);
-    final endeks = (1 - meslek.dovizOrani) * piyasa.enflasyonEndeksi +
+    final endeks = (1 - meslek.dovizOrani) * maasEndeksi +
         meslek.dovizOrani * kurEndeksi;
 
     final sokCarpani = _gelirSoku(meslek.gelirVaryansi, akis);

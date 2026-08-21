@@ -15,8 +15,8 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Oyuncu {
 
- String get ad;/// Oyuncunun yaşadığı şehir (İstanbul, Konya, Trabzon, Gaziantep, İzmir).
- String get sehir;/// Oynanan tur sayısı. 1 tur = 1 ay. İlk tur 0'dır.
+ String get ad;/// Oyuncunun yaşadığı şehir. Yaşam gideri çarpanı buradan gelir.
+ Sehir get sehir;/// Oynanan tur sayısı. 1 tur = 1 ay. İlk tur 0'dır.
  int get tur;/// Oyuna başlanan yaş. Yaş buradan ve turdan TÜRETİLİR, ayrıca tutulmaz;
 /// iki alan ayrı tutulsa er ya da geç birbirinden kayar.
  int get baslangicYasi;/// Tek mekanik etkisi askerliktir.
@@ -64,7 +64,7 @@ abstract mixin class $OyuncuCopyWith<$Res>  {
   factory $OyuncuCopyWith(Oyuncu value, $Res Function(Oyuncu) _then) = _$OyuncuCopyWithImpl;
 @useResult
 $Res call({
- String ad, String sehir, int tur, int baslangicYasi, Cinsiyet cinsiyet, EgitimSeviyesi egitim, KariyerDurumu kariyer, int nakit, int enerji, int mutluluk, int itibar, int krediNotu, Map<Sektor, int> yetkinlikler, int sgkPrimAyi
+ String ad, Sehir sehir, int tur, int baslangicYasi, Cinsiyet cinsiyet, EgitimSeviyesi egitim, KariyerDurumu kariyer, int nakit, int enerji, int mutluluk, int itibar, int krediNotu, Map<Sektor, int> yetkinlikler, int sgkPrimAyi
 });
 
 
@@ -85,7 +85,7 @@ class _$OyuncuCopyWithImpl<$Res>
   return _then(_self.copyWith(
 ad: null == ad ? _self.ad : ad // ignore: cast_nullable_to_non_nullable
 as String,sehir: null == sehir ? _self.sehir : sehir // ignore: cast_nullable_to_non_nullable
-as String,tur: null == tur ? _self.tur : tur // ignore: cast_nullable_to_non_nullable
+as Sehir,tur: null == tur ? _self.tur : tur // ignore: cast_nullable_to_non_nullable
 as int,baslangicYasi: null == baslangicYasi ? _self.baslangicYasi : baslangicYasi // ignore: cast_nullable_to_non_nullable
 as int,cinsiyet: null == cinsiyet ? _self.cinsiyet : cinsiyet // ignore: cast_nullable_to_non_nullable
 as Cinsiyet,egitim: null == egitim ? _self.egitim : egitim // ignore: cast_nullable_to_non_nullable
@@ -191,7 +191,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String ad,  String sehir,  int tur,  int baslangicYasi,  Cinsiyet cinsiyet,  EgitimSeviyesi egitim,  KariyerDurumu kariyer,  int nakit,  int enerji,  int mutluluk,  int itibar,  int krediNotu,  Map<Sektor, int> yetkinlikler,  int sgkPrimAyi)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String ad,  Sehir sehir,  int tur,  int baslangicYasi,  Cinsiyet cinsiyet,  EgitimSeviyesi egitim,  KariyerDurumu kariyer,  int nakit,  int enerji,  int mutluluk,  int itibar,  int krediNotu,  Map<Sektor, int> yetkinlikler,  int sgkPrimAyi)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Oyuncu() when $default != null:
 return $default(_that.ad,_that.sehir,_that.tur,_that.baslangicYasi,_that.cinsiyet,_that.egitim,_that.kariyer,_that.nakit,_that.enerji,_that.mutluluk,_that.itibar,_that.krediNotu,_that.yetkinlikler,_that.sgkPrimAyi);case _:
@@ -212,7 +212,7 @@ return $default(_that.ad,_that.sehir,_that.tur,_that.baslangicYasi,_that.cinsiye
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String ad,  String sehir,  int tur,  int baslangicYasi,  Cinsiyet cinsiyet,  EgitimSeviyesi egitim,  KariyerDurumu kariyer,  int nakit,  int enerji,  int mutluluk,  int itibar,  int krediNotu,  Map<Sektor, int> yetkinlikler,  int sgkPrimAyi)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String ad,  Sehir sehir,  int tur,  int baslangicYasi,  Cinsiyet cinsiyet,  EgitimSeviyesi egitim,  KariyerDurumu kariyer,  int nakit,  int enerji,  int mutluluk,  int itibar,  int krediNotu,  Map<Sektor, int> yetkinlikler,  int sgkPrimAyi)  $default,) {final _that = this;
 switch (_that) {
 case _Oyuncu():
 return $default(_that.ad,_that.sehir,_that.tur,_that.baslangicYasi,_that.cinsiyet,_that.egitim,_that.kariyer,_that.nakit,_that.enerji,_that.mutluluk,_that.itibar,_that.krediNotu,_that.yetkinlikler,_that.sgkPrimAyi);case _:
@@ -232,7 +232,7 @@ return $default(_that.ad,_that.sehir,_that.tur,_that.baslangicYasi,_that.cinsiye
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String ad,  String sehir,  int tur,  int baslangicYasi,  Cinsiyet cinsiyet,  EgitimSeviyesi egitim,  KariyerDurumu kariyer,  int nakit,  int enerji,  int mutluluk,  int itibar,  int krediNotu,  Map<Sektor, int> yetkinlikler,  int sgkPrimAyi)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String ad,  Sehir sehir,  int tur,  int baslangicYasi,  Cinsiyet cinsiyet,  EgitimSeviyesi egitim,  KariyerDurumu kariyer,  int nakit,  int enerji,  int mutluluk,  int itibar,  int krediNotu,  Map<Sektor, int> yetkinlikler,  int sgkPrimAyi)?  $default,) {final _that = this;
 switch (_that) {
 case _Oyuncu() when $default != null:
 return $default(_that.ad,_that.sehir,_that.tur,_that.baslangicYasi,_that.cinsiyet,_that.egitim,_that.kariyer,_that.nakit,_that.enerji,_that.mutluluk,_that.itibar,_that.krediNotu,_that.yetkinlikler,_that.sgkPrimAyi);case _:
@@ -251,8 +251,8 @@ class _Oyuncu extends Oyuncu {
   factory _Oyuncu.fromJson(Map<String, dynamic> json) => _$OyuncuFromJson(json);
 
 @override final  String ad;
-/// Oyuncunun yaşadığı şehir (İstanbul, Konya, Trabzon, Gaziantep, İzmir).
-@override final  String sehir;
+/// Oyuncunun yaşadığı şehir. Yaşam gideri çarpanı buradan gelir.
+@override final  Sehir sehir;
 /// Oynanan tur sayısı. 1 tur = 1 ay. İlk tur 0'dır.
 @override@JsonKey() final  int tur;
 /// Oyuna başlanan yaş. Yaş buradan ve turdan TÜRETİLİR, ayrıca tutulmaz;
@@ -322,7 +322,7 @@ abstract mixin class _$OyuncuCopyWith<$Res> implements $OyuncuCopyWith<$Res> {
   factory _$OyuncuCopyWith(_Oyuncu value, $Res Function(_Oyuncu) _then) = __$OyuncuCopyWithImpl;
 @override @useResult
 $Res call({
- String ad, String sehir, int tur, int baslangicYasi, Cinsiyet cinsiyet, EgitimSeviyesi egitim, KariyerDurumu kariyer, int nakit, int enerji, int mutluluk, int itibar, int krediNotu, Map<Sektor, int> yetkinlikler, int sgkPrimAyi
+ String ad, Sehir sehir, int tur, int baslangicYasi, Cinsiyet cinsiyet, EgitimSeviyesi egitim, KariyerDurumu kariyer, int nakit, int enerji, int mutluluk, int itibar, int krediNotu, Map<Sektor, int> yetkinlikler, int sgkPrimAyi
 });
 
 
@@ -343,7 +343,7 @@ class __$OyuncuCopyWithImpl<$Res>
   return _then(_Oyuncu(
 ad: null == ad ? _self.ad : ad // ignore: cast_nullable_to_non_nullable
 as String,sehir: null == sehir ? _self.sehir : sehir // ignore: cast_nullable_to_non_nullable
-as String,tur: null == tur ? _self.tur : tur // ignore: cast_nullable_to_non_nullable
+as Sehir,tur: null == tur ? _self.tur : tur // ignore: cast_nullable_to_non_nullable
 as int,baslangicYasi: null == baslangicYasi ? _self.baslangicYasi : baslangicYasi // ignore: cast_nullable_to_non_nullable
 as int,cinsiyet: null == cinsiyet ? _self.cinsiyet : cinsiyet // ignore: cast_nullable_to_non_nullable
 as Cinsiyet,egitim: null == egitim ? _self.egitim : egitim // ignore: cast_nullable_to_non_nullable

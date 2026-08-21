@@ -4,10 +4,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:hayat_kariyer/core/models/egitim_seviyesi.dart';
 import 'package:hayat_kariyer/core/models/kariyer_durumu.dart';
 import 'package:hayat_kariyer/core/models/oyuncu.dart';
+import 'package:hayat_kariyer/core/models/sehir.dart';
 import 'package:hayat_kariyer/core/models/sektor.dart';
 
 void main() {
-  Oyuncu yeniOyuncu() => Oyuncu.yeni(ad: 'Furkan', sehir: 'Konya');
+  Oyuncu yeniOyuncu() => Oyuncu.yeni(ad: 'Furkan', sehir: Sehir.konya);
 
   group('Başlangıç durumu', () {
     test('yeni oyuncu 18 yaşında ve ilk turda başlar', () {
@@ -143,8 +144,8 @@ void main() {
     });
 
     test('eksik alanlar varsayılana düşer', () {
-      final geri = Oyuncu.fromJson({'ad': 'Ayşe', 'sehir': 'Trabzon'});
-      expect(geri, Oyuncu.yeni(ad: 'Ayşe', sehir: 'Trabzon'));
+      final geri = Oyuncu.fromJson({'ad': 'Ayşe', 'sehir': 'trabzon'});
+      expect(geri, Oyuncu.yeni(ad: 'Ayşe', sehir: Sehir.trabzon));
     });
   });
 
@@ -152,7 +153,7 @@ void main() {
     test('sınır dışı değerler geri çekilir', () {
       const bozuk = Oyuncu(
         ad: 'Bozuk',
-        sehir: 'İzmir',
+        sehir: Sehir.izmir,
         tur: -5,
         enerji: 320,
         mutluluk: -40,
@@ -219,7 +220,7 @@ void main() {
     test('kadın karakter askerlik yükümlüsü değil', () {
       final o = Oyuncu.yeni(
         ad: 'Ayşe',
-        sehir: 'İzmir',
+        sehir: Sehir.izmir,
         cinsiyet: Cinsiyet.kadin,
       );
       expect(o.askerlikYukumlusu, isFalse);

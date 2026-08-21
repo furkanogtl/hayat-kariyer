@@ -8,7 +8,7 @@ part of 'oyuncu.dart';
 
 _Oyuncu _$OyuncuFromJson(Map<String, dynamic> json) => _Oyuncu(
   ad: json['ad'] as String,
-  sehir: json['sehir'] as String,
+  sehir: $enumDecode(_$SehirEnumMap, json['sehir']),
   tur: (json['tur'] as num?)?.toInt() ?? 0,
   baslangicYasi:
       (json['baslangicYasi'] as num?)?.toInt() ??
@@ -37,7 +37,7 @@ _Oyuncu _$OyuncuFromJson(Map<String, dynamic> json) => _Oyuncu(
 
 Map<String, dynamic> _$OyuncuToJson(_Oyuncu instance) => <String, dynamic>{
   'ad': instance.ad,
-  'sehir': instance.sehir,
+  'sehir': _$SehirEnumMap[instance.sehir]!,
   'tur': instance.tur,
   'baslangicYasi': instance.baslangicYasi,
   'cinsiyet': _$CinsiyetEnumMap[instance.cinsiyet]!,
@@ -52,6 +52,14 @@ Map<String, dynamic> _$OyuncuToJson(_Oyuncu instance) => <String, dynamic>{
     (k, e) => MapEntry(_$SektorEnumMap[k]!, e),
   ),
   'sgkPrimAyi': instance.sgkPrimAyi,
+};
+
+const _$SehirEnumMap = {
+  Sehir.istanbul: 'istanbul',
+  Sehir.izmir: 'izmir',
+  Sehir.gaziantep: 'gaziantep',
+  Sehir.trabzon: 'trabzon',
+  Sehir.konya: 'konya',
 };
 
 const _$CinsiyetEnumMap = {Cinsiyet.erkek: 'erkek', Cinsiyet.kadin: 'kadin'};

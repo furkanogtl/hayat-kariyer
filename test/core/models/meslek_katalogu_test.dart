@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:hayat_kariyer/core/models/egitim_seviyesi.dart';
 import 'package:hayat_kariyer/core/models/meslek_katalogu.dart';
 import 'package:hayat_kariyer/core/models/oyuncu.dart';
+import 'package:hayat_kariyer/core/models/sehir.dart';
 import 'package:hayat_kariyer/core/models/sektor.dart';
 
 const _tekMeslek = '''
@@ -70,7 +71,7 @@ void main() {
     test('girilebilir meslekler oyuncunun durumuna göre süzülür', () {
       final ilkokul = Oyuncu.yeni(
         ad: 'Test',
-        sehir: 'Konya',
+        sehir: Sehir.konya,
         egitim: EgitimSeviyesi.ilkogretim,
       );
       // Memur lise + 20 yaş istiyor; diğer ikisi şartsız.
@@ -79,7 +80,7 @@ void main() {
         {'asci', 'ciftci'},
       );
 
-      final liseli = Oyuncu.yeni(ad: 'Test', sehir: 'Konya')
+      final liseli = Oyuncu.yeni(ad: 'Test', sehir: Sehir.konya)
           .copyWith(tur: 24); // 20 yaşında
       expect(katalog.girilebilirler(liseli).map((m) => m.id), contains('memur'));
     });

@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:hayat_kariyer/core/models/egitim_seviyesi.dart';
 import 'package:hayat_kariyer/core/models/meslek.dart';
 import 'package:hayat_kariyer/core/models/oyuncu.dart';
+import 'package:hayat_kariyer/core/models/sehir.dart';
 import 'package:hayat_kariyer/core/models/sektor.dart';
 
 /// docs/meslekler.md içindeki örnek şemanın birebir karşılığı.
@@ -117,7 +118,7 @@ void main() {
       int yetkinlik = 10,
       int tur = 36,
     }) =>
-        Oyuncu.yeni(ad: 'Test', sehir: 'İzmir', egitim: egitim)
+        Oyuncu.yeni(ad: 'Test', sehir: Sehir.izmir, egitim: egitim)
             .yetkinlikDegistir(Sektor.teknoloji, yetkinlik)
             .copyWith(tur: tur);
 
@@ -142,7 +143,7 @@ void main() {
 
     test('yetkinlik mesleğin sektöründen okunur', () {
       final baskaSektor =
-          Oyuncu.yeni(ad: 'Test', sehir: 'İzmir', egitim: EgitimSeviyesi.lisans)
+          Oyuncu.yeni(ad: 'Test', sehir: Sehir.izmir, egitim: EgitimSeviyesi.lisans)
               .yetkinlikDegistir(Sektor.tarim, 90)
               .copyWith(tur: 36);
       expect(yazilimci().girebilirMi(baskaSektor), isFalse);

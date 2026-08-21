@@ -7,6 +7,7 @@ import 'package:hayat_kariyer/core/models/egitim_seviyesi.dart';
 import 'package:hayat_kariyer/core/models/kariyer_durumu.dart';
 import 'package:hayat_kariyer/core/models/meslek_katalogu.dart';
 import 'package:hayat_kariyer/core/models/oyuncu.dart';
+import 'package:hayat_kariyer/core/models/sehir.dart';
 import 'package:hayat_kariyer/core/models/piyasa_durumu.dart';
 import 'package:hayat_kariyer/core/models/sektor.dart';
 import 'package:hayat_kariyer/core/models/zaman_dagilimi.dart';
@@ -40,7 +41,7 @@ void main() {
     bool kayitDisi = false,
     Sektor sektor = Sektor.teknoloji,
   }) =>
-      Oyuncu.yeni(ad: 'Test', sehir: 'Konya', egitim: EgitimSeviyesi.lisans)
+      Oyuncu.yeni(ad: 'Test', sehir: Sehir.konya, egitim: EgitimSeviyesi.lisans)
           .yetkinlikDegistir(sektor, yetkinlik)
           .copyWith(
             enerji: enerji,
@@ -409,7 +410,7 @@ void main() {
 
   group('Çalışan olmayan durumlar', () {
     test('öğrenci gelir üretmez ama hızlı öğrenir', () {
-      final o = Oyuncu.yeni(ad: 'Test', sehir: 'İzmir')
+      final o = Oyuncu.yeni(ad: 'Test', sehir: Sehir.izmir)
           .yetkinlikDegistir(Sektor.saglik, 5)
           .kariyerDegistir(
             const KariyerDurumu.ogrenci(
@@ -424,7 +425,7 @@ void main() {
     });
 
     test('son turda mezun olur ve eğitim seviyesi yükselir', () {
-      final o = Oyuncu.yeni(ad: 'Test', sehir: 'İzmir').kariyerDegistir(
+      final o = Oyuncu.yeni(ad: 'Test', sehir: Sehir.izmir).kariyerDegistir(
         const KariyerDurumu.ogrenci(hedef: EgitimSeviyesi.lisans, kalanTur: 1),
       );
       final sonuc = isle(o, zaman: ZamanDagilimi.calismadan());
@@ -434,14 +435,14 @@ void main() {
     });
 
     test('işsizlik mutluluğu düşürür, gelir yok', () {
-      final o = Oyuncu.yeni(ad: 'Test', sehir: 'İzmir').copyWith(mutluluk: 60);
+      final o = Oyuncu.yeni(ad: 'Test', sehir: Sehir.izmir).copyWith(mutluluk: 60);
       final sonuc = isle(o, zaman: const ZamanDagilimi(dinlenme: 2));
       expect(sonuc.netGelir, 0);
       expect(sonuc.oyuncu.mutluluk, lessThan(60));
     });
 
     test('askerlikte zaman dağıtımı işlemez', () {
-      final o = Oyuncu.yeni(ad: 'Test', sehir: 'Konya')
+      final o = Oyuncu.yeni(ad: 'Test', sehir: Sehir.konya)
           .yetkinlikDegistir(Sektor.teknoloji, 40)
           .copyWith(enerji: 80, mutluluk: 60)
           .kariyerDegistir(const KariyerDurumu.askerlik(kalanTur: 6));
@@ -452,7 +453,7 @@ void main() {
     });
 
     test('askerlik bitince terhis olur', () {
-      final o = Oyuncu.yeni(ad: 'Test', sehir: 'Konya')
+      final o = Oyuncu.yeni(ad: 'Test', sehir: Sehir.konya)
           .kariyerDegistir(const KariyerDurumu.askerlik(kalanTur: 1));
       final sonuc = isle(o);
       expect(sonuc.askerlikBitti, isTrue);
@@ -460,7 +461,7 @@ void main() {
     });
 
     test('emekli aylığı enflasyona endekslenir', () {
-      final o = Oyuncu.yeni(ad: 'Test', sehir: 'İzmir')
+      final o = Oyuncu.yeni(ad: 'Test', sehir: Sehir.izmir)
           .kariyerDegistir(const KariyerDurumu.emekli(tabanAylik: 20000));
       expect(isle(o).netGelir, 20000);
       expect(
@@ -470,7 +471,7 @@ void main() {
     });
 
     test('bozuk kayıttaki tanımsız meslek çökmez, işsizliğe düşer', () {
-      final o = Oyuncu.yeni(ad: 'Test', sehir: 'İzmir')
+      final o = Oyuncu.yeni(ad: 'Test', sehir: Sehir.izmir)
           .kariyerDegistir(const KariyerDurumu.calisan(meslekId: 'yok_boyle'));
       final sonuc = isle(o);
       expect(sonuc.oyuncu.kariyer, isA<Issiz>());
