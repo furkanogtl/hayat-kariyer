@@ -12,9 +12,9 @@
       { "ad": "Başhekim",            "maas": 400000, "yetkinlikGerek": 80, "sureTur": 48 },
       { "ad": "Özel Hastane Ortağı", "maas": 750000, "yetkinlikGerek": 92, "sureTur": null }
     ],
-    "yetkinlikArtisHizi": 0.9,
+    "yetkinlikArtisHizi": 1.0,
     "networkArtisi": 1.2,
-    "enerjiMaliyeti": 8,
+    "enerjiMaliyeti": 7,
     "gelirVaryansi": 0.1,
     "dovizOrani": 0.0,
     "acilanIsletmeler": ["muayenehane", "ozel_klinik"],
@@ -224,10 +224,10 @@
     "girisSarti": { "egitim": "ilkogretim", "yetkinlik": 0, "yas": [18, 99] },
     "kademeler": [
       { "ad": "Yeni Kanal",     "maas": 3000,   "yetkinlikGerek": 0,  "sureTur": 12 },
-      { "ad": "Küçük Kanal",    "maas": 18000,  "yetkinlikGerek": 10, "sureTur": 18 },
-      { "ad": "Orta Kanal",     "maas": 80000,  "yetkinlikGerek": 30, "sureTur": 24 },
-      { "ad": "Büyük Kanal",    "maas": 300000, "yetkinlikGerek": 55, "sureTur": 36 },
-      { "ad": "Medya Markası",  "maas": 900000, "yetkinlikGerek": 80, "sureTur": null }
+      { "ad": "Küçük Kanal",    "maas": 16000,  "yetkinlikGerek": 15, "sureTur": 24 },
+      { "ad": "Orta Kanal",     "maas": 55000,  "yetkinlikGerek": 40, "sureTur": 36 },
+      { "ad": "Büyük Kanal",    "maas": 170000, "yetkinlikGerek": 70, "sureTur": 48 },
+      { "ad": "Medya Markası",  "maas": 450000, "yetkinlikGerek": 92, "sureTur": null }
     ],
     "yetkinlikArtisHizi": 1.2,
     "networkArtisi": 1.3,
