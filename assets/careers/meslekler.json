@@ -1,0 +1,278 @@
+[
+  {
+    "id": "doktor",
+    "ad": "Doktor",
+    "sektor": "saglik",
+    "girisSarti": { "egitim": "lisans", "yetkinlik": 20, "yas": [24, 99] },
+    "kademeler": [
+      { "ad": "İntörn",              "maas": 20000,  "yetkinlikGerek": 0,  "sureTur": 12 },
+      { "ad": "Pratisyen Hekim",     "maas": 65000,  "yetkinlikGerek": 15, "sureTur": 24 },
+      { "ad": "Uzmanlık Asistanı",   "maas": 80000,  "yetkinlikGerek": 35, "sureTur": 36 },
+      { "ad": "Uzman Hekim",         "maas": 180000, "yetkinlikGerek": 60, "sureTur": 36 },
+      { "ad": "Başhekim",            "maas": 400000, "yetkinlikGerek": 80, "sureTur": 48 },
+      { "ad": "Özel Hastane Ortağı", "maas": 750000, "yetkinlikGerek": 92, "sureTur": null }
+    ],
+    "yetkinlikArtisHizi": 0.9,
+    "networkArtisi": 1.2,
+    "enerjiMaliyeti": 8,
+    "gelirVaryansi": 0.1,
+    "dovizOrani": 0.0,
+    "acilanIsletmeler": ["muayenehane", "ozel_klinik"],
+    "olayHavuzu": ["saglik_01", "saglik_02", "saglik_03", "saglik_04", "saglik_05"]
+  },
+  {
+    "id": "yazilim_gelistirici",
+    "ad": "Yazılım Geliştirici",
+    "sektor": "teknoloji",
+    "girisSarti": { "egitim": "lisans", "yetkinlik": 10, "yas": [21, 99] },
+    "kademeler": [
+      { "ad": "Stajyer",        "maas": 18000,  "yetkinlikGerek": 0,  "sureTur": 6 },
+      { "ad": "Junior",         "maas": 45000,  "yetkinlikGerek": 15, "sureTur": 18 },
+      { "ad": "Mid",            "maas": 85000,  "yetkinlikGerek": 40, "sureTur": 24 },
+      { "ad": "Senior",         "maas": 150000, "yetkinlikGerek": 70, "sureTur": 30 },
+      { "ad": "Takım Lideri",   "maas": 220000, "yetkinlikGerek": 85, "sureTur": 36 },
+      { "ad": "CTO",            "maas": 400000, "yetkinlikGerek": 95, "sureTur": null }
+    ],
+    "yetkinlikArtisHizi": 1.2,
+    "networkArtisi": 0.8,
+    "enerjiMaliyeti": 3,
+    "gelirVaryansi": 0.15,
+    "dovizOrani": 0.2,
+    "acilanIsletmeler": ["yazilim_studyosu", "saas_urunu"],
+    "olayHavuzu": ["tech_01", "tech_02", "tech_03", "tech_04", "tech_05"]
+  },
+  {
+    "id": "insaat_muhendisi",
+    "ad": "İnşaat Mühendisi",
+    "sektor": "teknoloji",
+    "girisSarti": { "egitim": "lisans", "yetkinlik": 10, "yas": [22, 99] },
+    "kademeler": [
+      { "ad": "Şantiye Stajyeri", "maas": 22000,  "yetkinlikGerek": 0,  "sureTur": 6 },
+      { "ad": "Saha Mühendisi",   "maas": 55000,  "yetkinlikGerek": 15, "sureTur": 18 },
+      { "ad": "Şantiye Şefi",     "maas": 110000, "yetkinlikGerek": 40, "sureTur": 30 },
+      { "ad": "Proje Müdürü",     "maas": 200000, "yetkinlikGerek": 65, "sureTur": 36 },
+      { "ad": "Müteahhit",        "maas": 450000, "yetkinlikGerek": 85, "sureTur": null }
+    ],
+    "yetkinlikArtisHizi": 1.0,
+    "networkArtisi": 1.1,
+    "enerjiMaliyeti": 6,
+    "gelirVaryansi": 0.35,
+    "dovizOrani": 0.0,
+    "acilanIsletmeler": ["insaat_firmasi", "muteahhitlik"],
+    "olayHavuzu": ["insaat_01", "insaat_02", "insaat_03", "insaat_04", "insaat_05"]
+  },
+  {
+    "id": "avukat",
+    "ad": "Avukat",
+    "sektor": "hukuk_kamu",
+    "girisSarti": { "egitim": "lisans", "yetkinlik": 10, "yas": [23, 99] },
+    "kademeler": [
+      { "ad": "Stajyer Avukat", "maas": 15000,  "yetkinlikGerek": 0,  "sureTur": 12 },
+      { "ad": "Serbest Avukat", "maas": 50000,  "yetkinlikGerek": 20, "sureTur": 24 },
+      { "ad": "Ortak Avukat",   "maas": 130000, "yetkinlikGerek": 45, "sureTur": 36 },
+      { "ad": "Büro Sahibi",    "maas": 300000, "yetkinlikGerek": 70, "sureTur": 48 },
+      { "ad": "Kıdemli Ortak",  "maas": 550000, "yetkinlikGerek": 88, "sureTur": null }
+    ],
+    "yetkinlikArtisHizi": 1.0,
+    "networkArtisi": 1.5,
+    "enerjiMaliyeti": 5,
+    "gelirVaryansi": 0.45,
+    "dovizOrani": 0.0,
+    "acilanIsletmeler": ["hukuk_burosu"],
+    "olayHavuzu": ["hukuk_01", "hukuk_02", "hukuk_03", "hukuk_04", "hukuk_05"]
+  },
+  {
+    "id": "ogretmen",
+    "ad": "Öğretmen",
+    "sektor": "hukuk_kamu",
+    "girisSarti": { "egitim": "lisans", "yetkinlik": 5, "yas": [22, 99] },
+    "kademeler": [
+      { "ad": "Ücretli Öğretmen",   "maas": 22000, "yetkinlikGerek": 0,  "sureTur": 12 },
+      { "ad": "Kadrolu Öğretmen",   "maas": 42000, "yetkinlikGerek": 10, "sureTur": 48 },
+      { "ad": "Kıdemli Öğretmen",   "maas": 55000, "yetkinlikGerek": 35, "sureTur": 60 },
+      { "ad": "Müdür Yardımcısı",   "maas": 68000, "yetkinlikGerek": 55, "sureTur": 48 },
+      { "ad": "Okul Müdürü",        "maas": 85000, "yetkinlikGerek": 70, "sureTur": null }
+    ],
+    "yetkinlikArtisHizi": 0.9,
+    "networkArtisi": 0.9,
+    "enerjiMaliyeti": 4,
+    "gelirVaryansi": 0.0,
+    "dovizOrani": 0.0,
+    "acilanIsletmeler": ["dershane"],
+    "olayHavuzu": ["egitim_01", "egitim_02", "egitim_03", "egitim_04", "egitim_05"]
+  },
+  {
+    "id": "memur",
+    "ad": "Memur",
+    "sektor": "hukuk_kamu",
+    "girisSarti": { "egitim": "lise", "yetkinlik": 0, "yas": [20, 99] },
+    "kademeler": [
+      { "ad": "Memur",            "maas": 38000, "yetkinlikGerek": 0,  "sureTur": 60 },
+      { "ad": "Şef",              "maas": 52000, "yetkinlikGerek": 25, "sureTur": 60 },
+      { "ad": "Müdür Yardımcısı", "maas": 68000, "yetkinlikGerek": 45, "sureTur": 72 },
+      { "ad": "Şube Müdürü",      "maas": 90000, "yetkinlikGerek": 65, "sureTur": null }
+    ],
+    "yetkinlikArtisHizi": 0.7,
+    "networkArtisi": 0.6,
+    "enerjiMaliyeti": 2,
+    "gelirVaryansi": 0.0,
+    "dovizOrani": 0.0,
+    "acilanIsletmeler": [],
+    "olayHavuzu": ["kamu_01", "kamu_02", "kamu_03", "kamu_04", "kamu_05"]
+  },
+  {
+    "id": "mali_musavir",
+    "ad": "Mali Müşavir",
+    "sektor": "finans",
+    "girisSarti": { "egitim": "lisans", "yetkinlik": 15, "yas": [24, 99] },
+    "kademeler": [
+      { "ad": "Stajyer",            "maas": 20000,  "yetkinlikGerek": 0,  "sureTur": 36 },
+      { "ad": "Mali Müşavir",       "maas": 70000,  "yetkinlikGerek": 25, "sureTur": 36 },
+      { "ad": "Ofis Sahibi",        "maas": 180000, "yetkinlikGerek": 50, "sureTur": 48 },
+      { "ad": "Yeminli Müşavir",    "maas": 400000, "yetkinlikGerek": 80, "sureTur": null }
+    ],
+    "yetkinlikArtisHizi": 1.0,
+    "networkArtisi": 1.5,
+    "enerjiMaliyeti": 4,
+    "gelirVaryansi": 0.2,
+    "dovizOrani": 0.0,
+    "acilanIsletmeler": ["muhasebe_ofisi"],
+    "olayHavuzu": ["finans_01", "finans_02", "finans_03", "finans_04", "finans_05"]
+  },
+  {
+    "id": "emlak_danismani",
+    "ad": "Emlak Danışmanı",
+    "sektor": "ticaret",
+    "girisSarti": { "egitim": "ilkogretim", "yetkinlik": 0, "yas": [18, 99] },
+    "kademeler": [
+      { "ad": "Çaylak Danışman",   "maas": 15000,  "yetkinlikGerek": 0,  "sureTur": 12 },
+      { "ad": "Emlak Danışmanı",   "maas": 45000,  "yetkinlikGerek": 15, "sureTur": 24 },
+      { "ad": "Kıdemli Danışman",  "maas": 120000, "yetkinlikGerek": 40, "sureTur": 36 },
+      { "ad": "Ofis Sahibi",       "maas": 300000, "yetkinlikGerek": 65, "sureTur": null }
+    ],
+    "yetkinlikArtisHizi": 1.1,
+    "networkArtisi": 1.4,
+    "enerjiMaliyeti": 5,
+    "gelirVaryansi": 0.6,
+    "dovizOrani": 0.0,
+    "acilanIsletmeler": ["emlak_ofisi"],
+    "olayHavuzu": ["emlak_01", "emlak_02", "emlak_03", "emlak_04", "emlak_05"]
+  },
+  {
+    "id": "satis_temsilcisi",
+    "ad": "Satış Temsilcisi",
+    "sektor": "ticaret",
+    "girisSarti": { "egitim": "lise", "yetkinlik": 0, "yas": [18, 99] },
+    "kademeler": [
+      { "ad": "Saha Satış Elemanı", "maas": 28000,  "yetkinlikGerek": 0,  "sureTur": 12 },
+      { "ad": "Satış Temsilcisi",   "maas": 45000,  "yetkinlikGerek": 15, "sureTur": 24 },
+      { "ad": "Bölge Sorumlusu",    "maas": 90000,  "yetkinlikGerek": 40, "sureTur": 36 },
+      { "ad": "Satış Müdürü",       "maas": 160000, "yetkinlikGerek": 65, "sureTur": null }
+    ],
+    "yetkinlikArtisHizi": 1.0,
+    "networkArtisi": 1.2,
+    "enerjiMaliyeti": 5,
+    "gelirVaryansi": 0.4,
+    "dovizOrani": 0.0,
+    "acilanIsletmeler": [],
+    "olayHavuzu": ["satis_01", "satis_02", "satis_03", "satis_04", "satis_05"]
+  },
+  {
+    "id": "oto_tamircisi",
+    "ad": "Oto Tamircisi",
+    "sektor": "esnaf",
+    "girisSarti": { "egitim": "ilkogretim", "yetkinlik": 0, "yas": [18, 99] },
+    "kademeler": [
+      { "ad": "Çırak",             "maas": 12000,  "yetkinlikGerek": 0,  "sureTur": 24 },
+      { "ad": "Kalfa",             "maas": 28000,  "yetkinlikGerek": 15, "sureTur": 24 },
+      { "ad": "Usta",              "maas": 50000,  "yetkinlikGerek": 35, "sureTur": 36 },
+      { "ad": "Dükkan Sahibi",     "maas": 120000, "yetkinlikGerek": 60, "sureTur": 48 },
+      { "ad": "Oto Sanayi Sahibi", "maas": 250000, "yetkinlikGerek": 80, "sureTur": null }
+    ],
+    "yetkinlikArtisHizi": 1.1,
+    "networkArtisi": 0.8,
+    "enerjiMaliyeti": 5,
+    "gelirVaryansi": 0.25,
+    "dovizOrani": 0.0,
+    "acilanIsletmeler": ["oto_servis", "oto_galeri"],
+    "olayHavuzu": ["esnaf_01", "esnaf_02", "esnaf_03", "oto_01", "oto_02"]
+  },
+  {
+    "id": "asci",
+    "ad": "Aşçı",
+    "sektor": "esnaf",
+    "girisSarti": { "egitim": "ilkogretim", "yetkinlik": 0, "yas": [18, 99] },
+    "kademeler": [
+      { "ad": "Komi",             "maas": 14000,  "yetkinlikGerek": 0,  "sureTur": 18 },
+      { "ad": "Aşçı Yardımcısı",  "maas": 26000,  "yetkinlikGerek": 12, "sureTur": 24 },
+      { "ad": "Aşçı",             "maas": 45000,  "yetkinlikGerek": 30, "sureTur": 30 },
+      { "ad": "Şef",              "maas": 90000,  "yetkinlikGerek": 55, "sureTur": 36 },
+      { "ad": "Restoran Sahibi",  "maas": 220000, "yetkinlikGerek": 75, "sureTur": null }
+    ],
+    "yetkinlikArtisHizi": 1.1,
+    "networkArtisi": 1.1,
+    "enerjiMaliyeti": 7,
+    "gelirVaryansi": 0.3,
+    "dovizOrani": 0.0,
+    "acilanIsletmeler": ["restoran", "kafe"],
+    "olayHavuzu": ["esnaf_01", "esnaf_02", "mutfak_01", "mutfak_02", "mutfak_03"]
+  },
+  {
+    "id": "icerik_ureticisi",
+    "ad": "İçerik Üreticisi",
+    "sektor": "medya",
+    "girisSarti": { "egitim": "ilkogretim", "yetkinlik": 0, "yas": [18, 99] },
+    "kademeler": [
+      { "ad": "Yeni Kanal",     "maas": 3000,   "yetkinlikGerek": 0,  "sureTur": 12 },
+      { "ad": "Küçük Kanal",    "maas": 18000,  "yetkinlikGerek": 10, "sureTur": 18 },
+      { "ad": "Orta Kanal",     "maas": 80000,  "yetkinlikGerek": 30, "sureTur": 24 },
+      { "ad": "Büyük Kanal",    "maas": 300000, "yetkinlikGerek": 55, "sureTur": 36 },
+      { "ad": "Medya Markası",  "maas": 900000, "yetkinlikGerek": 80, "sureTur": null }
+    ],
+    "yetkinlikArtisHizi": 1.2,
+    "networkArtisi": 1.3,
+    "enerjiMaliyeti": 4,
+    "gelirVaryansi": 0.75,
+    "dovizOrani": 0.3,
+    "acilanIsletmeler": ["medya_kanali", "ajans"],
+    "olayHavuzu": ["medya_01", "medya_02", "medya_03", "medya_04", "medya_05"]
+  },
+  {
+    "id": "pilot",
+    "ad": "Pilot",
+    "sektor": "lojistik",
+    "girisSarti": { "egitim": "lise", "yetkinlik": 10, "yas": [21, 45] },
+    "kademeler": [
+      { "ad": "İkinci Pilot",         "maas": 90000,  "yetkinlikGerek": 0,  "sureTur": 36 },
+      { "ad": "Kıdemli İkinci Pilot", "maas": 140000, "yetkinlikGerek": 25, "sureTur": 36 },
+      { "ad": "Kaptan Pilot",         "maas": 260000, "yetkinlikGerek": 50, "sureTur": 48 },
+      { "ad": "Eğitmen Kaptan",       "maas": 380000, "yetkinlikGerek": 75, "sureTur": null }
+    ],
+    "yetkinlikArtisHizi": 0.9,
+    "networkArtisi": 0.7,
+    "enerjiMaliyeti": 6,
+    "gelirVaryansi": 0.05,
+    "dovizOrani": 0.5,
+    "acilanIsletmeler": [],
+    "olayHavuzu": ["pilot_01", "pilot_02", "pilot_03", "pilot_04", "pilot_05"]
+  },
+  {
+    "id": "ciftci",
+    "ad": "Çiftçi",
+    "sektor": "tarim",
+    "girisSarti": { "egitim": "ilkogretim", "yetkinlik": 0, "yas": [18, 99] },
+    "kademeler": [
+      { "ad": "Aile İşletmesinde",  "maas": 12000,  "yetkinlikGerek": 0,  "sureTur": 24 },
+      { "ad": "Kendi Tarlası",      "maas": 30000,  "yetkinlikGerek": 15, "sureTur": 36 },
+      { "ad": "Büyük Üretici",      "maas": 90000,  "yetkinlikGerek": 40, "sureTur": 48 },
+      { "ad": "Tarım İşletmecisi",  "maas": 220000, "yetkinlikGerek": 65, "sureTur": null }
+    ],
+    "yetkinlikArtisHizi": 0.9,
+    "networkArtisi": 0.5,
+    "enerjiMaliyeti": 6,
+    "gelirVaryansi": 0.55,
+    "dovizOrani": 0.0,
+    "acilanIsletmeler": ["tarim_isletmesi", "sera"],
+    "olayHavuzu": ["tarim_01", "tarim_02", "tarim_03", "tarim_04", "tarim_05"]
+  }
+]
