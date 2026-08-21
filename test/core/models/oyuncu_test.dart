@@ -1,7 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:hayat_kariyer/core/models/egitim_seviyesi.dart';
+import 'package:hayat_kariyer/core/models/kariyer_durumu.dart';
 import 'package:hayat_kariyer/core/models/oyuncu.dart';
+import 'package:hayat_kariyer/core/models/sektor.dart';
 
 void main() {
   Oyuncu yeniOyuncu() => Oyuncu.yeni(ad: 'Furkan', sehir: 'Konya');
@@ -72,13 +75,13 @@ void main() {
 
     test('yetkinlik 0-100 arasında kalır ve sektöre göre ayrılır', () {
       final o = yeniOyuncu()
-          .yetkinlikDegistir('yazilim', 40)
-          .yetkinlikDegistir('insaat', 15)
-          .yetkinlikDegistir('yazilim', 999);
-      expect(o.yetkinlik('yazilim'), Oyuncu.yetkinlikTavan);
-      expect(o.yetkinlik('insaat'), 15);
-      expect(o.yetkinlik('tanimsiz'), 0);
-      expect(o.anaSektor, 'yazilim');
+          .yetkinlikDegistir(Sektor.teknoloji, 40)
+          .yetkinlikDegistir(Sektor.lojistik, 15)
+          .yetkinlikDegistir(Sektor.teknoloji, 999);
+      expect(o.yetkinlik(Sektor.teknoloji), Oyuncu.yetkinlikTavan);
+      expect(o.yetkinlik(Sektor.lojistik), 15);
+      expect(o.yetkinlik(Sektor.turizm), 0);
+      expect(o.anaSektor, Sektor.teknoloji);
     });
   });
 
@@ -125,8 +128,8 @@ void main() {
           .mutlulukDegistir(-12)
           .itibarDegistir(23)
           .krediNotuDegistir(150)
-          .yetkinlikDegistir('yazilim', 44)
-          .yetkinlikDegistir('finans', 8)
+          .yetkinlikDegistir(Sektor.teknoloji, 44)
+          .yetkinlikDegistir(Sektor.finans, 8)
           .turIlerlet()
           .turIlerlet();
 
@@ -136,7 +139,7 @@ void main() {
 
       expect(geri, o);
       expect(geri.yas, o.yas);
-      expect(geri.yetkinlik('yazilim'), 44);
+      expect(geri.yetkinlik(Sektor.teknoloji), 44);
     });
 
     test('eksik alanlar varsayılana düşer', () {
@@ -155,7 +158,7 @@ void main() {
         mutluluk: -40,
         itibar: 900,
         krediNotu: 99999,
-        yetkinlikler: {'yazilim': 250, 'insaat': -10},
+        yetkinlikler: {Sektor.teknoloji: 250, Sektor.lojistik: -10},
       );
       final d = bozuk.duzelt();
       expect(d.tur, 0);
@@ -163,13 +166,73 @@ void main() {
       expect(d.mutluluk, Oyuncu.mutlulukTaban);
       expect(d.itibar, Oyuncu.itibarTavan);
       expect(d.krediNotu, Oyuncu.krediNotuTavan);
-      expect(d.yetkinlik('yazilim'), Oyuncu.yetkinlikTavan);
-      expect(d.yetkinlik('insaat'), Oyuncu.yetkinlikTaban);
+      expect(d.yetkinlik(Sektor.teknoloji), Oyuncu.yetkinlikTavan);
+      expect(d.yetkinlik(Sektor.lojistik), Oyuncu.yetkinlikTaban);
     });
 
     test('geçerli kayıt değişmez', () {
-      final o = yeniOyuncu().nakitDegistir(1234).yetkinlikDegistir('finans', 30);
+      final o = yeniOyuncu().nakitDegistir(1234).yetkinlikDegistir(Sektor.finans, 30);
       expect(o.duzelt(), o);
+    });
+  });
+
+  group('Kariyer durumu ve SGK', () {
+    test('yeni oyuncu lise mezunu ve işsiz başlar', () {
+      final o = yeniOyuncu();
+      expect(o.egitim, EgitimSeviyesi.lise);
+      expect(o.kariyer, const KariyerDurumu.issiz());
+      expect(o.sgkPrimAyi, 0);
+      expect(o.askerlikYukumlusu, isTrue);
+    });
+
+    test('tur ilerleyince kariyer sayaçları da ilerler', () {
+      final o = yeniOyuncu()
+          .kariyerDegistir(
+            const KariyerDurumu.calisan(meslekId: 'memur', kademeTuru: 3),
+          )
+          .turIlerlet();
+      expect((o.kariyer as Calisan).kademeTuru, 4);
+      expect(o.tur, 1);
+    });
+
+    test('kayıtlı çalışanın primi yatar, kayıt dışının yatmaz', () {
+      var kayitli = yeniOyuncu().kariyerDegistir(
+        const KariyerDurumu.calisan(meslekId: 'memur'),
+      );
+      var kayitDisi = yeniOyuncu().kariyerDegistir(
+        const KariyerDurumu.calisan(meslekId: 'asci', kayitDisi: true),
+      );
+      for (var i = 0; i < 12; i++) {
+        kayitli = kayitli.turIlerlet();
+        kayitDisi = kayitDisi.turIlerlet();
+      }
+      expect(kayitli.sgkPrimAyi, 12);
+      expect(kayitDisi.sgkPrimAyi, 0);
+    });
+
+    test('işsizken prim yatmaz', () {
+      final o = yeniOyuncu().turIlerlet().turIlerlet();
+      expect(o.sgkPrimAyi, 0);
+      expect((o.kariyer as Issiz).gecenTur, 2);
+    });
+
+    test('kadın karakter askerlik yükümlüsü değil', () {
+      final o = Oyuncu.yeni(
+        ad: 'Ayşe',
+        sehir: 'İzmir',
+        cinsiyet: Cinsiyet.kadin,
+      );
+      expect(o.askerlikYukumlusu, isFalse);
+    });
+
+    test('kariyer durumu kayıtta korunur', () {
+      final o = yeniOyuncu().kariyerDegistir(
+        const KariyerDurumu.ogrenci(hedef: EgitimSeviyesi.lisans, kalanTur: 48),
+      );
+      final geri = Oyuncu.fromJson(
+        jsonDecode(jsonEncode(o.toJson())) as Map<String, dynamic>,
+      );
+      expect(geri.kariyer, o.kariyer);
     });
   });
 }

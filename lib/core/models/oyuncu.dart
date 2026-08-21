@@ -1,9 +1,16 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'egitim_seviyesi.dart';
+import 'kariyer_durumu.dart';
+import 'sektor.dart';
+
 part 'oyuncu.freezed.dart';
 part 'oyuncu.g.dart';
 
 /// Oyuncunun tüm durumu. Anayasadaki altı istatistik dışında stat eklenmez.
+///
+/// `egitim`, `cinsiyet` ve `kariyer` birer istatistik değil DURUM alanıdır;
+/// mesleklere giriş şartı ve askerlik mekaniği bunlara bağlıdır.
 ///
 /// Değiştirilemez (immutable) bir yapıdır; her tur motorun ürettiği yeni bir
 /// `Oyuncu` örneğiyle ilerlenir. Sınır kontrolleri (clamp) bu sınıfın
@@ -26,6 +33,15 @@ abstract class Oyuncu with _$Oyuncu {
     /// iki alan ayrı tutulsa er ya da geç birbirinden kayar.
     @Default(Oyuncu.baslangicYasiVarsayilan) int baslangicYasi,
 
+    /// Tek mekanik etkisi askerliktir.
+    @Default(Cinsiyet.erkek) Cinsiyet cinsiyet,
+
+    /// Mesleklere giriş ön koşulu.
+    @Default(EgitimSeviyesi.lise) EgitimSeviyesi egitim,
+
+    /// Öğrenci / çalışan / işsiz / askerlik / emekli.
+    @Default(KariyerDurumu.issiz()) KariyerDurumu kariyer,
+
     /// Nakit (TL). Kuruş tutulmaz.
     @Default(0) int nakit,
 
@@ -41,16 +57,25 @@ abstract class Oyuncu with _$Oyuncu {
     /// Kredi notu. Borçlanma limiti ve faiz oranını belirler.
     @Default(Oyuncu.krediNotuBaslangic) int krediNotu,
 
-    /// Sektör kimliği -> yetkinlik (0-100). Sektör listesi veri katmanında
-    /// tanımlanır; model belirli bir sektör kümesine bağlanmaz.
-    @Default(<String, int>{}) Map<String, int> yetkinlikler,
+    /// Sektör -> yetkinlik (0-100). Yetkinlik meslek değil SEKTÖR bazında
+    /// birikir: sektör içi geçiş bilgiyi korur, sektör dışına geçiş sıfırlar.
+    @Default(<Sektor, int>{}) Map<Sektor, int> yetkinlikler,
+
+    /// Yatan SGK primi (ay). Emekli aylığı buna bağlıdır; kayıt dışı çalışan
+    /// oyuncu geç oyunda bunun bedelini öder.
+    @Default(0) int sgkPrimAyi,
   }) = _Oyuncu;
 
   factory Oyuncu.fromJson(Map<String, dynamic> json) => _$OyuncuFromJson(json);
 
   /// Yeni oyun başlangıcı.
-  factory Oyuncu.yeni({required String ad, required String sehir}) =>
-      Oyuncu(ad: ad, sehir: sehir);
+  factory Oyuncu.yeni({
+    required String ad,
+    required String sehir,
+    Cinsiyet cinsiyet = Cinsiyet.erkek,
+    EgitimSeviyesi egitim = EgitimSeviyesi.lise,
+  }) =>
+      Oyuncu(ad: ad, sehir: sehir, cinsiyet: cinsiyet, egitim: egitim);
 
   static const int baslangicYasiVarsayilan = 18;
   static const int enerjiTaban = 0;
@@ -83,12 +108,15 @@ abstract class Oyuncu with _$Oyuncu {
   /// Burnout durumu.
   bool get burnout => mutluluk < burnoutEsigi;
 
+  /// Askerlik yükümlüsü mü (henüz yapmadıysa ilgili olaylar tetiklenir).
+  bool get askerlikYukumlusu => cinsiyet.askerlikYukumlusu;
+
   /// Belirli bir sektördeki yetkinlik. Tanımsız sektör 0 sayılır.
-  int yetkinlik(String sektorId) => yetkinlikler[sektorId] ?? 0;
+  int yetkinlik(Sektor sektor) => yetkinlikler[sektor] ?? 0;
 
   /// En yüksek yetkinliğe sahip sektör; hiç yoksa null.
-  String? get anaSektor {
-    String? enIyi;
+  Sektor? get anaSektor {
+    Sektor? enIyi;
     var enYuksek = 0;
     for (final girdi in yetkinlikler.entries) {
       if (girdi.value > enYuksek) {
@@ -120,18 +148,28 @@ abstract class Oyuncu with _$Oyuncu {
         krediNotu: _sinirla(krediNotu + fark, krediNotuTaban, krediNotuTavan),
       );
 
-  Oyuncu yetkinlikDegistir(String sektorId, int fark) {
-    final guncel = yetkinlik(sektorId);
-    return copyWith(
-      yetkinlikler: {
-        ...yetkinlikler,
-        sektorId: _sinirla(guncel + fark, yetkinlikTaban, yetkinlikTavan),
-      },
-    );
-  }
+  Oyuncu yetkinlikDegistir(Sektor sektor, int fark) => copyWith(
+        yetkinlikler: {
+          ...yetkinlikler,
+          sektor: _sinirla(
+            yetkinlik(sektor) + fark,
+            yetkinlikTaban,
+            yetkinlikTavan,
+          ),
+        },
+      );
 
-  /// Bir sonraki aya geçer. Yaş ilerlemesi buradan otomatik gelir.
-  Oyuncu turIlerlet() => copyWith(tur: tur + 1);
+  /// Kariyer durumunu değiştirir. Geçişin geçerliliğine motor karar verir.
+  Oyuncu kariyerDegistir(KariyerDurumu yeniDurum) =>
+      copyWith(kariyer: yeniDurum);
+
+  /// Bir sonraki aya geçer: tur artar (yaş buradan gelir) ve kariyer
+  /// durumunun sayaçları ilerler.
+  Oyuncu turIlerlet() => copyWith(
+        tur: tur + 1,
+        kariyer: kariyer.turIlerlet(),
+        sgkPrimAyi: kariyer.primYatiyorMu ? sgkPrimAyi + 1 : sgkPrimAyi,
+      );
 
   /// Kayıttan yüklenen ya da elle üretilmiş veriyi sınırlara çeker.
   /// Bozuk/eski kayıtlara karşı savunma hattıdır.
@@ -141,6 +179,7 @@ abstract class Oyuncu with _$Oyuncu {
         mutluluk: _sinirla(mutluluk, mutlulukTaban, mutlulukTavan),
         itibar: _sinirla(itibar, itibarTaban, itibarTavan),
         krediNotu: _sinirla(krediNotu, krediNotuTaban, krediNotuTavan),
+        sgkPrimAyi: sgkPrimAyi < 0 ? 0 : sgkPrimAyi,
         yetkinlikler: {
           for (final g in yetkinlikler.entries)
             g.key: _sinirla(g.value, yetkinlikTaban, yetkinlikTavan),
