@@ -14,6 +14,11 @@ _PiyasaDurumu _$PiyasaDurumuFromJson(Map<String, dynamic> json) =>
       sonAylikEnflasyon: (json['sonAylikEnflasyon'] as num?)?.toDouble() ?? 0.0,
       paraReformuSayisi: (json['paraReformuSayisi'] as num?)?.toInt() ?? 0,
       paraReformuYapildi: json['paraReformuYapildi'] as bool? ?? false,
+      fiyatlar:
+          (json['fiyatlar'] as Map<String, dynamic>?)?.map(
+            (k, e) => MapEntry(k, (e as num).toDouble()),
+          ) ??
+          const <String, double>{},
     );
 
 Map<String, dynamic> _$PiyasaDurumuToJson(_PiyasaDurumu instance) =>
@@ -24,6 +29,7 @@ Map<String, dynamic> _$PiyasaDurumuToJson(_PiyasaDurumu instance) =>
       'sonAylikEnflasyon': instance.sonAylikEnflasyon,
       'paraReformuSayisi': instance.paraReformuSayisi,
       'paraReformuYapildi': instance.paraReformuYapildi,
+      'fiyatlar': instance.fiyatlar,
     };
 
 const _$RejimEnumMap = {

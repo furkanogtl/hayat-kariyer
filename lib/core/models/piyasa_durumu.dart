@@ -32,6 +32,9 @@ abstract class PiyasaDurumu with _$PiyasaDurumu {
 
     /// Sıfır atma bu turda mı oldu. UI/olay kartı bunu duyurmak için okur.
     @Default(false) bool paraReformuYapildi,
+
+    /// Varlık kimliği -> birim fiyat (ham TL).
+    @Default(<String, double>{}) Map<String, double> fiyatlar,
   }) = _PiyasaDurumu;
 
   factory PiyasaDurumu.fromJson(Map<String, dynamic> json) =>
@@ -66,6 +69,20 @@ abstract class PiyasaDurumu with _$PiyasaDurumu {
 
   /// Sıfır atma zamanı geldi mi.
   bool get paraReformuGerekli => gosterimEndeksi > paraReformuEsigi;
+
+  /// Varlığın ham TL birim fiyatı. Tanımsız varlık için 0.
+  double fiyat(String varlikId) => fiyatlar[varlikId] ?? 0;
+
+  /// Bir varlığın fiyatını çarpanla değiştirir.
+  ///
+  /// Olay kartlarının piyasaya müdahale kapısıdır: "arsanıza imar çıktı"
+  /// kartı `fiyatiCarp('arsa', 6.0)` çağırır. Motor bu tür sıçramaları
+  /// kendi üretmez.
+  PiyasaDurumu fiyatiCarp(String varlikId, double carpan) {
+    final mevcut = fiyatlar[varlikId];
+    if (mevcut == null) return this;
+    return copyWith(fiyatlar: {...fiyatlar, varlikId: mevcut * carpan});
+  }
 }
 
 /// Sıfır atma eşiği: gösterim endeksi bunu aşınca para reformu yapılır.

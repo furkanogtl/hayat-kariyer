@@ -1,8 +1,11 @@
+import 'dart:math' as math;
+
 import '../models/piyasa_durumu.dart';
+import '../models/varlik.dart';
 import '../rng/rastgele_akis.dart';
 import 'rejim.dart';
 
-/// Makro ekonomiyi yürüten motor: rejim geçişleri ve enflasyon.
+/// Makro ekonomiyi ve varlık fiyatlarını yürüten motor.
 ///
 /// Saf ve deterministiktir — aynı `PiyasaDurumu` ve aynı akış aynı sonucu
 /// verir. Rastgeleliği kendi üretmez, dışarıdan verilen [RastgeleAkis]'i
@@ -12,16 +15,26 @@ import 'rejim.dart';
 /// olmamasına göre). Bu sorun değil: `RastgeleKaynak` her tur için ayrı akış
 /// türetir, bir turdaki fazladan zar sonraki turları kaydırmaz.
 class PiyasaSimulatoru {
-  const PiyasaSimulatoru();
+  PiyasaSimulatoru({List<VarlikTanimi>? varliklar})
+      : varliklar = varliklar ?? piyasaVarliklari;
+
+  /// Fiyatı üretilecek varlıklar. Sıra sabittir; zar atma sırası buna bağlı.
+  final List<VarlikTanimi> varliklar;
 
   /// Enflasyonun inebileceği alt sınır. Türkiye bağlamında kalıcı deflasyon
   /// gerçekçi değil; gürültü aşırıya kaçarsa buradan kesilir.
   static const double enAzAylikEnflasyon = -0.005;
 
-  PiyasaDurumu baslangic({Rejim rejim = Rejim.buyume}) =>
-      PiyasaDurumu(rejim: rejim);
+  /// Fiyatın bir turda düşebileceği taban oran. GBM teoride sıfıra inmez ama
+  /// aşırı bir şok fiyatı anlamsız kılabilir; oyun için sert bir zemin.
+  static const double enAzTurGetirisi = -0.75;
 
-  /// Bir turu işler: önce rejim geçişi, sonra o rejimin enflasyonu.
+  PiyasaDurumu baslangic({Rejim rejim = Rejim.buyume}) => PiyasaDurumu(
+        rejim: rejim,
+        fiyatlar: {for (final v in varliklar) v.id: v.baslangicFiyati},
+      );
+
+  /// Bir turu işler: rejim geçişi → enflasyon → varlık fiyatları → para reformu.
   PiyasaDurumu turIsle(PiyasaDurumu onceki, RastgeleAkis akis) {
     final rejim = _sonrakiRejim(onceki, akis);
     final rejimDegisti = rejim != onceki.rejim;
@@ -39,6 +52,7 @@ class PiyasaSimulatoru {
       enflasyonEndeksi: onceki.enflasyonEndeksi * (1 + aylik),
       sonAylikEnflasyon: aylik,
       paraReformuYapildi: false,
+      fiyatlar: _yeniFiyatlar(onceki.fiyatlar, rejim, akis),
     );
 
     // Sıfır atma: motorun hesapları değişmez, yalnızca gösterim ölçeği kayar.
@@ -59,5 +73,47 @@ class PiyasaSimulatoru {
     final agirliklar = onceki.rejim.parametreler.gecisAgirliklari;
     final adaylar = agirliklar.keys.toList();
     return akis.agirlikliSecim(adaylar, (r) => agirliklar[r]!);
+  }
+
+  /// GBM adımı: `fiyat *= exp(drift + sigma*z)`.
+  ///
+  /// `drift` bileşik (logaritmik) getiri olarak tanımlı, bu yüzden
+  /// `-sigma^2/2` düzeltmesi UYGULANMAZ. Uygulansaydı yüksek oynaklıklı
+  /// varlıklar tabloda yazandan kalıcı olarak geride kalırdı; hisse senedi
+  /// 40 yılda enflasyonun altında kalıyor, yani borsa oyuncu için tuzağa
+  /// dönüşüyordu.
+  Map<String, double> _yeniFiyatlar(
+    Map<String, double> oncekiler,
+    Rejim rejim,
+    RastgeleAkis akis,
+  ) {
+    // Ortak şoklar önce çekilir: aynı turda tüm hisseler ve kripto aynı
+    // piyasa rüzgârını, döviz ve altın aynı kur rüzgârını yer.
+    final ortakSoklar = <OrtakFaktor, double>{
+      OrtakFaktor.piyasa: akis.normal(),
+      OrtakFaktor.kur: akis.normal(),
+      OrtakFaktor.yok: 0.0,
+    };
+
+    final yeniler = <String, double>{};
+    for (final varlik in varliklar) {
+      final p = varlik.parametre(rejim);
+      final bireysel = akis.normal();
+      final agirlik = varlik.ortakFaktor == OrtakFaktor.yok
+          ? 0.0
+          : varlik.ortakAgirlik;
+      // Toplam varyans 1 kalsın diye bireysel payın ağırlığı sqrt(1-a^2).
+      final z = agirlik * ortakSoklar[varlik.ortakFaktor]! +
+          math.sqrt(1 - agirlik * agirlik) * bireysel;
+
+      final sigma = p.oynaklik;
+      final logGetiri = p.drift + sigma * z;
+      var carpan = math.exp(logGetiri);
+      if (carpan < 1 + enAzTurGetirisi) carpan = 1 + enAzTurGetirisi;
+
+      final mevcut = oncekiler[varlik.id] ?? varlik.baslangicFiyati;
+      yeniler[varlik.id] = mevcut * carpan;
+    }
+    return yeniler;
   }
 }

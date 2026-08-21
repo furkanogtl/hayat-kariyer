@@ -8,7 +8,7 @@ import 'package:hayat_kariyer/core/rng/rng.dart';
 
 /// Bir oyunu baştan sona simüle eder ve her turun durumunu döndürür.
 List<PiyasaDurumu> simulasyon(int tohum, int turSayisi, {Rejim? baslangic}) {
-  const motor = PiyasaSimulatoru();
+  final motor = PiyasaSimulatoru();
   final kaynak = RastgeleKaynak(tohum);
   var durum = motor.baslangic(rejim: baslangic ?? Rejim.buyume);
   final gecmis = <PiyasaDurumu>[durum];
@@ -313,7 +313,7 @@ void main() {
     });
 
     test('kayıttan devam eden oyun aynı geleceği üretir', () {
-      const motor = PiyasaSimulatoru();
+      final motor = PiyasaSimulatoru();
       final kaynak = RastgeleKaynak(4242);
 
       var kesintisiz = motor.baslangic();
