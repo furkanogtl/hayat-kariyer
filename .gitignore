@@ -46,3 +46,6 @@ app.*.map.json
 
 # Flutter android build ciktisi
 android/build/
+
+# Proje anayasasi ve calisma notlari - git disinda tutuluyor
+CLAUDE.md
