@@ -13,6 +13,14 @@ _OyunDurumu _$OyunDurumuFromJson(Map<String, dynamic> json) => _OyunDurumu(
   portfoy: json['portfoy'] == null
       ? const Portfoy()
       : Portfoy.fromJson(json['portfoy'] as Map<String, dynamic>),
+  isletmeler:
+      (json['isletmeler'] as List<dynamic>?)
+          ?.map((e) => Isletme.fromJson(e as Map<String, dynamic>))
+          .toList() ??
+      const <Isletme>[],
+  ilgi: json['ilgi'] == null
+      ? const IlgiDagilimi()
+      : IlgiDagilimi.fromJson(json['ilgi'] as Map<String, dynamic>),
   bekleyenOlaylar:
       (json['bekleyenOlaylar'] as List<dynamic>?)
           ?.map((e) => BekleyenOlay.fromJson(e as Map<String, dynamic>))
@@ -33,6 +41,8 @@ Map<String, dynamic> _$OyunDurumuToJson(_OyunDurumu instance) =>
       'oyuncu': instance.oyuncu,
       'piyasa': instance.piyasa,
       'portfoy': instance.portfoy,
+      'isletmeler': instance.isletmeler,
+      'ilgi': instance.ilgi,
       'bekleyenOlaylar': instance.bekleyenOlaylar,
       'olayGecmisi': instance.olayGecmisi,
       'maasEndeksi': instance.maasEndeksi,

@@ -1,0 +1,64 @@
+[
+  {
+    "id": "kafe",
+    "ad": "Kafe",
+    "sermaye": 1800000,
+    "yonetimYuku": 2,
+    "prestij": 0.3,
+    "ceoMaasi": 25000,
+    "ceoEtkinligi": 0.7,
+    "degerCarpani": 3.0,
+    "satisSuresiTur": 3,
+    "baslangicStatlari": { "musteriTabani": 60, "personelMoral": 60 },
+    "girisSarti": { "enAzYas": 22, "itibar": 10 },
+    "gelirler": [
+      {
+        "ad": "Satış cirosu",
+        "tur": "stata_bagli",
+        "taban": 300000,
+        "statId": "musteriTabani"
+      }
+    ],
+    "giderler": [
+      { "ad": "Dükkân kirası", "tur": "sabit", "taban": 45000 },
+      { "ad": "Personel", "tur": "sabit", "taban": 60000 },
+      { "ad": "Sabit giderler", "tur": "sabit", "taban": 12000 },
+      { "ad": "Malzeme", "tur": "cirodan_pay", "oran": 0.35 },
+      {
+        "ad": "Ruhsat ve sigorta",
+        "tur": "sabit",
+        "taban": 30000,
+        "periyotTur": 12
+      }
+    ],
+    "olayHavuzu": []
+  },
+  {
+    "id": "oto_galeri",
+    "ad": "Oto Galeri",
+    "sermaye": 5000000,
+    "yonetimYuku": 3,
+    "prestij": 0.5,
+    "ceoMaasi": 55000,
+    "ceoEtkinligi": 0.7,
+    "degerCarpani": 2.5,
+    "satisSuresiTur": 4,
+    "baslangicStatlari": { "stokKalitesi": 50, "musteriTabani": 30 },
+    "girisSarti": { "enAzYas": 24, "itibar": 20 },
+    "gelirler": [
+      {
+        "ad": "Araç satış cirosu",
+        "tur": "stata_bagli",
+        "taban": 1800000,
+        "statId": "stokKalitesi"
+      }
+    ],
+    "giderler": [
+      { "ad": "Stok yenileme", "tur": "cirodan_pay", "oran": 0.72 },
+      { "ad": "Noter, plaka, vergi", "tur": "cirodan_pay", "oran": 0.05 },
+      { "ad": "Galeri kirası", "tur": "sabit", "taban": 90000 },
+      { "ad": "Personel", "tur": "sabit", "taban": 120000 }
+    ],
+    "olayHavuzu": []
+  }
+]

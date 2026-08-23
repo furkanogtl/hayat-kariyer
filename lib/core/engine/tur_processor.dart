@@ -6,6 +6,7 @@ import '../models/piyasa_durumu.dart';
 import '../models/sehir.dart';
 import '../models/zaman_dagilimi.dart';
 import '../rng/rastgele_kaynak.dart';
+import 'isletme_motoru.dart';
 import 'kariyer_motoru.dart';
 import 'olay_motoru.dart';
 import 'piyasa_simulatoru.dart';
@@ -55,6 +56,9 @@ class TurRaporu {
     this.emirSonuclari = const [],
     this.tamamlananSatislar = const [],
     this.acilanOlaylar = const [],
+    this.isletmeKari = 0,
+    this.isletmeRaporlari = const [],
+    this.devredilenIsletmeler = const {},
     this.terfiEtti = false,
     this.yeniKademeAdi,
     this.istenCikarildi = false,
@@ -92,6 +96,13 @@ class TurRaporu {
 
   /// Turlar önce verilmiş kararlardan bu tur açığa çıkanlar.
   final List<AcigaCikanSonuc> acilanOlaylar;
+
+  /// İşletmelerin bu turdaki toplam net kârı (negatif olabilir).
+  final int isletmeKari;
+  final List<IsletmeRaporu> isletmeRaporlari;
+
+  /// Bu turda devri tamamlanan işletmeler: id → eline geçen tutar.
+  final Map<String, int> devredilenIsletmeler;
 
   final bool terfiEtti;
   final String? yeniKademeAdi;
@@ -138,14 +149,15 @@ class TurGirdisi {
 ///   3. Kariyer işlenir (gelir, terfi, statlar) — maaş GEÇEN yılın endeksiyle
 ///   4. Gecikmeli olay sonuçları açığa çıkar
 ///   5. Kira geliri ve olgunlaşan gecikmeli satışlar — YENİ fiyatlarla
-///   6. Yaşam gideri düşer — GÜNCEL enflasyonla
-///   7. Nakit mahsuplaşır, eksi bakiye faiz işletir, kredi notu güncellenir
-///   8. Tur ilerler (yaş, kariyer sayaçları, SGK primi)
+///   6. İşletmeler işler (ilgi, statlar, kâr/zarar, devirler)
+///   7. Yaşam gideri düşer — GÜNCEL enflasyonla
+///   8. Nakit mahsuplaşır, eksi bakiye faiz işletir, kredi notu güncellenir
+///   9. Tur ilerler (yaş, kariyer sayaçları, SGK primi)
 ///
 /// 0. adımın piyasadan ÖNCE olması bilinçli: oyuncu ekranda gördüğü fiyattan
 /// alır, sonra piyasa oynar. Aksi halde "aldığım fiyat bu değildi" olurdu.
 ///
-/// 3. ve 6. adımın farklı endeks kullanması da bilinçli: maaş yılda bir
+/// 3. ve 7. adımın farklı endeks kullanması da bilinçli: maaş yılda bir
 /// zamlanır, market her ay zamlanır. Aradaki makas oyunun ana baskısıdır.
 class TurProcessor {
   TurProcessor({
@@ -153,6 +165,7 @@ class TurProcessor {
     PiyasaSimulatoru? piyasa,
     PortfoyMotoru? portfoy,
     this.olay,
+    this.isletme,
     this.kariyer = const KariyerMotoru(),
     this.ayarlar = const TurAyarlari(),
   })  : piyasa = piyasa ?? PiyasaSimulatoru(),
@@ -165,6 +178,10 @@ class TurProcessor {
   /// Olay motoru isteğe bağlı: kart sistemi olmadan da tur işlenebilir
   /// (denge simülasyonları kartsız çalışıyor).
   final OlayMotoru? olay;
+
+  /// İşletme motoru isteğe bağlı: işletmesiz oyun da işlenebilir, denge
+  /// simülasyonlarının çoğu işletmesiz koşuyor.
+  final IsletmeMotoru? isletme;
   final KariyerMotoru kariyer;
   final TurAyarlari ayarlar;
 
@@ -241,10 +258,27 @@ class TurProcessor {
     final satisGeliri = portfoySonucu.satislar
         .fold<int>(0, (toplam, s) => toplam + s.tutar);
 
-    // 6. Yaşam gideri — güncel enflasyonla, maaş endeksiyle DEĞİL.
+    // 6. İşletmeler — güncel endeksle. Kariyer maaşı geçen ocağın
+    // endeksini kullanır ama işletme cirosu bu ayın fiyatlarıyla oluşur.
+    final isletmeMotoru = isletme;
+    final isletmeSonucu = isletmeMotoru == null || durum.isletmeler.isEmpty
+        ? null
+        : isletmeMotoru.turIsle(
+            isletmeler: durum.isletmeler,
+            ilgi: durum.ilgi,
+            piyasa: yeniPiyasa,
+            tur: sonrakiTur,
+            akis: kaynak.akis('isletme', tur: sonrakiTur),
+          );
+    final isletmeKari = isletmeSonucu?.netNakit ?? 0;
+    final isletmeDevirGeliri = isletmeSonucu?.tamamlananSatislar.values
+            .fold<int>(0, (t, v) => t + v) ??
+        0;
+
+    // 7. Yaşam gideri — güncel enflasyonla, maaş endeksiyle DEĞİL.
     final yasamGideri = _yasamGideri(durum.oyuncu.sehir, yeniPiyasa);
 
-    // 7. Mahsuplaşma
+    // 8. Mahsuplaşma
     var oyuncu = araDurum.oyuncu;
     final onceki = durum.oyuncu.nakit;
     // Emirler ve olaylar nakiti zaten değiştirdi; faiz bunlardan sonraki
@@ -257,24 +291,41 @@ class TurProcessor {
     oyuncu = oyuncu.copyWith(nakit: mahsupOncesi).nakitDegistir(
           kariyerSonucu.netGelir +
               portfoySonucu.kiraGeliri +
-              satisGeliri -
+              satisGeliri +
+              isletmeKari +
+              isletmeDevirGeliri -
               yasamGideri -
               faizGideri,
         );
+    if (isletmeSonucu != null && isletmeSonucu.itibarKatkisi != 0) {
+      oyuncu = oyuncu.itibarDegistir(isletmeSonucu.itibarKatkisi);
+    }
     oyuncu = oyuncu.krediNotuDegistir(
       oyuncu.nakit < 0
           ? -ayarlar.borcluKrediNotuDususu
           : ayarlar.duzenliKrediNotuArtisi,
     );
 
-    // 8. Tur ilerlet
+    // 9. Tur ilerlet
     oyuncu = oyuncu.turIlerlet();
 
-    final yeniDurum = araDurum.copyWith(
+    var yeniDurum = araDurum.copyWith(
       oyuncu: oyuncu,
       portfoy: guncelPortfoy,
       maasEndeksi: maasEndeksi,
     );
+    if (isletmeSonucu != null) {
+      // Devredilen işletmenin ilgi puanı da serbest kalmalı; yoksa oyuncu
+      // sattığı işletmeye puan ayırmaya devam eder.
+      var ilgi = durum.ilgi;
+      for (final id in isletmeSonucu.tamamlananSatislar.keys) {
+        ilgi = ilgi.kaldir(id);
+      }
+      yeniDurum = yeniDurum.copyWith(
+        isletmeler: isletmeSonucu.isletmeler,
+        ilgi: ilgi,
+      );
+    }
 
     return TurSonucu(
       durum: yeniDurum,
@@ -298,6 +349,9 @@ class TurProcessor {
         emirSonuclari: emirSonucu.sonuclar,
         tamamlananSatislar: portfoySonucu.satislar,
         acilanOlaylar: acilanOlaylar,
+        isletmeKari: isletmeKari,
+        isletmeRaporlari: isletmeSonucu?.raporlar ?? const [],
+        devredilenIsletmeler: isletmeSonucu?.tamamlananSatislar ?? const {},
         terfiEtti: kariyerSonucu.terfiEtti,
         yeniKademeAdi: kariyerSonucu.yeniKademeAdi,
         istenCikarildi: kariyerSonucu.istenCikarildi,
@@ -353,6 +407,10 @@ class TurProcessor {
 
   bool _dikkatGerektirir(TurRaporu r) =>
       r.acilanOlaylar.isNotEmpty ||
+      r.devredilenIsletmeler.isNotEmpty ||
+      // İhmal edilen işletme kriz eşiğine geldi: oyuncu farkında olmadan
+      // işletmesini batırmasın diye atlama burada kesilir.
+      r.isletmeRaporlari.any((i) => i.krizRiski) ||
       r.tamamlananSatislar.isNotEmpty ||
       r.istenCikarildi ||
       r.terfiEtti ||

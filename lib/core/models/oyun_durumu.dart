@@ -1,5 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'ilgi_dagilimi.dart';
+import 'isletme.dart';
 import 'olay.dart';
 import 'oyuncu.dart';
 import 'piyasa_durumu.dart';
@@ -24,6 +26,12 @@ abstract class OyunDurumu with _$OyunDurumu {
     required Oyuncu oyuncu,
     required PiyasaDurumu piyasa,
     @Default(Portfoy()) Portfoy portfoy,
+
+    /// Oyuncunun sahip olduğu işletmeler.
+    @Default(<Isletme>[]) List<Isletme> isletmeler,
+
+    /// Bu turda işletmelere ayrılan ilgi. Zaman dağılımından AYRI kaynak.
+    @Default(IlgiDagilimi()) IlgiDagilimi ilgi,
 
     /// Sonucu bekleyen kararlar.
     @Default(<BekleyenOlay>[]) List<BekleyenOlay> bekleyenOlaylar,
@@ -58,11 +66,17 @@ abstract class OyunDurumu with _$OyunDurumu {
   double get alimGucuKaybi =>
       1 - maasEndeksi / piyasa.enflasyonEndeksi;
 
+  /// İşletmelerin toplam değeri (ham TL). Motorun her tur yazdığı
+  /// değerlemeden okunur; katalog burada bilinmez.
+  int get isletmeDegeri =>
+      isletmeler.fold(0, (t, i) => t + i.guncelDeger);
+
   /// Portföyün güncel piyasa değeri (ham TL).
   int get portfoyDegeri => portfoy.piyasaDegeri(piyasa.fiyatlar).round();
 
   /// Ana skor. Borç sistemi eklenince borçlar da buradan düşülecek.
-  int get netDeger => oyuncu.netDeger(varliklar: portfoyDegeri);
+  int get netDeger =>
+      oyuncu.netDeger(varliklar: portfoyDegeri + isletmeDegeri);
 
   /// Net değerin oyun başı parasına indirgenmiş hali. Skor ekranı bunu
   /// gösterir; nominal rakam enflasyonla şişip anlamsızlaşır.
@@ -72,6 +86,8 @@ abstract class OyunDurumu with _$OyunDurumu {
   OyunDurumu duzelt() => copyWith(
         oyuncu: oyuncu.duzelt(),
         portfoy: portfoy.duzelt(),
+        isletmeler: [for (final i in isletmeler) i.duzelt()],
+        ilgi: ilgi.duzelt(),
         bekleyenOlaylar: [
           for (final b in bekleyenOlaylar)
             if (b.kalanTur >= 0) b else b.copyWith(kalanTur: 0),
