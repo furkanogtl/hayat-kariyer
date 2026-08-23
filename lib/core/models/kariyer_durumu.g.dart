@@ -46,24 +46,30 @@ Map<String, dynamic> _$CalisanToJson(Calisan instance) => <String, dynamic>{
 Issiz _$IssizFromJson(Map<String, dynamic> json) => Issiz(
   gecenTur: (json['gecenTur'] as num?)?.toInt() ?? 0,
   atamaBekliyor: json['atamaBekliyor'] as bool? ?? false,
+  bekleyenMeslekId: json['bekleyenMeslekId'] as String?,
   $type: json['durum'] as String?,
 );
 
 Map<String, dynamic> _$IssizToJson(Issiz instance) => <String, dynamic>{
   'gecenTur': instance.gecenTur,
   'atamaBekliyor': instance.atamaBekliyor,
+  'bekleyenMeslekId': instance.bekleyenMeslekId,
   'durum': instance.$type,
 };
 
 Askerlik _$AskerlikFromJson(Map<String, dynamic> json) => Askerlik(
   kalanTur: (json['kalanTur'] as num).toInt(),
   bedelli: json['bedelli'] as bool? ?? false,
+  oncekiMeslekId: json['oncekiMeslekId'] as String?,
+  oncekiKademeIndeksi: (json['oncekiKademeIndeksi'] as num?)?.toInt() ?? 0,
   $type: json['durum'] as String?,
 );
 
 Map<String, dynamic> _$AskerlikToJson(Askerlik instance) => <String, dynamic>{
   'kalanTur': instance.kalanTur,
   'bedelli': instance.bedelli,
+  'oncekiMeslekId': instance.oncekiMeslekId,
+  'oncekiKademeIndeksi': instance.oncekiKademeIndeksi,
   'durum': instance.$type,
 };
 

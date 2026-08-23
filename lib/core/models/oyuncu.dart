@@ -65,6 +65,14 @@ abstract class Oyuncu with _$Oyuncu {
     /// Yatan SGK primi (ay). Emekli aylığı buna bağlıdır; kayıt dışı çalışan
     /// oyuncu geç oyunda bunun bedelini öder.
     @Default(0) int sgkPrimAyi,
+
+    /// Askerlik tamamlandı mı (bedelli dahil). Kadın oyuncuda hep true
+    /// sayılır; kontrol [Cinsiyet.askerlikYukumlusu] üzerinden yapılır.
+    @Default(false) bool askerlikYapildi,
+
+    /// Celp tebligatı geldiyse kalan tur. Bu sürede bedelli ödenebilir;
+    /// sıfıra inince oyuncu askere alınır. null = tebligat yok.
+    int? celpKalanTur,
   }) = _Oyuncu;
 
   factory Oyuncu.fromJson(Map<String, dynamic> json) => _$OyuncuFromJson(json);

@@ -61,6 +61,10 @@ class TurRaporu {
     this.isletmeKari = 0,
     this.odenenTaksit = 0,
     this.cekilenKredi = 0,
+    this.celpGeldi = false,
+    this.askereAlindi = false,
+    this.atamasiCikti = false,
+    this.iseGirildi = false,
     this.krediHatasi,
     this.toplamBorc = 0,
     this.kapananKrediler = const [],
@@ -115,6 +119,18 @@ class TurRaporu {
   /// Bu tur çekilen kredi anaparası. 0 = kredi çekilmedi.
   final int cekilenKredi;
 
+  /// Celp tebligatı bu turda geldi.
+  final bool celpGeldi;
+
+  /// Bu turda askere alındı.
+  final bool askereAlindi;
+
+  /// Atama kurası bu turda çıktı.
+  final bool atamasiCikti;
+
+  /// İşe giriş talebi bu turda kabul edildi.
+  final bool iseGirildi;
+
   /// Kredi talebi reddedildiyse sebebi.
   final KrediHatasi? krediHatasi;
 
@@ -156,12 +172,16 @@ class TurGirdisi {
     required this.zaman,
     this.emirler = const [],
     this.krediTalebi,
+    this.bedelliOde = false,
+    this.iseGirTalebi,
   });
 
   TurGirdisi.varsayilan()
       : zaman = ZamanDagilimi.dengeli(),
         emirler = const [],
-        krediTalebi = null;
+        krediTalebi = null,
+        bedelliOde = false,
+        iseGirTalebi = null;
 
   final ZamanDagilimi zaman;
 
@@ -171,6 +191,13 @@ class TurGirdisi {
   /// Bu turda çekilmek istenen kredi. Emirlerden ÖNCE işlenir: oyuncu
   /// çektiği krediyle aynı turda yatırım yapabilsin.
   final KrediTalebi? krediTalebi;
+
+  /// Celp tebligatı geldiyse bedelli ödensin mi.
+  final bool bedelliOde;
+
+  /// Girilmek istenen meslek kimliği. Kamu mesleklerinde atama kuyruğuna
+  /// alır, diğerlerinde doğrudan işe başlatır.
+  final String? iseGirTalebi;
 }
 
 /// Oyuncunun kredi talebi.
@@ -294,7 +321,21 @@ class TurProcessor {
       }
     }
 
-    // 0b. Emirler — oyuncunun gördüğü fiyatlarla, piyasa oynamadan önce.
+    // 0b. İşe giriş talebi. Kariyerden önce: aynı turda çalışmaya başlasın
+    //     (kamu mesleğinde atama kuyruğuna girsin).
+    var iseGirildi = false;
+    final isTalebi = girdi.iseGirTalebi;
+    if (isTalebi != null) {
+      final meslek = katalog.bul(isTalebi);
+      final yeniDurumu =
+          meslek == null ? null : kariyer.iseGir(oyuncuBaslangic, meslek);
+      if (yeniDurumu != null) {
+        oyuncuBaslangic = oyuncuBaslangic.kariyerDegistir(yeniDurumu);
+        iseGirildi = true;
+      }
+    }
+
+    // 0c. Emirler — oyuncunun gördüğü fiyatlarla, piyasa oynamadan önce.
     final emirSonucu = portfoy.emirleriIsle(
       durum.portfoy,
       oyuncuBaslangic.nakit,
@@ -327,6 +368,7 @@ class TurProcessor {
       zaman: girdi.zaman,
       akis: kaynak.akis('kariyer', tur: sonrakiTur),
       maasEndeksi: maasEndeksi,
+      bedelliOde: girdi.bedelliOde,
     );
 
     // 4. Gecikmeli olay sonuçları. Kariyerden sonra, gider mahsuplaşmasından
@@ -480,6 +522,10 @@ class TurProcessor {
         isletmeKari: isletmeKari,
         odenenTaksit: odenenTaksit,
         cekilenKredi: krediSonucu.borc?.anapara ?? 0,
+        celpGeldi: kariyerSonucu.celpGeldi,
+        askereAlindi: kariyerSonucu.askereAlindi,
+        atamasiCikti: kariyerSonucu.atamasiCikti,
+        iseGirildi: iseGirildi,
         krediHatasi: krediSonucu.hata,
         toplamBorc: yeniDurum.toplamBorc,
         kapananKrediler: borcSonucu?.kapananlar ?? const [],
@@ -545,6 +591,10 @@ class TurProcessor {
       r.devredilenIsletmeler.isNotEmpty ||
       // Taksit kaçırmak ve takibe düşmek fark edilmeden geçilmemeli.
       r.gecikenKrediler.isNotEmpty ||
+      // Hayatın dönüm noktaları: farkında olmadan geçilmesin.
+      r.celpGeldi ||
+      r.askereAlindi ||
+      r.atamasiCikti ||
       r.kapananKrediler.isNotEmpty ||
       // İhmal edilen işletme kriz eşiğine geldi: oyuncu farkında olmadan
       // işletmesini batırmasın diye atlama burada kesilir.

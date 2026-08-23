@@ -33,6 +33,8 @@ _Oyuncu _$OyuncuFromJson(Map<String, dynamic> json) => _Oyuncu(
       ) ??
       const <Sektor, int>{},
   sgkPrimAyi: (json['sgkPrimAyi'] as num?)?.toInt() ?? 0,
+  askerlikYapildi: json['askerlikYapildi'] as bool? ?? false,
+  celpKalanTur: (json['celpKalanTur'] as num?)?.toInt(),
 );
 
 Map<String, dynamic> _$OyuncuToJson(_Oyuncu instance) => <String, dynamic>{
@@ -52,6 +54,8 @@ Map<String, dynamic> _$OyuncuToJson(_Oyuncu instance) => <String, dynamic>{
     (k, e) => MapEntry(_$SektorEnumMap[k]!, e),
   ),
   'sgkPrimAyi': instance.sgkPrimAyi,
+  'askerlikYapildi': instance.askerlikYapildi,
+  'celpKalanTur': instance.celpKalanTur,
 };
 
 const _$SehirEnumMap = {

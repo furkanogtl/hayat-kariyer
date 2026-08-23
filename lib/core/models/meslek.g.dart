@@ -68,6 +68,7 @@ _Meslek _$MeslekFromJson(Map<String, dynamic> json) => _Meslek(
           ?.map((e) => e as String)
           .toList() ??
       const <String>[],
+  atamaGerektirir: json['atamaGerektirir'] as bool? ?? false,
   olayHavuzu:
       (json['olayHavuzu'] as List<dynamic>?)
           ?.map((e) => e as String)
@@ -87,6 +88,7 @@ Map<String, dynamic> _$MeslekToJson(_Meslek instance) => <String, dynamic>{
   'gelirVaryansi': instance.gelirVaryansi,
   'dovizOrani': instance.dovizOrani,
   'acilanIsletmeler': instance.acilanIsletmeler,
+  'atamaGerektirir': instance.atamaGerektirir,
   'olayHavuzu': instance.olayHavuzu,
 };
 

@@ -581,7 +581,9 @@ mixin _$Meslek {
  int get enerjiMaliyeti;/// Maaşın tur bazında oynaklığı (0 = memur, 0.6 = emlakçı).
  double get gelirVaryansi;/// Gelirin dövize endeksli oranı (0-1). Kur şokunda koruma sağlar.
  double get dovizOrani;/// Bu meslekle açılabilen işletme kimlikleri.
- List<String> get acilanIsletmeler;/// Bu mesleğe özel olay kartı kimlikleri.
+ List<String> get acilanIsletmeler;/// Kamu mesleği mi: giriş sınavı kazanıldıktan sonra ATAMA beklenir.
+/// Motor isim listesi tutmasın diye veri dosyasında işaretleniyor.
+ bool get atamaGerektirir;/// Bu mesleğe özel olay kartı kimlikleri.
  List<String> get olayHavuzu;
 /// Create a copy of Meslek
 /// with the given fields replaced by the non-null parameter values.
@@ -595,16 +597,16 @@ $MeslekCopyWith<Meslek> get copyWith => _$MeslekCopyWithImpl<Meslek>(this as Mes
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Meslek&&(identical(other.id, id) || other.id == id)&&(identical(other.ad, ad) || other.ad == ad)&&(identical(other.sektor, sektor) || other.sektor == sektor)&&(identical(other.girisSarti, girisSarti) || other.girisSarti == girisSarti)&&const DeepCollectionEquality().equals(other.kademeler, kademeler)&&(identical(other.yetkinlikArtisHizi, yetkinlikArtisHizi) || other.yetkinlikArtisHizi == yetkinlikArtisHizi)&&(identical(other.networkArtisi, networkArtisi) || other.networkArtisi == networkArtisi)&&(identical(other.enerjiMaliyeti, enerjiMaliyeti) || other.enerjiMaliyeti == enerjiMaliyeti)&&(identical(other.gelirVaryansi, gelirVaryansi) || other.gelirVaryansi == gelirVaryansi)&&(identical(other.dovizOrani, dovizOrani) || other.dovizOrani == dovizOrani)&&const DeepCollectionEquality().equals(other.acilanIsletmeler, acilanIsletmeler)&&const DeepCollectionEquality().equals(other.olayHavuzu, olayHavuzu));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Meslek&&(identical(other.id, id) || other.id == id)&&(identical(other.ad, ad) || other.ad == ad)&&(identical(other.sektor, sektor) || other.sektor == sektor)&&(identical(other.girisSarti, girisSarti) || other.girisSarti == girisSarti)&&const DeepCollectionEquality().equals(other.kademeler, kademeler)&&(identical(other.yetkinlikArtisHizi, yetkinlikArtisHizi) || other.yetkinlikArtisHizi == yetkinlikArtisHizi)&&(identical(other.networkArtisi, networkArtisi) || other.networkArtisi == networkArtisi)&&(identical(other.enerjiMaliyeti, enerjiMaliyeti) || other.enerjiMaliyeti == enerjiMaliyeti)&&(identical(other.gelirVaryansi, gelirVaryansi) || other.gelirVaryansi == gelirVaryansi)&&(identical(other.dovizOrani, dovizOrani) || other.dovizOrani == dovizOrani)&&const DeepCollectionEquality().equals(other.acilanIsletmeler, acilanIsletmeler)&&(identical(other.atamaGerektirir, atamaGerektirir) || other.atamaGerektirir == atamaGerektirir)&&const DeepCollectionEquality().equals(other.olayHavuzu, olayHavuzu));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,ad,sektor,girisSarti,const DeepCollectionEquality().hash(kademeler),yetkinlikArtisHizi,networkArtisi,enerjiMaliyeti,gelirVaryansi,dovizOrani,const DeepCollectionEquality().hash(acilanIsletmeler),const DeepCollectionEquality().hash(olayHavuzu));
+int get hashCode => Object.hash(runtimeType,id,ad,sektor,girisSarti,const DeepCollectionEquality().hash(kademeler),yetkinlikArtisHizi,networkArtisi,enerjiMaliyeti,gelirVaryansi,dovizOrani,const DeepCollectionEquality().hash(acilanIsletmeler),atamaGerektirir,const DeepCollectionEquality().hash(olayHavuzu));
 
 @override
 String toString() {
-  return 'Meslek(id: $id, ad: $ad, sektor: $sektor, girisSarti: $girisSarti, kademeler: $kademeler, yetkinlikArtisHizi: $yetkinlikArtisHizi, networkArtisi: $networkArtisi, enerjiMaliyeti: $enerjiMaliyeti, gelirVaryansi: $gelirVaryansi, dovizOrani: $dovizOrani, acilanIsletmeler: $acilanIsletmeler, olayHavuzu: $olayHavuzu)';
+  return 'Meslek(id: $id, ad: $ad, sektor: $sektor, girisSarti: $girisSarti, kademeler: $kademeler, yetkinlikArtisHizi: $yetkinlikArtisHizi, networkArtisi: $networkArtisi, enerjiMaliyeti: $enerjiMaliyeti, gelirVaryansi: $gelirVaryansi, dovizOrani: $dovizOrani, acilanIsletmeler: $acilanIsletmeler, atamaGerektirir: $atamaGerektirir, olayHavuzu: $olayHavuzu)';
 }
 
 
@@ -615,7 +617,7 @@ abstract mixin class $MeslekCopyWith<$Res>  {
   factory $MeslekCopyWith(Meslek value, $Res Function(Meslek) _then) = _$MeslekCopyWithImpl;
 @useResult
 $Res call({
- String id, String ad, Sektor sektor, GirisSarti girisSarti, List<Kademe> kademeler, double yetkinlikArtisHizi, double networkArtisi, int enerjiMaliyeti, double gelirVaryansi, double dovizOrani, List<String> acilanIsletmeler, List<String> olayHavuzu
+ String id, String ad, Sektor sektor, GirisSarti girisSarti, List<Kademe> kademeler, double yetkinlikArtisHizi, double networkArtisi, int enerjiMaliyeti, double gelirVaryansi, double dovizOrani, List<String> acilanIsletmeler, bool atamaGerektirir, List<String> olayHavuzu
 });
 
 
@@ -632,7 +634,7 @@ class _$MeslekCopyWithImpl<$Res>
 
 /// Create a copy of Meslek
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? ad = null,Object? sektor = null,Object? girisSarti = null,Object? kademeler = null,Object? yetkinlikArtisHizi = null,Object? networkArtisi = null,Object? enerjiMaliyeti = null,Object? gelirVaryansi = null,Object? dovizOrani = null,Object? acilanIsletmeler = null,Object? olayHavuzu = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? ad = null,Object? sektor = null,Object? girisSarti = null,Object? kademeler = null,Object? yetkinlikArtisHizi = null,Object? networkArtisi = null,Object? enerjiMaliyeti = null,Object? gelirVaryansi = null,Object? dovizOrani = null,Object? acilanIsletmeler = null,Object? atamaGerektirir = null,Object? olayHavuzu = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,ad: null == ad ? _self.ad : ad // ignore: cast_nullable_to_non_nullable
@@ -645,7 +647,8 @@ as double,enerjiMaliyeti: null == enerjiMaliyeti ? _self.enerjiMaliyeti : enerji
 as int,gelirVaryansi: null == gelirVaryansi ? _self.gelirVaryansi : gelirVaryansi // ignore: cast_nullable_to_non_nullable
 as double,dovizOrani: null == dovizOrani ? _self.dovizOrani : dovizOrani // ignore: cast_nullable_to_non_nullable
 as double,acilanIsletmeler: null == acilanIsletmeler ? _self.acilanIsletmeler : acilanIsletmeler // ignore: cast_nullable_to_non_nullable
-as List<String>,olayHavuzu: null == olayHavuzu ? _self.olayHavuzu : olayHavuzu // ignore: cast_nullable_to_non_nullable
+as List<String>,atamaGerektirir: null == atamaGerektirir ? _self.atamaGerektirir : atamaGerektirir // ignore: cast_nullable_to_non_nullable
+as bool,olayHavuzu: null == olayHavuzu ? _self.olayHavuzu : olayHavuzu // ignore: cast_nullable_to_non_nullable
 as List<String>,
   ));
 }
@@ -740,10 +743,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String ad,  Sektor sektor,  GirisSarti girisSarti,  List<Kademe> kademeler,  double yetkinlikArtisHizi,  double networkArtisi,  int enerjiMaliyeti,  double gelirVaryansi,  double dovizOrani,  List<String> acilanIsletmeler,  List<String> olayHavuzu)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String ad,  Sektor sektor,  GirisSarti girisSarti,  List<Kademe> kademeler,  double yetkinlikArtisHizi,  double networkArtisi,  int enerjiMaliyeti,  double gelirVaryansi,  double dovizOrani,  List<String> acilanIsletmeler,  bool atamaGerektirir,  List<String> olayHavuzu)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Meslek() when $default != null:
-return $default(_that.id,_that.ad,_that.sektor,_that.girisSarti,_that.kademeler,_that.yetkinlikArtisHizi,_that.networkArtisi,_that.enerjiMaliyeti,_that.gelirVaryansi,_that.dovizOrani,_that.acilanIsletmeler,_that.olayHavuzu);case _:
+return $default(_that.id,_that.ad,_that.sektor,_that.girisSarti,_that.kademeler,_that.yetkinlikArtisHizi,_that.networkArtisi,_that.enerjiMaliyeti,_that.gelirVaryansi,_that.dovizOrani,_that.acilanIsletmeler,_that.atamaGerektirir,_that.olayHavuzu);case _:
   return orElse();
 
 }
@@ -761,10 +764,10 @@ return $default(_that.id,_that.ad,_that.sektor,_that.girisSarti,_that.kademeler,
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String ad,  Sektor sektor,  GirisSarti girisSarti,  List<Kademe> kademeler,  double yetkinlikArtisHizi,  double networkArtisi,  int enerjiMaliyeti,  double gelirVaryansi,  double dovizOrani,  List<String> acilanIsletmeler,  List<String> olayHavuzu)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String ad,  Sektor sektor,  GirisSarti girisSarti,  List<Kademe> kademeler,  double yetkinlikArtisHizi,  double networkArtisi,  int enerjiMaliyeti,  double gelirVaryansi,  double dovizOrani,  List<String> acilanIsletmeler,  bool atamaGerektirir,  List<String> olayHavuzu)  $default,) {final _that = this;
 switch (_that) {
 case _Meslek():
-return $default(_that.id,_that.ad,_that.sektor,_that.girisSarti,_that.kademeler,_that.yetkinlikArtisHizi,_that.networkArtisi,_that.enerjiMaliyeti,_that.gelirVaryansi,_that.dovizOrani,_that.acilanIsletmeler,_that.olayHavuzu);case _:
+return $default(_that.id,_that.ad,_that.sektor,_that.girisSarti,_that.kademeler,_that.yetkinlikArtisHizi,_that.networkArtisi,_that.enerjiMaliyeti,_that.gelirVaryansi,_that.dovizOrani,_that.acilanIsletmeler,_that.atamaGerektirir,_that.olayHavuzu);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -781,10 +784,10 @@ return $default(_that.id,_that.ad,_that.sektor,_that.girisSarti,_that.kademeler,
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String ad,  Sektor sektor,  GirisSarti girisSarti,  List<Kademe> kademeler,  double yetkinlikArtisHizi,  double networkArtisi,  int enerjiMaliyeti,  double gelirVaryansi,  double dovizOrani,  List<String> acilanIsletmeler,  List<String> olayHavuzu)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String ad,  Sektor sektor,  GirisSarti girisSarti,  List<Kademe> kademeler,  double yetkinlikArtisHizi,  double networkArtisi,  int enerjiMaliyeti,  double gelirVaryansi,  double dovizOrani,  List<String> acilanIsletmeler,  bool atamaGerektirir,  List<String> olayHavuzu)?  $default,) {final _that = this;
 switch (_that) {
 case _Meslek() when $default != null:
-return $default(_that.id,_that.ad,_that.sektor,_that.girisSarti,_that.kademeler,_that.yetkinlikArtisHizi,_that.networkArtisi,_that.enerjiMaliyeti,_that.gelirVaryansi,_that.dovizOrani,_that.acilanIsletmeler,_that.olayHavuzu);case _:
+return $default(_that.id,_that.ad,_that.sektor,_that.girisSarti,_that.kademeler,_that.yetkinlikArtisHizi,_that.networkArtisi,_that.enerjiMaliyeti,_that.gelirVaryansi,_that.dovizOrani,_that.acilanIsletmeler,_that.atamaGerektirir,_that.olayHavuzu);case _:
   return null;
 
 }
@@ -796,7 +799,7 @@ return $default(_that.id,_that.ad,_that.sektor,_that.girisSarti,_that.kademeler,
 @JsonSerializable()
 
 class _Meslek extends Meslek {
-  const _Meslek({required this.id, required this.ad, required this.sektor, this.girisSarti = const GirisSarti(), required final  List<Kademe> kademeler, this.yetkinlikArtisHizi = 1.0, this.networkArtisi = 0.5, this.enerjiMaliyeti = 3, this.gelirVaryansi = 0.0, this.dovizOrani = 0.0, final  List<String> acilanIsletmeler = const <String>[], final  List<String> olayHavuzu = const <String>[]}): _kademeler = kademeler,_acilanIsletmeler = acilanIsletmeler,_olayHavuzu = olayHavuzu,super._();
+  const _Meslek({required this.id, required this.ad, required this.sektor, this.girisSarti = const GirisSarti(), required final  List<Kademe> kademeler, this.yetkinlikArtisHizi = 1.0, this.networkArtisi = 0.5, this.enerjiMaliyeti = 3, this.gelirVaryansi = 0.0, this.dovizOrani = 0.0, final  List<String> acilanIsletmeler = const <String>[], this.atamaGerektirir = false, final  List<String> olayHavuzu = const <String>[]}): _kademeler = kademeler,_acilanIsletmeler = acilanIsletmeler,_olayHavuzu = olayHavuzu,super._();
   factory _Meslek.fromJson(Map<String, dynamic> json) => _$MeslekFromJson(json);
 
 @override final  String id;
@@ -829,6 +832,9 @@ class _Meslek extends Meslek {
   return EqualUnmodifiableListView(_acilanIsletmeler);
 }
 
+/// Kamu mesleği mi: giriş sınavı kazanıldıktan sonra ATAMA beklenir.
+/// Motor isim listesi tutmasın diye veri dosyasında işaretleniyor.
+@override@JsonKey() final  bool atamaGerektirir;
 /// Bu mesleğe özel olay kartı kimlikleri.
  final  List<String> _olayHavuzu;
 /// Bu mesleğe özel olay kartı kimlikleri.
@@ -852,16 +858,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Meslek&&(identical(other.id, id) || other.id == id)&&(identical(other.ad, ad) || other.ad == ad)&&(identical(other.sektor, sektor) || other.sektor == sektor)&&(identical(other.girisSarti, girisSarti) || other.girisSarti == girisSarti)&&const DeepCollectionEquality().equals(other._kademeler, _kademeler)&&(identical(other.yetkinlikArtisHizi, yetkinlikArtisHizi) || other.yetkinlikArtisHizi == yetkinlikArtisHizi)&&(identical(other.networkArtisi, networkArtisi) || other.networkArtisi == networkArtisi)&&(identical(other.enerjiMaliyeti, enerjiMaliyeti) || other.enerjiMaliyeti == enerjiMaliyeti)&&(identical(other.gelirVaryansi, gelirVaryansi) || other.gelirVaryansi == gelirVaryansi)&&(identical(other.dovizOrani, dovizOrani) || other.dovizOrani == dovizOrani)&&const DeepCollectionEquality().equals(other._acilanIsletmeler, _acilanIsletmeler)&&const DeepCollectionEquality().equals(other._olayHavuzu, _olayHavuzu));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Meslek&&(identical(other.id, id) || other.id == id)&&(identical(other.ad, ad) || other.ad == ad)&&(identical(other.sektor, sektor) || other.sektor == sektor)&&(identical(other.girisSarti, girisSarti) || other.girisSarti == girisSarti)&&const DeepCollectionEquality().equals(other._kademeler, _kademeler)&&(identical(other.yetkinlikArtisHizi, yetkinlikArtisHizi) || other.yetkinlikArtisHizi == yetkinlikArtisHizi)&&(identical(other.networkArtisi, networkArtisi) || other.networkArtisi == networkArtisi)&&(identical(other.enerjiMaliyeti, enerjiMaliyeti) || other.enerjiMaliyeti == enerjiMaliyeti)&&(identical(other.gelirVaryansi, gelirVaryansi) || other.gelirVaryansi == gelirVaryansi)&&(identical(other.dovizOrani, dovizOrani) || other.dovizOrani == dovizOrani)&&const DeepCollectionEquality().equals(other._acilanIsletmeler, _acilanIsletmeler)&&(identical(other.atamaGerektirir, atamaGerektirir) || other.atamaGerektirir == atamaGerektirir)&&const DeepCollectionEquality().equals(other._olayHavuzu, _olayHavuzu));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,ad,sektor,girisSarti,const DeepCollectionEquality().hash(_kademeler),yetkinlikArtisHizi,networkArtisi,enerjiMaliyeti,gelirVaryansi,dovizOrani,const DeepCollectionEquality().hash(_acilanIsletmeler),const DeepCollectionEquality().hash(_olayHavuzu));
+int get hashCode => Object.hash(runtimeType,id,ad,sektor,girisSarti,const DeepCollectionEquality().hash(_kademeler),yetkinlikArtisHizi,networkArtisi,enerjiMaliyeti,gelirVaryansi,dovizOrani,const DeepCollectionEquality().hash(_acilanIsletmeler),atamaGerektirir,const DeepCollectionEquality().hash(_olayHavuzu));
 
 @override
 String toString() {
-  return 'Meslek(id: $id, ad: $ad, sektor: $sektor, girisSarti: $girisSarti, kademeler: $kademeler, yetkinlikArtisHizi: $yetkinlikArtisHizi, networkArtisi: $networkArtisi, enerjiMaliyeti: $enerjiMaliyeti, gelirVaryansi: $gelirVaryansi, dovizOrani: $dovizOrani, acilanIsletmeler: $acilanIsletmeler, olayHavuzu: $olayHavuzu)';
+  return 'Meslek(id: $id, ad: $ad, sektor: $sektor, girisSarti: $girisSarti, kademeler: $kademeler, yetkinlikArtisHizi: $yetkinlikArtisHizi, networkArtisi: $networkArtisi, enerjiMaliyeti: $enerjiMaliyeti, gelirVaryansi: $gelirVaryansi, dovizOrani: $dovizOrani, acilanIsletmeler: $acilanIsletmeler, atamaGerektirir: $atamaGerektirir, olayHavuzu: $olayHavuzu)';
 }
 
 
@@ -872,7 +878,7 @@ abstract mixin class _$MeslekCopyWith<$Res> implements $MeslekCopyWith<$Res> {
   factory _$MeslekCopyWith(_Meslek value, $Res Function(_Meslek) _then) = __$MeslekCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String ad, Sektor sektor, GirisSarti girisSarti, List<Kademe> kademeler, double yetkinlikArtisHizi, double networkArtisi, int enerjiMaliyeti, double gelirVaryansi, double dovizOrani, List<String> acilanIsletmeler, List<String> olayHavuzu
+ String id, String ad, Sektor sektor, GirisSarti girisSarti, List<Kademe> kademeler, double yetkinlikArtisHizi, double networkArtisi, int enerjiMaliyeti, double gelirVaryansi, double dovizOrani, List<String> acilanIsletmeler, bool atamaGerektirir, List<String> olayHavuzu
 });
 
 
@@ -889,7 +895,7 @@ class __$MeslekCopyWithImpl<$Res>
 
 /// Create a copy of Meslek
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? ad = null,Object? sektor = null,Object? girisSarti = null,Object? kademeler = null,Object? yetkinlikArtisHizi = null,Object? networkArtisi = null,Object? enerjiMaliyeti = null,Object? gelirVaryansi = null,Object? dovizOrani = null,Object? acilanIsletmeler = null,Object? olayHavuzu = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? ad = null,Object? sektor = null,Object? girisSarti = null,Object? kademeler = null,Object? yetkinlikArtisHizi = null,Object? networkArtisi = null,Object? enerjiMaliyeti = null,Object? gelirVaryansi = null,Object? dovizOrani = null,Object? acilanIsletmeler = null,Object? atamaGerektirir = null,Object? olayHavuzu = null,}) {
   return _then(_Meslek(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,ad: null == ad ? _self.ad : ad // ignore: cast_nullable_to_non_nullable
@@ -902,7 +908,8 @@ as double,enerjiMaliyeti: null == enerjiMaliyeti ? _self.enerjiMaliyeti : enerji
 as int,gelirVaryansi: null == gelirVaryansi ? _self.gelirVaryansi : gelirVaryansi // ignore: cast_nullable_to_non_nullable
 as double,dovizOrani: null == dovizOrani ? _self.dovizOrani : dovizOrani // ignore: cast_nullable_to_non_nullable
 as double,acilanIsletmeler: null == acilanIsletmeler ? _self._acilanIsletmeler : acilanIsletmeler // ignore: cast_nullable_to_non_nullable
-as List<String>,olayHavuzu: null == olayHavuzu ? _self._olayHavuzu : olayHavuzu // ignore: cast_nullable_to_non_nullable
+as List<String>,atamaGerektirir: null == atamaGerektirir ? _self.atamaGerektirir : atamaGerektirir // ignore: cast_nullable_to_non_nullable
+as bool,olayHavuzu: null == olayHavuzu ? _self._olayHavuzu : olayHavuzu // ignore: cast_nullable_to_non_nullable
 as List<String>,
   ));
 }

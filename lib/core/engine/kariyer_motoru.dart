@@ -60,9 +60,33 @@ class KariyerAyarlari {
   final int issizlikMutlulukKaybi = 5;
   final int askerlikMutlulukKaybi = 3;
   final int askerlikEnerjiKaybi = 8;
+
+  /// Er olarak askerlik süresi (tur). Bedelli tek tur.
+  final int askerlikSuresi = 6;
+  final int bedelliSuresi = 1;
+
+  /// Bedelli bedeli — TABAN TL, enflasyon endeksiyle çarpılır.
+  /// Stajyer maaşının (~18.000) 15 katı: genç oyuncu için gerçek bir
+  /// engel, orta kariyer için iki aylık maaş.
+  final int bedelliBedeli = 280000;
+
+  /// Celp yaş aralığı. Öğrencilik otomatik tecil sayılır.
+  final int celpEnAzYas = 21;
+  final int celpEnCokYas = 29;
+
+  /// Tebligat geldikten sonra bedelli ödemek için kalan tur.
+  /// Oyuncu parayı denkleştirsin ya da yatırımını bozsun diye var;
+  /// sıfır olsaydı karar değil bildirim olurdu.
+  final int celpTebligatTuru = 3;
+
+  /// KPSS/atama beklemesi (tur). Öğretmen ve memur bu kapıdan geçer:
+  /// düşük tavanlarının karşılığı "garantili ama yavaş başlar".
+  final int atamaEnAzTur = 3;
+  final int atamaEnCokTur = 18;
   final int kovulmaMutlulukKaybi = 8;
   final int mezuniyetMutlulugu = 6;
   final int terhisMutlulugu = 10;
+  final int atamaMutlulugu = 12;
 
   /// Kayıt dışı çalışanın eline geçen fazla pay. Bedeli: SGK primi yok.
   final double kayitDisiPrimi = 1.20;
@@ -94,6 +118,9 @@ class KariyerTurSonucu {
     this.istenCikarildi = false,
     this.mezunOldu = false,
     this.askerlikBitti = false,
+    this.celpGeldi = false,
+    this.askereAlindi = false,
+    this.atamasiCikti = false,
   });
 
   /// Turun sonundaki oyuncu. Nakit HENÜZ EKLENMEMİŞTİR; gelir/gider
@@ -109,6 +136,37 @@ class KariyerTurSonucu {
   final bool istenCikarildi;
   final bool mezunOldu;
   final bool askerlikBitti;
+
+  /// Bu turda celp tebligatı geldi.
+  final bool celpGeldi;
+
+  /// Bu turda askere alındı (tebligat süresi doldu).
+  final bool askereAlindi;
+
+  /// Atama bekleyen oyuncunun kurası çıktı.
+  final bool atamasiCikti;
+
+  /// Yalnız motorun kendi içinde kullanılıyor: durum işleyicileri sonucu
+  /// üretiyor, askerlik kapısı üstüne kendi bayraklarını yazıyor.
+  KariyerTurSonucu copyWith({
+    Oyuncu? oyuncu,
+    int? netGelir,
+    bool? celpGeldi,
+    bool? askereAlindi,
+  }) =>
+      KariyerTurSonucu(
+        oyuncu: oyuncu ?? this.oyuncu,
+        netGelir: netGelir ?? this.netGelir,
+        performans: performans,
+        terfiEtti: terfiEtti,
+        yeniKademeAdi: yeniKademeAdi,
+        istenCikarildi: istenCikarildi,
+        mezunOldu: mezunOldu,
+        askerlikBitti: askerlikBitti,
+        celpGeldi: celpGeldi ?? this.celpGeldi,
+        askereAlindi: askereAlindi ?? this.askereAlindi,
+        atamasiCikti: atamasiCikti,
+      );
 }
 
 /// Kariyerin bir turunu işler: gelir, terfi, yetkinlik, itibar, enerji.
@@ -134,17 +192,168 @@ class KariyerMotoru {
     /// verilir: maaş yılda bir zamlanır, giderler her ay artar. Boş
     /// bırakılırsa maaş anlık enflasyona endekslenir (test kolaylığı).
     double? maasEndeksi,
+
+    /// Oyuncu bu turda bedelli ödemek istiyor mu.
+    bool bedelliOde = false,
   }) {
     final z = zaman.duzelt();
     final endeks = maasEndeksi ?? piyasa.enflasyonEndeksi;
-    return switch (oyuncu.kariyer) {
-      Calisan durum => _calisan(oyuncu, durum, katalog, piyasa, z, akis, endeks),
-      Ogrenci durum => _ogrenci(oyuncu, durum, z, akis),
-      Issiz() => _issiz(oyuncu, z, akis),
-      Askerlik durum => _askerlik(oyuncu, durum),
-      Emekli durum => _emekli(oyuncu, durum, z, akis, endeks),
+
+    // Askerlik kapısı kariyer işlenmeden ÖNCE: celp geldiği tur oyuncu
+    // hâlâ çalışıyor, askere alındığı tur artık çalışmıyor.
+    final askerlikSonucu = _askerlikKapisi(oyuncu, piyasa, akis, bedelliOde);
+    final guncelOyuncu = askerlikSonucu.oyuncu;
+
+    final temel = switch (guncelOyuncu.kariyer) {
+      Calisan durum =>
+        _calisan(guncelOyuncu, durum, katalog, piyasa, z, akis, endeks),
+      Ogrenci durum => _ogrenci(guncelOyuncu, durum, z, akis),
+      Issiz durum => _issiz(guncelOyuncu, durum, katalog, z, akis),
+      Askerlik durum => _askerlik(guncelOyuncu, durum),
+      Emekli durum => _emekli(guncelOyuncu, durum, z, akis, endeks),
     };
+
+    return temel.copyWith(
+      // Bedelli bedeli kariyer gelirinden düşülür: nakit hareketini
+      // TurProcessor yapıyor, motor yalnız tutarı bildiriyor.
+      netGelir: temel.netGelir - askerlikSonucu.bedelliBedeli,
+      celpGeldi: askerlikSonucu.celpGeldi,
+      askereAlindi: askerlikSonucu.askereAlindi,
+    );
   }
+
+  /// Bu meslek atama kurası gerektiriyor mu.
+  ///
+  /// Veriye bakıyor, isim listesi tutmuyor: kamu mesleklerinin işareti
+  /// `atamaGerektirir` alanı. Yeni bir kamu mesleği eklendiğinde motora
+  /// dokunmak gerekmesin.
+  bool atamaGerektirirMi(Meslek meslek) => meslek.atamaGerektirir;
+
+  /// İşe giriş talebi. Şartlar tutmuyorsa null döner.
+  ///
+  /// Kamu mesleklerinde oyuncu doğrudan işe değil ATAMA KUYRUĞUNA girer:
+  /// öğretmen ve memurun düşük tavanının karşılığı "garantili ama yavaş
+  /// başlar".
+  KariyerDurumu? iseGir(Oyuncu oyuncu, Meslek meslek) {
+    if (!meslek.girebilirMi(oyuncu)) return null;
+    if (oyuncu.kariyer is Askerlik) return null;
+    return atamaGerektirirMi(meslek)
+        ? KariyerDurumu.issiz(atamaBekliyor: true, bekleyenMeslekId: meslek.id)
+        : KariyerDurumu.calisan(meslekId: meslek.id);
+  }
+
+  /// Celp, tecil, bedelli ve askere alınma.
+  ///
+  /// Öğrencilik otomatik tecildir: tebligat yalnız okumayan, askerliğini
+  /// yapmamış, yaşı tutan erkek oyuncuya gelir.
+  ({
+    Oyuncu oyuncu,
+    int bedelliBedeli,
+    bool celpGeldi,
+    bool askereAlindi,
+  }) _askerlikKapisi(
+    Oyuncu oyuncu,
+    PiyasaDurumu piyasa,
+    RastgeleAkis akis,
+    bool bedelliOde,
+  ) {
+    if (oyuncu.askerlikYapildi ||
+        !oyuncu.cinsiyet.askerlikYukumlusu ||
+        oyuncu.kariyer is Askerlik) {
+      return (
+        oyuncu: oyuncu,
+        bedelliBedeli: 0,
+        celpGeldi: false,
+        askereAlindi: false,
+      );
+    }
+
+    // Öğrencilik tecil: tebligat gelmez, gelmişse askıya alınır.
+    if (oyuncu.kariyer is Ogrenci) {
+      return (
+        oyuncu: oyuncu.celpKalanTur == null
+            ? oyuncu
+            : oyuncu.copyWith(celpKalanTur: null),
+        bedelliBedeli: 0,
+        celpGeldi: false,
+        askereAlindi: false,
+      );
+    }
+
+    final kalan = oyuncu.celpKalanTur;
+
+    // Tebligat henüz gelmedi: yaş tutuyorsa gelsin.
+    if (kalan == null) {
+      final yasTutuyor = oyuncu.yas >= ayarlar.celpEnAzYas &&
+          oyuncu.yas <= ayarlar.celpEnCokYas;
+      if (!yasTutuyor) {
+        return (
+          oyuncu: oyuncu,
+          bedelliBedeli: 0,
+          celpGeldi: false,
+          askereAlindi: false,
+        );
+      }
+      return (
+        oyuncu: oyuncu.copyWith(celpKalanTur: ayarlar.celpTebligatTuru),
+        bedelliBedeli: 0,
+        celpGeldi: true,
+        askereAlindi: false,
+      );
+    }
+
+    // Bedelli ödeniyor mu? Nakit yetmiyorsa talep sessizce düşer:
+    // oyuncu parayı denkleştiremediyse askere gider.
+    if (bedelliOde) {
+      final bedel = piyasa.endeksle(ayarlar.bedelliBedeli);
+      if (oyuncu.nakit >= bedel) {
+        return (
+          oyuncu: oyuncu.copyWith(
+            celpKalanTur: null,
+            kariyer: KariyerDurumu.askerlik(
+              kalanTur: ayarlar.bedelliSuresi,
+              bedelli: true,
+              oncekiMeslekId: _meslekId(oyuncu.kariyer),
+              oncekiKademeIndeksi: _kademeIndeksi(oyuncu.kariyer),
+            ),
+          ),
+          bedelliBedeli: bedel,
+          celpGeldi: false,
+          askereAlindi: true,
+        );
+      }
+    }
+
+    if (kalan > 1) {
+      return (
+        oyuncu: oyuncu.copyWith(celpKalanTur: kalan - 1),
+        bedelliBedeli: 0,
+        celpGeldi: false,
+        askereAlindi: false,
+      );
+    }
+
+    // Süre doldu: er olarak askere alınır.
+    return (
+      oyuncu: oyuncu.copyWith(
+        celpKalanTur: null,
+        kariyer: KariyerDurumu.askerlik(
+          kalanTur: ayarlar.askerlikSuresi,
+          oncekiMeslekId: _meslekId(oyuncu.kariyer),
+          oncekiKademeIndeksi: _kademeIndeksi(oyuncu.kariyer),
+        ),
+      ),
+      bedelliBedeli: 0,
+      celpGeldi: false,
+      askereAlindi: true,
+    );
+  }
+
+  String? _meslekId(KariyerDurumu durum) =>
+      durum is Calisan ? durum.meslekId : null;
+
+  int _kademeIndeksi(KariyerDurumu durum) =>
+      durum is Calisan ? durum.kademeIndeksi : 0;
 
   // --- Durum bazlı işleyiciler -------------------------------------------
 
@@ -163,6 +372,8 @@ class KariyerMotoru {
       // için bu yol yalnızca bozuk kayıt içindir: oyuncu işsiz sayılır.
       return _issiz(
         oyuncu.kariyerDegistir(const KariyerDurumu.issiz()),
+        const Issiz(),
+        katalog,
         z,
         akis,
       );
@@ -239,10 +450,46 @@ class KariyerMotoru {
     );
   }
 
-  KariyerTurSonucu _issiz(Oyuncu oyuncu, ZamanDagilimi z, RastgeleAkis akis) {
-    final guncel = _ortakEtkiler(oyuncu, z, akis)
+  KariyerTurSonucu _issiz(
+    Oyuncu oyuncu,
+    Issiz durum,
+    MeslekKatalogu katalog,
+    ZamanDagilimi z,
+    RastgeleAkis akis,
+  ) {
+    var guncel = _ortakEtkiler(oyuncu, z, akis)
         .mutlulukDegistir(-ayarlar.issizlikMutlulukKaybi);
-    return KariyerTurSonucu(oyuncu: guncel, netGelir: 0, performans: 0);
+
+    // Atama kurası: KPSS'yi kazanmış oyuncu atanana kadar bekler.
+    // Her tur sabit şansla çıkar; beklenen süre atamaEnAz-atamaEnCok
+    // aralığının ortasına oturuyor.
+    var atandi = false;
+    if (durum.atamaBekliyor && durum.bekleyenMeslekId != null) {
+      final gecen = durum.gecenTur;
+      if (gecen >= ayarlar.atamaEnCokTur) {
+        atandi = true;
+      } else if (gecen >= ayarlar.atamaEnAzTur) {
+        final kalanPencere = ayarlar.atamaEnCokTur - gecen;
+        atandi = akis.sans(1 / kalanPencere);
+      }
+      if (atandi) {
+        final meslek = katalog.bul(durum.bekleyenMeslekId!);
+        guncel = guncel
+            .kariyerDegistir(
+              meslek == null
+                  ? const KariyerDurumu.issiz()
+                  : KariyerDurumu.calisan(meslekId: meslek.id),
+            )
+            .mutlulukDegistir(ayarlar.atamaMutlulugu);
+      }
+    }
+
+    return KariyerTurSonucu(
+      oyuncu: guncel,
+      netGelir: 0,
+      performans: 0,
+      atamasiCikti: atandi,
+    );
   }
 
   KariyerTurSonucu _askerlik(Oyuncu oyuncu, Askerlik durum) {
@@ -252,8 +499,20 @@ class KariyerMotoru {
         .mutlulukDegistir(-ayarlar.askerlikMutlulukKaybi);
     final bitti = durum.kalanTur <= 1;
     if (bitti) {
+      // İŞE İADE: askerden dönen oyuncu eski işine, eski kademesine
+      // döner. Gerçek hayatta da yasal hak; olmasaydı askerlik "6 ay
+      // gelir kaybı" değil "kariyeri sıfırla" cezası olurdu.
+      final oncekiIs = durum.oncekiMeslekId;
       guncel = guncel
-          .kariyerDegistir(const KariyerDurumu.issiz())
+          .copyWith(askerlikYapildi: true)
+          .kariyerDegistir(
+            oncekiIs == null
+                ? const KariyerDurumu.issiz()
+                : KariyerDurumu.calisan(
+                    meslekId: oncekiIs,
+                    kademeIndeksi: durum.oncekiKademeIndeksi,
+                  ),
+          )
           .mutlulukDegistir(ayarlar.terhisMutlulugu);
     }
     return KariyerTurSonucu(

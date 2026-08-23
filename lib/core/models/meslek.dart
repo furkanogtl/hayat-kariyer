@@ -88,6 +88,10 @@ abstract class Meslek with _$Meslek {
     /// Bu meslekle açılabilen işletme kimlikleri.
     @Default(<String>[]) List<String> acilanIsletmeler,
 
+    /// Kamu mesleği mi: giriş sınavı kazanıldıktan sonra ATAMA beklenir.
+    /// Motor isim listesi tutmasın diye veri dosyasında işaretleniyor.
+    @Default(false) bool atamaGerektirir,
+
     /// Bu mesleğe özel olay kartı kimlikleri.
     @Default(<String>[]) List<String> olayHavuzu,
   }) = _Meslek;

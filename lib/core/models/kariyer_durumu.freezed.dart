@@ -166,13 +166,13 @@ return emekli(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( EgitimSeviyesi hedef,  int kalanTur)?  ogrenci,TResult Function( String meslekId,  int kademeIndeksi,  int kademeTuru,  bool kayitDisi)?  calisan,TResult Function( int gecenTur,  bool atamaBekliyor)?  issiz,TResult Function( int kalanTur,  bool bedelli)?  askerlik,TResult Function( int tabanAylik)?  emekli,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( EgitimSeviyesi hedef,  int kalanTur)?  ogrenci,TResult Function( String meslekId,  int kademeIndeksi,  int kademeTuru,  bool kayitDisi)?  calisan,TResult Function( int gecenTur,  bool atamaBekliyor,  String? bekleyenMeslekId)?  issiz,TResult Function( int kalanTur,  bool bedelli,  String? oncekiMeslekId,  int oncekiKademeIndeksi)?  askerlik,TResult Function( int tabanAylik)?  emekli,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case Ogrenci() when ogrenci != null:
 return ogrenci(_that.hedef,_that.kalanTur);case Calisan() when calisan != null:
 return calisan(_that.meslekId,_that.kademeIndeksi,_that.kademeTuru,_that.kayitDisi);case Issiz() when issiz != null:
-return issiz(_that.gecenTur,_that.atamaBekliyor);case Askerlik() when askerlik != null:
-return askerlik(_that.kalanTur,_that.bedelli);case Emekli() when emekli != null:
+return issiz(_that.gecenTur,_that.atamaBekliyor,_that.bekleyenMeslekId);case Askerlik() when askerlik != null:
+return askerlik(_that.kalanTur,_that.bedelli,_that.oncekiMeslekId,_that.oncekiKademeIndeksi);case Emekli() when emekli != null:
 return emekli(_that.tabanAylik);case _:
   return orElse();
 
@@ -191,13 +191,13 @@ return emekli(_that.tabanAylik);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( EgitimSeviyesi hedef,  int kalanTur)  ogrenci,required TResult Function( String meslekId,  int kademeIndeksi,  int kademeTuru,  bool kayitDisi)  calisan,required TResult Function( int gecenTur,  bool atamaBekliyor)  issiz,required TResult Function( int kalanTur,  bool bedelli)  askerlik,required TResult Function( int tabanAylik)  emekli,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( EgitimSeviyesi hedef,  int kalanTur)  ogrenci,required TResult Function( String meslekId,  int kademeIndeksi,  int kademeTuru,  bool kayitDisi)  calisan,required TResult Function( int gecenTur,  bool atamaBekliyor,  String? bekleyenMeslekId)  issiz,required TResult Function( int kalanTur,  bool bedelli,  String? oncekiMeslekId,  int oncekiKademeIndeksi)  askerlik,required TResult Function( int tabanAylik)  emekli,}) {final _that = this;
 switch (_that) {
 case Ogrenci():
 return ogrenci(_that.hedef,_that.kalanTur);case Calisan():
 return calisan(_that.meslekId,_that.kademeIndeksi,_that.kademeTuru,_that.kayitDisi);case Issiz():
-return issiz(_that.gecenTur,_that.atamaBekliyor);case Askerlik():
-return askerlik(_that.kalanTur,_that.bedelli);case Emekli():
+return issiz(_that.gecenTur,_that.atamaBekliyor,_that.bekleyenMeslekId);case Askerlik():
+return askerlik(_that.kalanTur,_that.bedelli,_that.oncekiMeslekId,_that.oncekiKademeIndeksi);case Emekli():
 return emekli(_that.tabanAylik);}
 }
 /// A variant of `when` that fallback to returning `null`
@@ -212,13 +212,13 @@ return emekli(_that.tabanAylik);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( EgitimSeviyesi hedef,  int kalanTur)?  ogrenci,TResult? Function( String meslekId,  int kademeIndeksi,  int kademeTuru,  bool kayitDisi)?  calisan,TResult? Function( int gecenTur,  bool atamaBekliyor)?  issiz,TResult? Function( int kalanTur,  bool bedelli)?  askerlik,TResult? Function( int tabanAylik)?  emekli,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( EgitimSeviyesi hedef,  int kalanTur)?  ogrenci,TResult? Function( String meslekId,  int kademeIndeksi,  int kademeTuru,  bool kayitDisi)?  calisan,TResult? Function( int gecenTur,  bool atamaBekliyor,  String? bekleyenMeslekId)?  issiz,TResult? Function( int kalanTur,  bool bedelli,  String? oncekiMeslekId,  int oncekiKademeIndeksi)?  askerlik,TResult? Function( int tabanAylik)?  emekli,}) {final _that = this;
 switch (_that) {
 case Ogrenci() when ogrenci != null:
 return ogrenci(_that.hedef,_that.kalanTur);case Calisan() when calisan != null:
 return calisan(_that.meslekId,_that.kademeIndeksi,_that.kademeTuru,_that.kayitDisi);case Issiz() when issiz != null:
-return issiz(_that.gecenTur,_that.atamaBekliyor);case Askerlik() when askerlik != null:
-return askerlik(_that.kalanTur,_that.bedelli);case Emekli() when emekli != null:
+return issiz(_that.gecenTur,_that.atamaBekliyor,_that.bekleyenMeslekId);case Askerlik() when askerlik != null:
+return askerlik(_that.kalanTur,_that.bedelli,_that.oncekiMeslekId,_that.oncekiKademeIndeksi);case Emekli() when emekli != null:
 return emekli(_that.tabanAylik);case _:
   return null;
 
@@ -390,13 +390,16 @@ as bool,
 @JsonSerializable()
 
 class Issiz extends KariyerDurumu {
-  const Issiz({this.gecenTur = 0, this.atamaBekliyor = false, final  String? $type}): $type = $type ?? 'issiz',super._();
+  const Issiz({this.gecenTur = 0, this.atamaBekliyor = false, this.bekleyenMeslekId, final  String? $type}): $type = $type ?? 'issiz',super._();
   factory Issiz.fromJson(Map<String, dynamic> json) => _$IssizFromJson(json);
 
 @JsonKey() final  int gecenTur;
 /// Atama bekleyen öğretmen/memur bu bayrakla işaretlenir; işsizlikten
 /// farklı olay havuzu ve farklı çıkış yolu kullanır.
 @JsonKey() final  bool atamaBekliyor;
+/// Ataması beklenen meslek. Kura çıkınca oyuncu doğrudan bu mesleğe
+/// başlar; sınavı kazandığı meslek ile atandığı meslek ayrışmasın.
+ final  String? bekleyenMeslekId;
 
 @JsonKey(name: 'durum')
 final String $type;
@@ -415,16 +418,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Issiz&&(identical(other.gecenTur, gecenTur) || other.gecenTur == gecenTur)&&(identical(other.atamaBekliyor, atamaBekliyor) || other.atamaBekliyor == atamaBekliyor));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Issiz&&(identical(other.gecenTur, gecenTur) || other.gecenTur == gecenTur)&&(identical(other.atamaBekliyor, atamaBekliyor) || other.atamaBekliyor == atamaBekliyor)&&(identical(other.bekleyenMeslekId, bekleyenMeslekId) || other.bekleyenMeslekId == bekleyenMeslekId));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,gecenTur,atamaBekliyor);
+int get hashCode => Object.hash(runtimeType,gecenTur,atamaBekliyor,bekleyenMeslekId);
 
 @override
 String toString() {
-  return 'KariyerDurumu.issiz(gecenTur: $gecenTur, atamaBekliyor: $atamaBekliyor)';
+  return 'KariyerDurumu.issiz(gecenTur: $gecenTur, atamaBekliyor: $atamaBekliyor, bekleyenMeslekId: $bekleyenMeslekId)';
 }
 
 
@@ -435,7 +438,7 @@ abstract mixin class $IssizCopyWith<$Res> implements $KariyerDurumuCopyWith<$Res
   factory $IssizCopyWith(Issiz value, $Res Function(Issiz) _then) = _$IssizCopyWithImpl;
 @useResult
 $Res call({
- int gecenTur, bool atamaBekliyor
+ int gecenTur, bool atamaBekliyor, String? bekleyenMeslekId
 });
 
 
@@ -452,11 +455,12 @@ class _$IssizCopyWithImpl<$Res>
 
 /// Create a copy of KariyerDurumu
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? gecenTur = null,Object? atamaBekliyor = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? gecenTur = null,Object? atamaBekliyor = null,Object? bekleyenMeslekId = freezed,}) {
   return _then(Issiz(
 gecenTur: null == gecenTur ? _self.gecenTur : gecenTur // ignore: cast_nullable_to_non_nullable
 as int,atamaBekliyor: null == atamaBekliyor ? _self.atamaBekliyor : atamaBekliyor // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,bekleyenMeslekId: freezed == bekleyenMeslekId ? _self.bekleyenMeslekId : bekleyenMeslekId // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
@@ -467,12 +471,17 @@ as bool,
 @JsonSerializable()
 
 class Askerlik extends KariyerDurumu {
-  const Askerlik({required this.kalanTur, this.bedelli = false, final  String? $type}): $type = $type ?? 'askerlik',super._();
+  const Askerlik({required this.kalanTur, this.bedelli = false, this.oncekiMeslekId, this.oncekiKademeIndeksi = 0, final  String? $type}): $type = $type ?? 'askerlik',super._();
   factory Askerlik.fromJson(Map<String, dynamic> json) => _$AskerlikFromJson(json);
 
  final  int kalanTur;
 /// Bedelli askerlik mi (para ödendi, süre kısa).
 @JsonKey() final  bool bedelli;
+/// Askere alınmadan önceki iş. Terhiste İŞE İADE edilir — gerçek
+/// hayatta da yasal hak. Yoksa askerlik "6 ay gelir kaybı" değil
+/// "kariyeri sıfırla" cezası olurdu.
+ final  String? oncekiMeslekId;
+@JsonKey() final  int oncekiKademeIndeksi;
 
 @JsonKey(name: 'durum')
 final String $type;
@@ -491,16 +500,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Askerlik&&(identical(other.kalanTur, kalanTur) || other.kalanTur == kalanTur)&&(identical(other.bedelli, bedelli) || other.bedelli == bedelli));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Askerlik&&(identical(other.kalanTur, kalanTur) || other.kalanTur == kalanTur)&&(identical(other.bedelli, bedelli) || other.bedelli == bedelli)&&(identical(other.oncekiMeslekId, oncekiMeslekId) || other.oncekiMeslekId == oncekiMeslekId)&&(identical(other.oncekiKademeIndeksi, oncekiKademeIndeksi) || other.oncekiKademeIndeksi == oncekiKademeIndeksi));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,kalanTur,bedelli);
+int get hashCode => Object.hash(runtimeType,kalanTur,bedelli,oncekiMeslekId,oncekiKademeIndeksi);
 
 @override
 String toString() {
-  return 'KariyerDurumu.askerlik(kalanTur: $kalanTur, bedelli: $bedelli)';
+  return 'KariyerDurumu.askerlik(kalanTur: $kalanTur, bedelli: $bedelli, oncekiMeslekId: $oncekiMeslekId, oncekiKademeIndeksi: $oncekiKademeIndeksi)';
 }
 
 
@@ -511,7 +520,7 @@ abstract mixin class $AskerlikCopyWith<$Res> implements $KariyerDurumuCopyWith<$
   factory $AskerlikCopyWith(Askerlik value, $Res Function(Askerlik) _then) = _$AskerlikCopyWithImpl;
 @useResult
 $Res call({
- int kalanTur, bool bedelli
+ int kalanTur, bool bedelli, String? oncekiMeslekId, int oncekiKademeIndeksi
 });
 
 
@@ -528,11 +537,13 @@ class _$AskerlikCopyWithImpl<$Res>
 
 /// Create a copy of KariyerDurumu
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? kalanTur = null,Object? bedelli = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? kalanTur = null,Object? bedelli = null,Object? oncekiMeslekId = freezed,Object? oncekiKademeIndeksi = null,}) {
   return _then(Askerlik(
 kalanTur: null == kalanTur ? _self.kalanTur : kalanTur // ignore: cast_nullable_to_non_nullable
 as int,bedelli: null == bedelli ? _self.bedelli : bedelli // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,oncekiMeslekId: freezed == oncekiMeslekId ? _self.oncekiMeslekId : oncekiMeslekId // ignore: cast_nullable_to_non_nullable
+as String?,oncekiKademeIndeksi: null == oncekiKademeIndeksi ? _self.oncekiKademeIndeksi : oncekiKademeIndeksi // ignore: cast_nullable_to_non_nullable
+as int,
   ));
 }
 

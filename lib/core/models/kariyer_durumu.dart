@@ -78,6 +78,10 @@ sealed class KariyerDurumu with _$KariyerDurumu {
     /// Atama bekleyen öğretmen/memur bu bayrakla işaretlenir; işsizlikten
     /// farklı olay havuzu ve farklı çıkış yolu kullanır.
     @Default(false) bool atamaBekliyor,
+
+    /// Ataması beklenen meslek. Kura çıkınca oyuncu doğrudan bu mesleğe
+    /// başlar; sınavı kazandığı meslek ile atandığı meslek ayrışmasın.
+    String? bekleyenMeslekId,
   }) = Issiz;
 
   /// Askerlik. Kariyer durur.
@@ -87,6 +91,12 @@ sealed class KariyerDurumu with _$KariyerDurumu {
 
     /// Bedelli askerlik mi (para ödendi, süre kısa).
     @Default(false) bool bedelli,
+
+    /// Askere alınmadan önceki iş. Terhiste İŞE İADE edilir — gerçek
+    /// hayatta da yasal hak. Yoksa askerlik "6 ay gelir kaybı" değil
+    /// "kariyeri sıfırla" cezası olurdu.
+    String? oncekiMeslekId,
+    @Default(0) int oncekiKademeIndeksi,
   }) = Askerlik;
 
   /// Emekli. Maaş prim gün sayısından hesaplanıp burada dondurulur.
@@ -146,27 +156,17 @@ sealed class KariyerDurumu with _$KariyerDurumu {
 
   /// Bir tur ilerlet: geri sayımları azaltır, sayaçları artırır.
   /// Durum geçişlerine KARAR VERMEZ — o motorun işidir.
+  ///
+  /// Her dal `copyWith` kullanır, elle yeniden kurmaz. Önce elle
+  /// kuruluyordu ve `Askerlik`'e `oncekiMeslekId` eklendiğinde alan
+  /// sessizce düştü: askerden dönen oyuncu işine iade edilmiyor, işsiz
+  /// kalıyordu. Hiçbir yerde patlamayan, yalnız 40 yıllık simülasyonda
+  /// görünen bir hataydı.
   KariyerDurumu turIlerlet() => switch (this) {
-        Ogrenci(:final hedef, :final kalanTur) =>
-          KariyerDurumu.ogrenci(hedef: hedef, kalanTur: kalanTur - 1),
-        Askerlik(:final kalanTur, :final bedelli) =>
-          KariyerDurumu.askerlik(kalanTur: kalanTur - 1, bedelli: bedelli),
-        Calisan(
-          :final meslekId,
-          :final kademeIndeksi,
-          :final kademeTuru,
-          :final kayitDisi
-        ) =>
-          KariyerDurumu.calisan(
-            meslekId: meslekId,
-            kademeIndeksi: kademeIndeksi,
-            kademeTuru: kademeTuru + 1,
-            kayitDisi: kayitDisi,
-          ),
-        Issiz(:final gecenTur, :final atamaBekliyor) => KariyerDurumu.issiz(
-            gecenTur: gecenTur + 1,
-            atamaBekliyor: atamaBekliyor,
-          ),
+        Ogrenci d => d.copyWith(kalanTur: d.kalanTur - 1),
+        Askerlik d => d.copyWith(kalanTur: d.kalanTur - 1),
+        Calisan d => d.copyWith(kademeTuru: d.kademeTuru + 1),
+        Issiz d => d.copyWith(gecenTur: d.gecenTur + 1),
         Emekli() => this,
       };
 }
