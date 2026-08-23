@@ -66,7 +66,7 @@
     "tur": "kriz",
     "agirlik": 11,
     "bekleme": 18,
-    "kosullar": { "enCokKrediNotu": 45, "yas": [22, 65] },
+    "kosullar": { "enCokKrediNotu": 650, "yas": [22, 65] },
     "secenekler": [
       {
         "etiket": "Masrafıyla kapat",
@@ -151,7 +151,7 @@
     "tur": "hayat",
     "agirlik": 8,
     "bekleme": 36,
-    "kosullar": { "yas": [25, 55], "enAzKrediNotu": 55 },
+    "kosullar": { "yas": [25, 55], "enAzKrediNotu": 950 },
     "secenekler": [
       {
         "etiket": "Kredi çek, sıfır al",
@@ -257,7 +257,7 @@
     "tur": "firsat",
     "agirlik": 6,
     "bekleme": 60,
-    "kosullar": { "yas": [25, 62], "enCokKrediNotu": 60 },
+    "kosullar": { "yas": [25, 62], "enCokKrediNotu": 820 },
     "secenekler": [
       {
         "etiket": "Başvur",

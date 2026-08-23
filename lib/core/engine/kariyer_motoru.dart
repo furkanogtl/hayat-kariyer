@@ -293,6 +293,31 @@ class KariyerMotoru {
 
   /// Nominal net maaş.
   ///
+  /// Bankanın gördüğü maaş: şok ve performans çarpanı OLMADAN, yalnız
+  /// kademe tabanı ve endeks.
+  ///
+  /// Kredi kararı gerçekleşen gelire değil bordroya bakar. Ayrıca kredi
+  /// tur işlenmeden ÖNCE çekilir; o turun şoklu geliri henüz bilinmiyor.
+  /// Çalışmayan oyuncu için 0.
+  int bordroMaasi(
+    Oyuncu oyuncu,
+    MeslekKatalogu katalog,
+    PiyasaDurumu piyasa,
+    double maasEndeksi,
+  ) {
+    final durum = oyuncu.kariyer;
+    if (durum is! Calisan) return 0;
+    final meslek = katalog.bul(durum.meslekId);
+    if (meslek == null) return 0;
+    final kademe = meslek.kademeler[
+        durum.kademeIndeksi.clamp(0, meslek.kademeler.length - 1)];
+    final kurEndeksi = _kurEndeksi(piyasa);
+    final endeks = (1 - meslek.dovizOrani) * maasEndeksi +
+        meslek.dovizOrani * kurEndeksi;
+    final kayitDisiCarpani = durum.kayitDisi ? ayarlar.kayitDisiPrimi : 1.0;
+    return (kademe.maas * endeks * kayitDisiCarpani).round();
+  }
+
   /// Maaşın döviz payı enflasyona değil KURA endekslenir. Yazılımcının ve
   /// ihracatçının kur şokunda kazanması, memurun kaybetmesi bu satırdan
   /// çıkıyor — Türkiye bağlamının en somut mekaniklerinden biri.

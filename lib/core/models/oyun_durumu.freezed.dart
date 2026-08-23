@@ -19,7 +19,8 @@ mixin _$OyunDurumu {
 /// Bug tekrar üretimi buna bağlı.
  int get anaTohum; Oyuncu get oyuncu; PiyasaDurumu get piyasa; Portfoy get portfoy;/// Oyuncunun sahip olduğu işletmeler.
  List<Isletme> get isletmeler;/// Bu turda işletmelere ayrılan ilgi. Zaman dağılımından AYRI kaynak.
- IlgiDagilimi get ilgi;/// Sonucu bekleyen kararlar.
+ IlgiDagilimi get ilgi;/// Açık krediler. Tutarları NOMİNAL TL.
+ List<Borc> get borclar;/// Sonucu bekleyen kararlar.
  List<BekleyenOlay> get bekleyenOlaylar;/// Olay kimliği -> en son görüldüğü tur. Aynı kartın üst üste çıkmasını
 /// ve tek seferlik kartların tekrarını bu engelliyor.
  Map<String, int> get olayGecmisi;/// Maaşların bağlı olduğu fiyat endeksi.
@@ -41,16 +42,16 @@ $OyunDurumuCopyWith<OyunDurumu> get copyWith => _$OyunDurumuCopyWithImpl<OyunDur
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is OyunDurumu&&(identical(other.anaTohum, anaTohum) || other.anaTohum == anaTohum)&&(identical(other.oyuncu, oyuncu) || other.oyuncu == oyuncu)&&(identical(other.piyasa, piyasa) || other.piyasa == piyasa)&&(identical(other.portfoy, portfoy) || other.portfoy == portfoy)&&const DeepCollectionEquality().equals(other.isletmeler, isletmeler)&&(identical(other.ilgi, ilgi) || other.ilgi == ilgi)&&const DeepCollectionEquality().equals(other.bekleyenOlaylar, bekleyenOlaylar)&&const DeepCollectionEquality().equals(other.olayGecmisi, olayGecmisi)&&(identical(other.maasEndeksi, maasEndeksi) || other.maasEndeksi == maasEndeksi)&&(identical(other.kayitSurumu, kayitSurumu) || other.kayitSurumu == kayitSurumu));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is OyunDurumu&&(identical(other.anaTohum, anaTohum) || other.anaTohum == anaTohum)&&(identical(other.oyuncu, oyuncu) || other.oyuncu == oyuncu)&&(identical(other.piyasa, piyasa) || other.piyasa == piyasa)&&(identical(other.portfoy, portfoy) || other.portfoy == portfoy)&&const DeepCollectionEquality().equals(other.isletmeler, isletmeler)&&(identical(other.ilgi, ilgi) || other.ilgi == ilgi)&&const DeepCollectionEquality().equals(other.borclar, borclar)&&const DeepCollectionEquality().equals(other.bekleyenOlaylar, bekleyenOlaylar)&&const DeepCollectionEquality().equals(other.olayGecmisi, olayGecmisi)&&(identical(other.maasEndeksi, maasEndeksi) || other.maasEndeksi == maasEndeksi)&&(identical(other.kayitSurumu, kayitSurumu) || other.kayitSurumu == kayitSurumu));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,anaTohum,oyuncu,piyasa,portfoy,const DeepCollectionEquality().hash(isletmeler),ilgi,const DeepCollectionEquality().hash(bekleyenOlaylar),const DeepCollectionEquality().hash(olayGecmisi),maasEndeksi,kayitSurumu);
+int get hashCode => Object.hash(runtimeType,anaTohum,oyuncu,piyasa,portfoy,const DeepCollectionEquality().hash(isletmeler),ilgi,const DeepCollectionEquality().hash(borclar),const DeepCollectionEquality().hash(bekleyenOlaylar),const DeepCollectionEquality().hash(olayGecmisi),maasEndeksi,kayitSurumu);
 
 @override
 String toString() {
-  return 'OyunDurumu(anaTohum: $anaTohum, oyuncu: $oyuncu, piyasa: $piyasa, portfoy: $portfoy, isletmeler: $isletmeler, ilgi: $ilgi, bekleyenOlaylar: $bekleyenOlaylar, olayGecmisi: $olayGecmisi, maasEndeksi: $maasEndeksi, kayitSurumu: $kayitSurumu)';
+  return 'OyunDurumu(anaTohum: $anaTohum, oyuncu: $oyuncu, piyasa: $piyasa, portfoy: $portfoy, isletmeler: $isletmeler, ilgi: $ilgi, borclar: $borclar, bekleyenOlaylar: $bekleyenOlaylar, olayGecmisi: $olayGecmisi, maasEndeksi: $maasEndeksi, kayitSurumu: $kayitSurumu)';
 }
 
 
@@ -61,7 +62,7 @@ abstract mixin class $OyunDurumuCopyWith<$Res>  {
   factory $OyunDurumuCopyWith(OyunDurumu value, $Res Function(OyunDurumu) _then) = _$OyunDurumuCopyWithImpl;
 @useResult
 $Res call({
- int anaTohum, Oyuncu oyuncu, PiyasaDurumu piyasa, Portfoy portfoy, List<Isletme> isletmeler, IlgiDagilimi ilgi, List<BekleyenOlay> bekleyenOlaylar, Map<String, int> olayGecmisi, double maasEndeksi, int kayitSurumu
+ int anaTohum, Oyuncu oyuncu, PiyasaDurumu piyasa, Portfoy portfoy, List<Isletme> isletmeler, IlgiDagilimi ilgi, List<Borc> borclar, List<BekleyenOlay> bekleyenOlaylar, Map<String, int> olayGecmisi, double maasEndeksi, int kayitSurumu
 });
 
 
@@ -78,7 +79,7 @@ class _$OyunDurumuCopyWithImpl<$Res>
 
 /// Create a copy of OyunDurumu
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? anaTohum = null,Object? oyuncu = null,Object? piyasa = null,Object? portfoy = null,Object? isletmeler = null,Object? ilgi = null,Object? bekleyenOlaylar = null,Object? olayGecmisi = null,Object? maasEndeksi = null,Object? kayitSurumu = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? anaTohum = null,Object? oyuncu = null,Object? piyasa = null,Object? portfoy = null,Object? isletmeler = null,Object? ilgi = null,Object? borclar = null,Object? bekleyenOlaylar = null,Object? olayGecmisi = null,Object? maasEndeksi = null,Object? kayitSurumu = null,}) {
   return _then(_self.copyWith(
 anaTohum: null == anaTohum ? _self.anaTohum : anaTohum // ignore: cast_nullable_to_non_nullable
 as int,oyuncu: null == oyuncu ? _self.oyuncu : oyuncu // ignore: cast_nullable_to_non_nullable
@@ -86,7 +87,8 @@ as Oyuncu,piyasa: null == piyasa ? _self.piyasa : piyasa // ignore: cast_nullabl
 as PiyasaDurumu,portfoy: null == portfoy ? _self.portfoy : portfoy // ignore: cast_nullable_to_non_nullable
 as Portfoy,isletmeler: null == isletmeler ? _self.isletmeler : isletmeler // ignore: cast_nullable_to_non_nullable
 as List<Isletme>,ilgi: null == ilgi ? _self.ilgi : ilgi // ignore: cast_nullable_to_non_nullable
-as IlgiDagilimi,bekleyenOlaylar: null == bekleyenOlaylar ? _self.bekleyenOlaylar : bekleyenOlaylar // ignore: cast_nullable_to_non_nullable
+as IlgiDagilimi,borclar: null == borclar ? _self.borclar : borclar // ignore: cast_nullable_to_non_nullable
+as List<Borc>,bekleyenOlaylar: null == bekleyenOlaylar ? _self.bekleyenOlaylar : bekleyenOlaylar // ignore: cast_nullable_to_non_nullable
 as List<BekleyenOlay>,olayGecmisi: null == olayGecmisi ? _self.olayGecmisi : olayGecmisi // ignore: cast_nullable_to_non_nullable
 as Map<String, int>,maasEndeksi: null == maasEndeksi ? _self.maasEndeksi : maasEndeksi // ignore: cast_nullable_to_non_nullable
 as double,kayitSurumu: null == kayitSurumu ? _self.kayitSurumu : kayitSurumu // ignore: cast_nullable_to_non_nullable
@@ -211,10 +213,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int anaTohum,  Oyuncu oyuncu,  PiyasaDurumu piyasa,  Portfoy portfoy,  List<Isletme> isletmeler,  IlgiDagilimi ilgi,  List<BekleyenOlay> bekleyenOlaylar,  Map<String, int> olayGecmisi,  double maasEndeksi,  int kayitSurumu)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int anaTohum,  Oyuncu oyuncu,  PiyasaDurumu piyasa,  Portfoy portfoy,  List<Isletme> isletmeler,  IlgiDagilimi ilgi,  List<Borc> borclar,  List<BekleyenOlay> bekleyenOlaylar,  Map<String, int> olayGecmisi,  double maasEndeksi,  int kayitSurumu)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _OyunDurumu() when $default != null:
-return $default(_that.anaTohum,_that.oyuncu,_that.piyasa,_that.portfoy,_that.isletmeler,_that.ilgi,_that.bekleyenOlaylar,_that.olayGecmisi,_that.maasEndeksi,_that.kayitSurumu);case _:
+return $default(_that.anaTohum,_that.oyuncu,_that.piyasa,_that.portfoy,_that.isletmeler,_that.ilgi,_that.borclar,_that.bekleyenOlaylar,_that.olayGecmisi,_that.maasEndeksi,_that.kayitSurumu);case _:
   return orElse();
 
 }
@@ -232,10 +234,10 @@ return $default(_that.anaTohum,_that.oyuncu,_that.piyasa,_that.portfoy,_that.isl
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int anaTohum,  Oyuncu oyuncu,  PiyasaDurumu piyasa,  Portfoy portfoy,  List<Isletme> isletmeler,  IlgiDagilimi ilgi,  List<BekleyenOlay> bekleyenOlaylar,  Map<String, int> olayGecmisi,  double maasEndeksi,  int kayitSurumu)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int anaTohum,  Oyuncu oyuncu,  PiyasaDurumu piyasa,  Portfoy portfoy,  List<Isletme> isletmeler,  IlgiDagilimi ilgi,  List<Borc> borclar,  List<BekleyenOlay> bekleyenOlaylar,  Map<String, int> olayGecmisi,  double maasEndeksi,  int kayitSurumu)  $default,) {final _that = this;
 switch (_that) {
 case _OyunDurumu():
-return $default(_that.anaTohum,_that.oyuncu,_that.piyasa,_that.portfoy,_that.isletmeler,_that.ilgi,_that.bekleyenOlaylar,_that.olayGecmisi,_that.maasEndeksi,_that.kayitSurumu);case _:
+return $default(_that.anaTohum,_that.oyuncu,_that.piyasa,_that.portfoy,_that.isletmeler,_that.ilgi,_that.borclar,_that.bekleyenOlaylar,_that.olayGecmisi,_that.maasEndeksi,_that.kayitSurumu);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -252,10 +254,10 @@ return $default(_that.anaTohum,_that.oyuncu,_that.piyasa,_that.portfoy,_that.isl
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int anaTohum,  Oyuncu oyuncu,  PiyasaDurumu piyasa,  Portfoy portfoy,  List<Isletme> isletmeler,  IlgiDagilimi ilgi,  List<BekleyenOlay> bekleyenOlaylar,  Map<String, int> olayGecmisi,  double maasEndeksi,  int kayitSurumu)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int anaTohum,  Oyuncu oyuncu,  PiyasaDurumu piyasa,  Portfoy portfoy,  List<Isletme> isletmeler,  IlgiDagilimi ilgi,  List<Borc> borclar,  List<BekleyenOlay> bekleyenOlaylar,  Map<String, int> olayGecmisi,  double maasEndeksi,  int kayitSurumu)?  $default,) {final _that = this;
 switch (_that) {
 case _OyunDurumu() when $default != null:
-return $default(_that.anaTohum,_that.oyuncu,_that.piyasa,_that.portfoy,_that.isletmeler,_that.ilgi,_that.bekleyenOlaylar,_that.olayGecmisi,_that.maasEndeksi,_that.kayitSurumu);case _:
+return $default(_that.anaTohum,_that.oyuncu,_that.piyasa,_that.portfoy,_that.isletmeler,_that.ilgi,_that.borclar,_that.bekleyenOlaylar,_that.olayGecmisi,_that.maasEndeksi,_that.kayitSurumu);case _:
   return null;
 
 }
@@ -267,7 +269,7 @@ return $default(_that.anaTohum,_that.oyuncu,_that.piyasa,_that.portfoy,_that.isl
 @JsonSerializable()
 
 class _OyunDurumu extends OyunDurumu {
-  const _OyunDurumu({required this.anaTohum, required this.oyuncu, required this.piyasa, this.portfoy = const Portfoy(), final  List<Isletme> isletmeler = const <Isletme>[], this.ilgi = const IlgiDagilimi(), final  List<BekleyenOlay> bekleyenOlaylar = const <BekleyenOlay>[], final  Map<String, int> olayGecmisi = const <String, int>{}, this.maasEndeksi = 1.0, this.kayitSurumu = 1}): _isletmeler = isletmeler,_bekleyenOlaylar = bekleyenOlaylar,_olayGecmisi = olayGecmisi,super._();
+  const _OyunDurumu({required this.anaTohum, required this.oyuncu, required this.piyasa, this.portfoy = const Portfoy(), final  List<Isletme> isletmeler = const <Isletme>[], this.ilgi = const IlgiDagilimi(), final  List<Borc> borclar = const <Borc>[], final  List<BekleyenOlay> bekleyenOlaylar = const <BekleyenOlay>[], final  Map<String, int> olayGecmisi = const <String, int>{}, this.maasEndeksi = 1.0, this.kayitSurumu = 1}): _isletmeler = isletmeler,_borclar = borclar,_bekleyenOlaylar = bekleyenOlaylar,_olayGecmisi = olayGecmisi,super._();
   factory _OyunDurumu.fromJson(Map<String, dynamic> json) => _$OyunDurumuFromJson(json);
 
 /// Oyunun tohumu. Aynı tohum + aynı kararlar = aynı oyun.
@@ -287,6 +289,15 @@ class _OyunDurumu extends OyunDurumu {
 
 /// Bu turda işletmelere ayrılan ilgi. Zaman dağılımından AYRI kaynak.
 @override@JsonKey() final  IlgiDagilimi ilgi;
+/// Açık krediler. Tutarları NOMİNAL TL.
+ final  List<Borc> _borclar;
+/// Açık krediler. Tutarları NOMİNAL TL.
+@override@JsonKey() List<Borc> get borclar {
+  if (_borclar is EqualUnmodifiableListView) return _borclar;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_borclar);
+}
+
 /// Sonucu bekleyen kararlar.
  final  List<BekleyenOlay> _bekleyenOlaylar;
 /// Sonucu bekleyen kararlar.
@@ -329,16 +340,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OyunDurumu&&(identical(other.anaTohum, anaTohum) || other.anaTohum == anaTohum)&&(identical(other.oyuncu, oyuncu) || other.oyuncu == oyuncu)&&(identical(other.piyasa, piyasa) || other.piyasa == piyasa)&&(identical(other.portfoy, portfoy) || other.portfoy == portfoy)&&const DeepCollectionEquality().equals(other._isletmeler, _isletmeler)&&(identical(other.ilgi, ilgi) || other.ilgi == ilgi)&&const DeepCollectionEquality().equals(other._bekleyenOlaylar, _bekleyenOlaylar)&&const DeepCollectionEquality().equals(other._olayGecmisi, _olayGecmisi)&&(identical(other.maasEndeksi, maasEndeksi) || other.maasEndeksi == maasEndeksi)&&(identical(other.kayitSurumu, kayitSurumu) || other.kayitSurumu == kayitSurumu));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OyunDurumu&&(identical(other.anaTohum, anaTohum) || other.anaTohum == anaTohum)&&(identical(other.oyuncu, oyuncu) || other.oyuncu == oyuncu)&&(identical(other.piyasa, piyasa) || other.piyasa == piyasa)&&(identical(other.portfoy, portfoy) || other.portfoy == portfoy)&&const DeepCollectionEquality().equals(other._isletmeler, _isletmeler)&&(identical(other.ilgi, ilgi) || other.ilgi == ilgi)&&const DeepCollectionEquality().equals(other._borclar, _borclar)&&const DeepCollectionEquality().equals(other._bekleyenOlaylar, _bekleyenOlaylar)&&const DeepCollectionEquality().equals(other._olayGecmisi, _olayGecmisi)&&(identical(other.maasEndeksi, maasEndeksi) || other.maasEndeksi == maasEndeksi)&&(identical(other.kayitSurumu, kayitSurumu) || other.kayitSurumu == kayitSurumu));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,anaTohum,oyuncu,piyasa,portfoy,const DeepCollectionEquality().hash(_isletmeler),ilgi,const DeepCollectionEquality().hash(_bekleyenOlaylar),const DeepCollectionEquality().hash(_olayGecmisi),maasEndeksi,kayitSurumu);
+int get hashCode => Object.hash(runtimeType,anaTohum,oyuncu,piyasa,portfoy,const DeepCollectionEquality().hash(_isletmeler),ilgi,const DeepCollectionEquality().hash(_borclar),const DeepCollectionEquality().hash(_bekleyenOlaylar),const DeepCollectionEquality().hash(_olayGecmisi),maasEndeksi,kayitSurumu);
 
 @override
 String toString() {
-  return 'OyunDurumu(anaTohum: $anaTohum, oyuncu: $oyuncu, piyasa: $piyasa, portfoy: $portfoy, isletmeler: $isletmeler, ilgi: $ilgi, bekleyenOlaylar: $bekleyenOlaylar, olayGecmisi: $olayGecmisi, maasEndeksi: $maasEndeksi, kayitSurumu: $kayitSurumu)';
+  return 'OyunDurumu(anaTohum: $anaTohum, oyuncu: $oyuncu, piyasa: $piyasa, portfoy: $portfoy, isletmeler: $isletmeler, ilgi: $ilgi, borclar: $borclar, bekleyenOlaylar: $bekleyenOlaylar, olayGecmisi: $olayGecmisi, maasEndeksi: $maasEndeksi, kayitSurumu: $kayitSurumu)';
 }
 
 
@@ -349,7 +360,7 @@ abstract mixin class _$OyunDurumuCopyWith<$Res> implements $OyunDurumuCopyWith<$
   factory _$OyunDurumuCopyWith(_OyunDurumu value, $Res Function(_OyunDurumu) _then) = __$OyunDurumuCopyWithImpl;
 @override @useResult
 $Res call({
- int anaTohum, Oyuncu oyuncu, PiyasaDurumu piyasa, Portfoy portfoy, List<Isletme> isletmeler, IlgiDagilimi ilgi, List<BekleyenOlay> bekleyenOlaylar, Map<String, int> olayGecmisi, double maasEndeksi, int kayitSurumu
+ int anaTohum, Oyuncu oyuncu, PiyasaDurumu piyasa, Portfoy portfoy, List<Isletme> isletmeler, IlgiDagilimi ilgi, List<Borc> borclar, List<BekleyenOlay> bekleyenOlaylar, Map<String, int> olayGecmisi, double maasEndeksi, int kayitSurumu
 });
 
 
@@ -366,7 +377,7 @@ class __$OyunDurumuCopyWithImpl<$Res>
 
 /// Create a copy of OyunDurumu
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? anaTohum = null,Object? oyuncu = null,Object? piyasa = null,Object? portfoy = null,Object? isletmeler = null,Object? ilgi = null,Object? bekleyenOlaylar = null,Object? olayGecmisi = null,Object? maasEndeksi = null,Object? kayitSurumu = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? anaTohum = null,Object? oyuncu = null,Object? piyasa = null,Object? portfoy = null,Object? isletmeler = null,Object? ilgi = null,Object? borclar = null,Object? bekleyenOlaylar = null,Object? olayGecmisi = null,Object? maasEndeksi = null,Object? kayitSurumu = null,}) {
   return _then(_OyunDurumu(
 anaTohum: null == anaTohum ? _self.anaTohum : anaTohum // ignore: cast_nullable_to_non_nullable
 as int,oyuncu: null == oyuncu ? _self.oyuncu : oyuncu // ignore: cast_nullable_to_non_nullable
@@ -374,7 +385,8 @@ as Oyuncu,piyasa: null == piyasa ? _self.piyasa : piyasa // ignore: cast_nullabl
 as PiyasaDurumu,portfoy: null == portfoy ? _self.portfoy : portfoy // ignore: cast_nullable_to_non_nullable
 as Portfoy,isletmeler: null == isletmeler ? _self._isletmeler : isletmeler // ignore: cast_nullable_to_non_nullable
 as List<Isletme>,ilgi: null == ilgi ? _self.ilgi : ilgi // ignore: cast_nullable_to_non_nullable
-as IlgiDagilimi,bekleyenOlaylar: null == bekleyenOlaylar ? _self._bekleyenOlaylar : bekleyenOlaylar // ignore: cast_nullable_to_non_nullable
+as IlgiDagilimi,borclar: null == borclar ? _self._borclar : borclar // ignore: cast_nullable_to_non_nullable
+as List<Borc>,bekleyenOlaylar: null == bekleyenOlaylar ? _self._bekleyenOlaylar : bekleyenOlaylar // ignore: cast_nullable_to_non_nullable
 as List<BekleyenOlay>,olayGecmisi: null == olayGecmisi ? _self._olayGecmisi : olayGecmisi // ignore: cast_nullable_to_non_nullable
 as Map<String, int>,maasEndeksi: null == maasEndeksi ? _self.maasEndeksi : maasEndeksi // ignore: cast_nullable_to_non_nullable
 as double,kayitSurumu: null == kayitSurumu ? _self.kayitSurumu : kayitSurumu // ignore: cast_nullable_to_non_nullable

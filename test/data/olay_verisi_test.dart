@@ -290,6 +290,26 @@ void main() {
       }
     });
 
+    test('kredi notu koşulları doğru ölçekte', () {
+      // Kartlar önce 0-100 ölçeğine göre yazılmıştı; gerçek ölçek
+      // 300-1900. Yanlış ölçekteki koşul sessizce ya HİÇ ya HER ZAMAN
+      // tutar — kart görünmez olur ya da koşulsuza döner.
+      for (final olay in katalog.tumu) {
+        for (final deger in [
+          olay.kosullar.enAzKrediNotu,
+          olay.kosullar.enCokKrediNotu,
+        ]) {
+          if (deger == null) continue;
+          expect(
+            deger,
+            inInclusiveRange(Oyuncu.krediNotuTaban, Oyuncu.krediNotuTavan),
+            reason: '${olay.id}: kredi notu $deger ölçek dışı '
+                '(${Oyuncu.krediNotuTaban}-${Oyuncu.krediNotuTavan})',
+          );
+        }
+      }
+    });
+
     test('her oyuncu tipi yeterli kart görüyor', () {
       // İlk yazımda "koşulsuz kart sayısı" ölçülüyordu; asıl sorulması
       // gereken bu değil. Kartların hepsi koşulludur ama koşullar bir
