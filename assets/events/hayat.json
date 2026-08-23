@@ -1,0 +1,163 @@
+[
+  {
+    "id": "kira_zammi_01",
+    "baslik": "Ev sahibi aradı",
+    "metin": "Kontrat yenileniyor, kirayı ciddi oranda artırmak istiyor. Taşınmak da bedava değil.",
+    "tur": "hayat",
+    "agirlik": 14,
+    "bekleme": 12,
+    "kosullar": { "yas": [20, 65] },
+    "secenekler": [
+      {
+        "etiket": "Kabul et",
+        "etkiler": { "nakit": -14000, "mutluluk": -4 }
+      },
+      {
+        "etiket": "Pazarlık et",
+        "sonuclar": [
+          {
+            "sans": 0.55,
+            "metin": "Aradaki farkı ikiye böldünüz. Ev sahibi 'seni sevdiğim için' dedi.",
+            "etkiler": { "nakit": -7000, "itibar": 1 }
+          },
+          {
+            "sans": 0.45,
+            "metin": "Ev sahibi diretti. Ay sonunda zamlı kirayı ödedin.",
+            "etkiler": { "nakit": -16000, "mutluluk": -6 }
+          }
+        ]
+      },
+      {
+        "etiket": "Taşın",
+        "etkiler": { "nakit": -30000, "enerji": -12, "mutluluk": -2 }
+      }
+    ]
+  },
+  {
+    "id": "dugun_takisi_01",
+    "baslik": "Kuzeninin düğünü",
+    "metin": "Davetiye geldi. Herkes ne taktığına bakacak, gitmemek de ayıp.",
+    "tur": "hayat",
+    "agirlik": 10,
+    "bekleme": 18,
+    "kosullar": { "yas": [20, 60] },
+    "secenekler": [
+      {
+        "etiket": "Çeyrek altın tak",
+        "etkiler": { "nakit": -9000, "itibar": 3, "mutluluk": 3 }
+      },
+      {
+        "etiket": "Gönlünden kopanı ver",
+        "etkiler": { "nakit": -2500, "mutluluk": 1 }
+      },
+      {
+        "etiket": "Gitme, mazeret uydur",
+        "etkiler": { "itibar": -4, "mutluluk": -3 }
+      }
+    ]
+  },
+  {
+    "id": "yakinindan_borc_01",
+    "baslik": "Dayın borç istiyor",
+    "metin": "İşleri bozulmuş, birkaç ay içinde ödeyeceğine söz veriyor. Bu tür sözlerin ne olduğunu biliyorsun.",
+    "tur": "hayat",
+    "agirlik": 9,
+    "bekleme": 24,
+    "kosullar": { "enAzNakit": 60000, "yas": [22, 70] },
+    "secenekler": [
+      {
+        "etiket": "Ver",
+        "etkiler": { "nakit": -50000, "itibar": 2 },
+        "gecikmeTuru": 8,
+        "sonuclar": [
+          {
+            "sans": 0.4,
+            "metin": "Dayın parayı faiziyle getirdi. Aile içinde adın 'sözünün eri'ne çıktı.",
+            "etkiler": { "nakit": 55000, "itibar": 3 }
+          },
+          {
+            "sans": 0.35,
+            "metin": "Parayı taksit taksit, geç de olsa aldın. Enflasyon farkını sen yedin.",
+            "etkiler": { "nakit": 35000 }
+          },
+          {
+            "sans": 0.25,
+            "metin": "Dayın telefonlara çıkmıyor. Ailede kimse konuyu açmıyor.",
+            "etkiler": { "mutluluk": -8, "itibar": -1 }
+          }
+        ]
+      },
+      {
+        "etiket": "Reddet",
+        "etkiler": { "itibar": -5, "mutluluk": -2 }
+      }
+    ]
+  },
+  {
+    "id": "dis_tedavisi_01",
+    "baslik": "Azı dişin dayanmadı",
+    "metin": "Ağrı iki gündür geçmiyor. Devlette sıra üç ay sonraya, özelde hemen.",
+    "tur": "kriz",
+    "agirlik": 8,
+    "bekleme": 36,
+    "secenekler": [
+      {
+        "etiket": "Özele git",
+        "etkiler": { "nakit": -18000, "enerji": 5 }
+      },
+      {
+        "etiket": "Sıra bekle, ağrı kesiciyle idare et",
+        "etkiler": { "enerji": -14, "mutluluk": -6 }
+      }
+    ]
+  },
+  {
+    "id": "arac_arizasi_01",
+    "baslik": "Araba yolda kaldı",
+    "metin": "Sanayi ustası 'motor komple açılacak' diyor. Bir de çekici parası var.",
+    "tur": "kriz",
+    "agirlik": 9,
+    "bekleme": 30,
+    "kosullar": { "yas": [21, 70] },
+    "secenekler": [
+      {
+        "etiket": "Yaptır",
+        "etkiler": { "nakit": -35000, "mutluluk": -3 }
+      },
+      {
+        "etiket": "Ucuz usta bul",
+        "sonuclar": [
+          {
+            "sans": 0.5,
+            "metin": "Adam işini biliyormuş. Yarı fiyatına hallettin.",
+            "etkiler": { "nakit": -16000, "mutluluk": 2 }
+          },
+          {
+            "sans": 0.5,
+            "metin": "İki hafta sonra aynı arıza. Bu sefer tam parayı ödedin.",
+            "etkiler": { "nakit": -45000, "mutluluk": -6, "enerji": -6 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "asgari_ucret_tartismasi_01",
+    "baslik": "Zam oranı açıklandı",
+    "metin": "Herkes aynı şeyi konuşuyor: gelen zam markete yetişmiyor. Ofiste moraller bozuk.",
+    "tur": "hayat",
+    "agirlik": 7,
+    "bekleme": 12,
+    "kosullar": { "durumlar": ["calisan"], "rejimler": ["enflasyon", "kriz"] },
+    "secenekler": [
+      {
+        "etiket": "Sen de dertlen",
+        "etkiler": { "mutluluk": -4 }
+      },
+      {
+        "etiket": "Yan gelir yollarına bak",
+        "etkiler": { "enerji": -8, "yetkinlik": { "ticaret": 2 } }
+      }
+    ]
+  }
+]

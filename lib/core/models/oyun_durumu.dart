@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'olay.dart';
 import 'oyuncu.dart';
 import 'piyasa_durumu.dart';
 import 'portfoy.dart';
@@ -23,6 +24,13 @@ abstract class OyunDurumu with _$OyunDurumu {
     required Oyuncu oyuncu,
     required PiyasaDurumu piyasa,
     @Default(Portfoy()) Portfoy portfoy,
+
+    /// Sonucu bekleyen kararlar.
+    @Default(<BekleyenOlay>[]) List<BekleyenOlay> bekleyenOlaylar,
+
+    /// Olay kimliği -> en son görüldüğü tur. Aynı kartın üst üste çıkmasını
+    /// ve tek seferlik kartların tekrarını bu engelliyor.
+    @Default(<String, int>{}) Map<String, int> olayGecmisi,
 
     /// Maaşların bağlı olduğu fiyat endeksi.
     ///
@@ -64,6 +72,10 @@ abstract class OyunDurumu with _$OyunDurumu {
   OyunDurumu duzelt() => copyWith(
         oyuncu: oyuncu.duzelt(),
         portfoy: portfoy.duzelt(),
+        bekleyenOlaylar: [
+          for (final b in bekleyenOlaylar)
+            if (b.kalanTur >= 0) b else b.copyWith(kalanTur: 0),
+        ],
         maasEndeksi: maasEndeksi <= 0 ? 1.0 : maasEndeksi,
       );
 }

@@ -5,6 +5,32 @@ import 'egitim_seviyesi.dart';
 part 'kariyer_durumu.freezed.dart';
 part 'kariyer_durumu.g.dart';
 
+/// Kariyer durumunun türü.
+///
+/// Sealed sınıfın kendisi motorda `switch` ile ele alınır; bu enum yalnızca
+/// VERİ dosyalarının (olay kartı koşulları) duruma referans verebilmesi için
+/// var. JSON'a enum yazmak, kart yazarken `"durumlar": ["issiz"]` demeyi
+/// mümkün kılıyor.
+@JsonEnum(valueField: 'id')
+enum KariyerTuru {
+  ogrenci('ogrenci'),
+  calisan('calisan'),
+  issiz('issiz'),
+  askerlik('askerlik'),
+  emekli('emekli');
+
+  const KariyerTuru(this.id);
+
+  final String id;
+
+  static KariyerTuru? bul(String id) {
+    for (final t in KariyerTuru.values) {
+      if (t.id == id) return t;
+    }
+    return null;
+  }
+}
+
 /// Oyuncunun o anki kariyer durumu.
 ///
 /// "Meslek" nullable bir alan olarak tutulmaz; öğrencilik, işsizlik, askerlik
@@ -73,6 +99,15 @@ sealed class KariyerDurumu with _$KariyerDurumu {
 
   factory KariyerDurumu.fromJson(Map<String, dynamic> json) =>
       _$KariyerDurumuFromJson(json);
+
+  /// Durumun veri dosyalarında kullanılan türü.
+  KariyerTuru get turu => switch (this) {
+        Ogrenci() => KariyerTuru.ogrenci,
+        Calisan() => KariyerTuru.calisan,
+        Issiz() => KariyerTuru.issiz,
+        Askerlik() => KariyerTuru.askerlik,
+        Emekli() => KariyerTuru.emekli,
+      };
 
   /// Aktif olarak bir meslekte çalışıyor mu.
   bool get calisiyorMu => this is Calisan;

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:hayat_kariyer/core/engine/olay_motoru.dart';
 import 'package:hayat_kariyer/core/engine/portfoy_motoru.dart';
 import 'package:hayat_kariyer/core/engine/rejim.dart';
 import 'package:hayat_kariyer/core/engine/tur_processor.dart';
@@ -9,10 +10,12 @@ import 'package:hayat_kariyer/core/models/egitim_seviyesi.dart';
 import 'package:hayat_kariyer/core/models/kariyer_durumu.dart';
 import 'package:hayat_kariyer/core/models/meslek_katalogu.dart';
 import 'package:hayat_kariyer/core/models/oyun_durumu.dart';
+import 'package:hayat_kariyer/core/models/olay_katalogu.dart';
 import 'package:hayat_kariyer/core/models/oyuncu.dart';
 import 'package:hayat_kariyer/core/models/sehir.dart';
 import 'package:hayat_kariyer/core/models/sektor.dart';
 import 'package:hayat_kariyer/core/models/zaman_dagilimi.dart';
+import 'package:hayat_kariyer/core/rng/rng.dart';
 
 MeslekKatalogu gercekKatalog() => MeslekKatalogu.jsonMetinlerinden(
       Directory('assets/careers')
@@ -375,6 +378,101 @@ void main() {
         greaterThan(nakitci.reelNetDeger * 3),
         reason: 'nakit tutmak cezalandırılmalı',
       );
+    });
+  });
+
+  group('Olay sistemi boru hattına bağlı', () {
+    final olayliMotor = TurProcessor(
+      katalog: katalog,
+      olay: OlayMotoru(
+        katalog: OlayKatalogu.jsonMetinlerinden([
+          '''
+          {"id":"gec","baslik":"g","metin":"g","tur":"teklif","agirlik":10,
+           "secenekler":[{"etiket":"a","etkiler":{"nakit":-10000},
+             "gecikmeTuru":4,
+             "sonuclar":[{"sans":1.0,"metin":"Geldi.",
+               "etkiler":{"nakit":80000}}]}]}
+          ''',
+        ]),
+      ),
+    );
+
+    OyunDurumu olayliBaslat() => olayliMotor.yeniOyun(
+          oyuncu: memur(nakit: 500000),
+          anaTohum: 4242,
+        );
+
+    test('bekleyen sonuç zamanı gelince turda açığa çıkar', () {
+      final olay = olayliMotor.olay!.katalog.bul('gec')!;
+      var d = olayliMotor.olay!
+          .secimYap(
+            olayliBaslat(),
+            olay,
+            0,
+            RastgeleKaynak(1).akis('olay'),
+          )
+          .durum;
+      expect(d.bekleyenOlaylar, hasLength(1));
+
+      final raporlar = <TurRaporu>[];
+      for (var i = 0; i < 4; i++) {
+        final s = olayliMotor.turuBitir(d, TurGirdisi.varsayilan());
+        d = s.durum;
+        raporlar.add(s.rapor);
+      }
+      expect(raporlar.take(3).every((r) => r.acilanOlaylar.isEmpty), isTrue);
+      expect(raporlar.last.acilanOlaylar, hasLength(1));
+      expect(d.bekleyenOlaylar, isEmpty);
+    });
+
+    test('açığa çıkan para o ayın bilançosuna girer', () {
+      final olay = olayliMotor.olay!.katalog.bul('gec')!;
+      var d = olayliMotor.olay!
+          .secimYap(olayliBaslat(), olay, 0, RastgeleKaynak(1).akis('olay'))
+          .durum;
+      final oncekiNakit = d.oyuncu.nakit;
+      for (var i = 0; i < 3; i++) {
+        d = olayliMotor.turuBitir(d, TurGirdisi.varsayilan()).durum;
+      }
+      final acilis = olayliMotor.turuBitir(d, TurGirdisi.varsayilan());
+      expect(acilis.rapor.acilanOlaylar, hasLength(1));
+      expect(acilis.durum.oyuncu.nakit, greaterThan(oncekiNakit));
+    });
+
+    test('olay motoru yoksa boru hattı yine çalışır', () {
+      final s = tek(baslat());
+      expect(s.rapor.acilanOlaylar, isEmpty);
+      expect(motor.desteCek(baslat()).bosMu, isTrue);
+    });
+
+    test('kart çıkacaksa tur atlama kesilir', () {
+      final kartliMotor = TurProcessor(
+        katalog: katalog,
+        olay: OlayMotoru(
+          katalog: OlayKatalogu.jsonMetinlerinden([
+            '''
+            {"id":"her_zaman","baslik":"h","metin":"h","agirlik":10,
+             "bekleme":0,
+             "secenekler":[{"etiket":"a","etkiler":{}}]}
+            ''',
+          ]),
+        ),
+      );
+      final sonuc = kartliMotor.turlariAtla(
+        kartliMotor.yeniOyun(oyuncu: memur(), anaTohum: 4242),
+        TurGirdisi.varsayilan(),
+        12,
+      );
+      // Kart çıkma ihtimali %25; 12 turun tamamının sessiz geçmesi
+      // ihtimali %3'ün altında.
+      expect(sonuc.raporlar.length, lessThan(12));
+    });
+
+    test('deste çekmek oyunu ilerletmez ve tekrarlanabilir', () {
+      final d = olayliBaslat();
+      final a = olayliMotor.desteCek(d);
+      final b = olayliMotor.desteCek(d);
+      expect(a.kartlar.map((k) => k.id), b.kartlar.map((k) => k.id));
     });
   });
 

@@ -1,0 +1,200 @@
+[
+  {
+    "id": "imar_soylentisi_01",
+    "baslik": "Arsanın olduğu bölgede imar söylentisi",
+    "metin": "Kahvede konuşuluyor: yeni yol o taraftan geçecekmiş. Emlakçı da aramaya başladı.",
+    "tur": "firsat",
+    "agirlik": 6,
+    "bekleme": 48,
+    "kosullar": { "enAzItibar": 15 },
+    "secenekler": [
+      {
+        "etiket": "Bekle, gelişmeleri izle",
+        "gecikmeTuru": 6,
+        "sonuclar": [
+          {
+            "sans": 0.25,
+            "metin": "İmar planı askıya çıktı. Bölgedeki arsa fiyatları uçtu.",
+            "etkiler": { "fiyatCarpani": { "arsa": 5.5 }, "mutluluk": 10 }
+          },
+          {
+            "sans": 0.35,
+            "metin": "Plan kısmen onaylandı. Fiyatlar bir miktar hareketlendi.",
+            "etkiler": { "fiyatCarpani": { "arsa": 1.6 }, "mutluluk": 3 }
+          },
+          {
+            "sans": 0.4,
+            "metin": "Söylenti söylenti olarak kaldı. Kahvedekiler başka konuya geçti.",
+            "etkiler": { "mutluluk": -2 }
+          }
+        ]
+      },
+      {
+        "etiket": "Duyduğunu unut",
+        "etkiler": {}
+      }
+    ]
+  },
+  {
+    "id": "hemsehri_isbirligi_01",
+    "baslik": "Hemşehrinden iş bağlantısı",
+    "metin": "Memleketten tanıdığın bir isim, tanıdığı bir firmaya senden bahsetmiş. Bir kahve içmeni istiyorlar.",
+    "tur": "firsat",
+    "agirlik": 11,
+    "bekleme": 20,
+    "kosullar": { "enAzItibar": 20, "durumlar": ["calisan", "issiz"] },
+    "secenekler": [
+      {
+        "etiket": "Görüşmeye git",
+        "etkiler": { "enerji": -5 },
+        "sonuclar": [
+          {
+            "sans": 0.45,
+            "metin": "İş bağlandı. Hem cebine girdi hem çevren genişledi.",
+            "etkiler": { "nakit": 40000, "itibar": 6 }
+          },
+          {
+            "sans": 0.4,
+            "metin": "İş çıkmadı ama iyi bir tanışıklık oldu.",
+            "etkiler": { "itibar": 4 }
+          },
+          {
+            "sans": 0.15,
+            "metin": "Adam sadece kendi işini anlattı, iki saatini aldı.",
+            "etkiler": { "mutluluk": -3 }
+          }
+        ]
+      },
+      {
+        "etiket": "Vaktim yok de",
+        "etkiler": { "itibar": -3 }
+      }
+    ]
+  },
+  {
+    "id": "kur_soku_firsati_01",
+    "baslik": "Kur fırladı",
+    "metin": "Herkes döviz bürosuna koşuyor. Elindeki nakit her gün biraz daha eriyor.",
+    "tur": "firsat",
+    "agirlik": 12,
+    "bekleme": 24,
+    "kosullar": { "rejimler": ["kriz", "enflasyon"], "enAzNakit": 30000 },
+    "secenekler": [
+      {
+        "etiket": "Sırada bekle, döviz al",
+        "etkiler": { "enerji": -4, "yetkinlik": { "finans": 1 } }
+      },
+      {
+        "etiket": "Panikleme, bekle",
+        "etkiler": { "mutluluk": -2 }
+      }
+    ]
+  },
+  {
+    "id": "ortaklik_teklifi_01",
+    "baslik": "Eski arkadaşından ortaklık teklifi",
+    "metin": "Kerem bir lojistik yazılımı kurmuş. Yüzde yirmi hisse için 150.000 TL istiyor.",
+    "tur": "teklif",
+    "agirlik": 5,
+    "tekSeferlik": true,
+    "kosullar": {
+      "enAzItibar": 30,
+      "enAzNakit": 150000,
+      "yas": [24, 45]
+    },
+    "secenekler": [
+      {
+        "etiket": "Yatırım yap",
+        "etkiler": { "nakit": -150000 },
+        "gecikmeTuru": 10,
+        "sonuclar": [
+          {
+            "sans": 0.2,
+            "metin": "Şirket büyük bir müşteriye satıldı. Payına düşen hayatını değiştirdi.",
+            "etkiler": { "nakit": 1400000, "itibar": 12, "mutluluk": 15 }
+          },
+          {
+            "sans": 0.35,
+            "metin": "Şirket ayakta ama büyümüyor. Kerem payını geri aldı.",
+            "etkiler": { "nakit": 180000 }
+          },
+          {
+            "sans": 0.45,
+            "metin": "Şirket kapandı. Kerem hâlâ özür diliyor.",
+            "etkiler": { "mutluluk": -10, "itibar": -2 }
+          }
+        ]
+      },
+      {
+        "etiket": "Reddet",
+        "etkiler": { "itibar": -3 }
+      }
+    ]
+  },
+  {
+    "id": "zam_pazarligi_01",
+    "baslik": "Yıllık değerlendirme görüşmesi",
+    "metin": "Müdürün 'bu yıl bütçe dar ama seni kaybetmek istemeyiz' diyor. Top sende.",
+    "tur": "teklif",
+    "agirlik": 10,
+    "bekleme": 14,
+    "kosullar": { "durumlar": ["calisan"], "yas": [22, 60] },
+    "secenekler": [
+      {
+        "etiket": "Yüksekten iste",
+        "sonuclar": [
+          {
+            "sans": 0.35,
+            "metin": "Kabul ettiler. Kendine olan güvenin de arttı.",
+            "etkiler": { "nakit": 45000, "mutluluk": 8, "itibar": 3 }
+          },
+          {
+            "sans": 0.4,
+            "metin": "Ortada buluştunuz. Fena değil.",
+            "etkiler": { "nakit": 18000, "mutluluk": 2 }
+          },
+          {
+            "sans": 0.25,
+            "metin": "Müdürün rahatsız oldu. Aranız bir süre gerginleşti.",
+            "etkiler": { "mutluluk": -6, "itibar": -2 }
+          }
+        ]
+      },
+      {
+        "etiket": "Ne verirlerse",
+        "etkiler": { "nakit": 8000, "mutluluk": -2 }
+      }
+    ]
+  },
+  {
+    "id": "sertifika_firsati_01",
+    "baslik": "Şirket eğitim bütçesi açtı",
+    "metin": "Katılmak isteyene sertifika programı var. Akşamlarını yiyecek ama işine yarayacak.",
+    "tur": "firsat",
+    "agirlik": 8,
+    "bekleme": 30,
+    "kosullar": { "durumlar": ["calisan"], "enAzEnerji": 30 },
+    "secenekler": [
+      {
+        "etiket": "Katıl",
+        "etkiler": { "enerji": -18, "mutluluk": -3 },
+        "sonuclar": [
+          {
+            "sans": 0.7,
+            "metin": "Programı bitirdin. Ekipte sana bakış değişti.",
+            "etkiler": { "itibar": 4, "yetkinlik": { "teknoloji": 4 } }
+          },
+          {
+            "sans": 0.3,
+            "metin": "Yoğunluktan yarıda bıraktın. Yine de bir şeyler öğrendin.",
+            "etkiler": { "yetkinlik": { "teknoloji": 1 } }
+          }
+        ]
+      },
+      {
+        "etiket": "Katılma",
+        "etkiler": {}
+      }
+    ]
+  }
+]

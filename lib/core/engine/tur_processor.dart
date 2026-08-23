@@ -7,6 +7,7 @@ import '../models/sehir.dart';
 import '../models/zaman_dagilimi.dart';
 import '../rng/rastgele_kaynak.dart';
 import 'kariyer_motoru.dart';
+import 'olay_motoru.dart';
 import 'piyasa_simulatoru.dart';
 import 'portfoy_motoru.dart';
 import 'rejim.dart';
@@ -53,6 +54,7 @@ class TurRaporu {
     required this.netDeger,
     this.emirSonuclari = const [],
     this.tamamlananSatislar = const [],
+    this.acilanOlaylar = const [],
     this.terfiEtti = false,
     this.yeniKademeAdi,
     this.istenCikarildi = false,
@@ -87,6 +89,9 @@ class TurRaporu {
 
   /// Bu tur olgunlaşan gecikmeli satışlar.
   final List<TamamlananSatis> tamamlananSatislar;
+
+  /// Turlar önce verilmiş kararlardan bu tur açığa çıkanlar.
+  final List<AcigaCikanSonuc> acilanOlaylar;
 
   final bool terfiEtti;
   final String? yeniKademeAdi;
@@ -131,21 +136,23 @@ class TurGirdisi {
 ///   1. Piyasa hareket eder (rejim, enflasyon, fiyatlar)
 ///   2. Ocaksa maaş endeksi güncellenir (zam)
 ///   3. Kariyer işlenir (gelir, terfi, statlar) — maaş GEÇEN yılın endeksiyle
-///   4. Kira geliri ve olgunlaşan gecikmeli satışlar — YENİ fiyatlarla
-///   5. Yaşam gideri düşer — GÜNCEL enflasyonla
-///   6. Nakit mahsuplaşır, eksi bakiye faiz işletir, kredi notu güncellenir
-///   7. Tur ilerler (yaş, kariyer sayaçları, SGK primi)
+///   4. Gecikmeli olay sonuçları açığa çıkar
+///   5. Kira geliri ve olgunlaşan gecikmeli satışlar — YENİ fiyatlarla
+///   6. Yaşam gideri düşer — GÜNCEL enflasyonla
+///   7. Nakit mahsuplaşır, eksi bakiye faiz işletir, kredi notu güncellenir
+///   8. Tur ilerler (yaş, kariyer sayaçları, SGK primi)
 ///
 /// 0. adımın piyasadan ÖNCE olması bilinçli: oyuncu ekranda gördüğü fiyattan
 /// alır, sonra piyasa oynar. Aksi halde "aldığım fiyat bu değildi" olurdu.
 ///
-/// 3. ve 5. adımın farklı endeks kullanması da bilinçli: maaş yılda bir
+/// 3. ve 6. adımın farklı endeks kullanması da bilinçli: maaş yılda bir
 /// zamlanır, market her ay zamlanır. Aradaki makas oyunun ana baskısıdır.
 class TurProcessor {
   TurProcessor({
     required this.katalog,
     PiyasaSimulatoru? piyasa,
     PortfoyMotoru? portfoy,
+    this.olay,
     this.kariyer = const KariyerMotoru(),
     this.ayarlar = const TurAyarlari(),
   })  : piyasa = piyasa ?? PiyasaSimulatoru(),
@@ -154,6 +161,10 @@ class TurProcessor {
   final MeslekKatalogu katalog;
   final PiyasaSimulatoru piyasa;
   final PortfoyMotoru portfoy;
+
+  /// Olay motoru isteğe bağlı: kart sistemi olmadan da tur işlenebilir
+  /// (denge simülasyonları kartsız çalışıyor).
+  final OlayMotoru? olay;
   final KariyerMotoru kariyer;
   final TurAyarlari ayarlar;
 
@@ -206,24 +217,44 @@ class TurProcessor {
       maasEndeksi: maasEndeksi,
     );
 
-    // 4. Portföy: kira geliri ve olgunlaşan satışlar — yeni fiyatlarla.
-    final portfoySonucu = portfoy.turIsle(guncelPortfoy, yeniPiyasa);
+    // 4. Gecikmeli olay sonuçları. Kariyerden sonra, gider mahsuplaşmasından
+    //    önce: açığa çıkan para bu ayın bilançosuna girsin.
+    var araDurum = durum.copyWith(
+      oyuncu: kariyerSonucu.oyuncu,
+      piyasa: yeniPiyasa,
+      portfoy: guncelPortfoy,
+    );
+    var acilanOlaylar = const <AcigaCikanSonuc>[];
+    if (olay != null) {
+      final olaySonucu = olay!.bekleyenleriIsle(
+        araDurum,
+        kaynak.akis('olay', tur: sonrakiTur),
+      );
+      araDurum = olaySonucu.durum;
+      acilanOlaylar = olaySonucu.sonuclar;
+    }
+    guncelPortfoy = araDurum.portfoy;
+
+    // 5. Portföy: kira geliri ve olgunlaşan satışlar — yeni fiyatlarla.
+    final portfoySonucu = portfoy.turIsle(guncelPortfoy, araDurum.piyasa);
     guncelPortfoy = portfoySonucu.portfoy;
     final satisGeliri = portfoySonucu.satislar
         .fold<int>(0, (toplam, s) => toplam + s.tutar);
 
-    // 5. Yaşam gideri — güncel enflasyonla, maaş endeksiyle DEĞİL.
+    // 6. Yaşam gideri — güncel enflasyonla, maaş endeksiyle DEĞİL.
     final yasamGideri = _yasamGideri(durum.oyuncu.sehir, yeniPiyasa);
 
-    // 6. Mahsuplaşma
-    var oyuncu = kariyerSonucu.oyuncu;
+    // 7. Mahsuplaşma
+    var oyuncu = araDurum.oyuncu;
     final onceki = durum.oyuncu.nakit;
+    // Emirler ve olaylar nakiti zaten değiştirdi; faiz bunlardan sonraki
+    // bakiyeye işler.
+    final mahsupOncesi = oyuncu.nakit + emirSonucu.nakitDegisimi;
     var faizGideri = 0;
-    final emirSonrasiNakit = onceki + emirSonucu.nakitDegisimi;
-    if (emirSonrasiNakit < 0) {
-      faizGideri = (-emirSonrasiNakit * ayarlar.eksiBakiyeFaizi).round();
+    if (mahsupOncesi < 0) {
+      faizGideri = (-mahsupOncesi * ayarlar.eksiBakiyeFaizi).round();
     }
-    oyuncu = oyuncu.copyWith(nakit: emirSonrasiNakit).nakitDegistir(
+    oyuncu = oyuncu.copyWith(nakit: mahsupOncesi).nakitDegistir(
           kariyerSonucu.netGelir +
               portfoySonucu.kiraGeliri +
               satisGeliri -
@@ -236,12 +267,11 @@ class TurProcessor {
           : ayarlar.duzenliKrediNotuArtisi,
     );
 
-    // 7. Tur ilerlet
+    // 8. Tur ilerlet
     oyuncu = oyuncu.turIlerlet();
 
-    final yeniDurum = durum.copyWith(
+    final yeniDurum = araDurum.copyWith(
       oyuncu: oyuncu,
-      piyasa: yeniPiyasa,
       portfoy: guncelPortfoy,
       maasEndeksi: maasEndeksi,
     );
@@ -267,6 +297,7 @@ class TurProcessor {
         netDeger: yeniDurum.netDeger,
         emirSonuclari: emirSonucu.sonuclar,
         tamamlananSatislar: portfoySonucu.satislar,
+        acilanOlaylar: acilanOlaylar,
         terfiEtti: kariyerSonucu.terfiEtti,
         yeniKademeAdi: kariyerSonucu.yeniKademeAdi,
         istenCikarildi: kariyerSonucu.istenCikarildi,
@@ -289,6 +320,10 @@ class TurProcessor {
     var guncel = durum;
     final raporlar = <TurRaporu>[];
     for (var i = 0; i < adet; i++) {
+      // Karar kartı çıkacaksa atlamadan önce dur; oyuncu görmeden geçmesin.
+      // Kart çekme saf olduğu için buradaki bakış oyunu bozmaz: aynı akış
+      // sonradan tekrar çekildiğinde aynı desteyi verir.
+      if (i > 0 && _kartVar(guncel)) break;
       final sonuc = turuBitir(guncel, girdi);
       guncel = sonuc.durum;
       raporlar.add(sonuc.rapor);
@@ -297,7 +332,27 @@ class TurProcessor {
     return (durum: guncel, raporlar: raporlar);
   }
 
+  /// Bu turda oyuncuya kart çıkacak mı.
+  bool _kartVar(OyunDurumu durum) {
+    final motor = olay;
+    if (motor == null) return false;
+    final akis =
+        RastgeleKaynak(durum.anaTohum).akis('olay_deste', tur: durum.tur + 1);
+    return !motor.desteCek(durum, akis).bosMu;
+  }
+
+  /// Bu turun destesi. UI turu başlatırken çağırır.
+  OlayDestesi desteCek(OyunDurumu durum) {
+    final motor = olay;
+    if (motor == null) return const OlayDestesi([]);
+    return motor.desteCek(
+      durum,
+      RastgeleKaynak(durum.anaTohum).akis('olay_deste', tur: durum.tur + 1),
+    );
+  }
+
   bool _dikkatGerektirir(TurRaporu r) =>
+      r.acilanOlaylar.isNotEmpty ||
       r.tamamlananSatislar.isNotEmpty ||
       r.istenCikarildi ||
       r.terfiEtti ||
