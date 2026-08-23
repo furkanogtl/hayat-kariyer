@@ -137,6 +137,12 @@ abstract class OlayKosullari with _$OlayKosullari {
     int? enAzMutluluk,
     int? enAzKrediNotu,
 
+    /// Üst sınırlar. Kriz ve borç kartları "durumu kötü olana çıksın"
+    /// diyebilmek için var; yalnız `enAz...` olsaydı sıkışmış oyuncuya özel
+    /// kart yazılamazdı. [enCokNakit] de TABAN TL'dir.
+    int? enCokNakit,
+    int? enCokKrediNotu,
+
     /// `[enAz, enCok]`.
     @JsonKey(name: 'yas') List<int>? yasAraligi,
     List<Sehir>? sehirler,
@@ -157,9 +163,14 @@ abstract class OlayKosullari with _$OlayKosullari {
     if (enAzEnerji != null && oyuncu.enerji < enAzEnerji!) return false;
     if (enAzMutluluk != null && oyuncu.mutluluk < enAzMutluluk!) return false;
     if (enAzKrediNotu != null && oyuncu.krediNotu < enAzKrediNotu!) return false;
-    if (enAzNakit != null) {
+    if (enCokKrediNotu != null && oyuncu.krediNotu > enCokKrediNotu!) {
+      return false;
+    }
+    if (enAzNakit != null || enCokNakit != null) {
       // Kart tutarları taban TL yazıldığı için karşılaştırma da reel.
-      if (piyasa.reeleCevir(oyuncu.nakit) < enAzNakit!) return false;
+      final reelNakit = piyasa.reeleCevir(oyuncu.nakit);
+      if (enAzNakit != null && reelNakit < enAzNakit!) return false;
+      if (enCokNakit != null && reelNakit > enCokNakit!) return false;
     }
     if (yasAraligi != null && yasAraligi!.length == 2) {
       if (oyuncu.yas < yasAraligi![0] || oyuncu.yas > yasAraligi![1]) {
@@ -281,6 +292,11 @@ abstract class Olay with _$Olay {
 
     if (kosullar.yasAraligi != null && kosullar.yasAraligi!.length != 2) {
       hatalar.add('$id: yas iki elemanlı olmalı');
+    }
+    final enAzN = kosullar.enAzNakit;
+    final enCokN = kosullar.enCokNakit;
+    if (enAzN != null && enCokN != null && enAzN > enCokN) {
+      hatalar.add('$id: enAzNakit üst sınırın üzerinde, kart hiç çıkmaz');
     }
     return hatalar;
   }

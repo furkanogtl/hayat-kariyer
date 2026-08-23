@@ -102,6 +102,8 @@ _OlayKosullari _$OlayKosullariFromJson(Map<String, dynamic> json) =>
       enAzEnerji: (json['enAzEnerji'] as num?)?.toInt(),
       enAzMutluluk: (json['enAzMutluluk'] as num?)?.toInt(),
       enAzKrediNotu: (json['enAzKrediNotu'] as num?)?.toInt(),
+      enCokNakit: (json['enCokNakit'] as num?)?.toInt(),
+      enCokKrediNotu: (json['enCokKrediNotu'] as num?)?.toInt(),
       yasAraligi: (json['yas'] as List<dynamic>?)
           ?.map((e) => (e as num).toInt())
           .toList(),
@@ -135,6 +137,8 @@ Map<String, dynamic> _$OlayKosullariToJson(
   'enAzEnerji': instance.enAzEnerji,
   'enAzMutluluk': instance.enAzMutluluk,
   'enAzKrediNotu': instance.enAzKrediNotu,
+  'enCokNakit': instance.enCokNakit,
+  'enCokKrediNotu': instance.enCokKrediNotu,
   'yas': instance.yasAraligi,
   'sehirler': instance.sehirler?.map((e) => _$SehirEnumMap[e]!).toList(),
   'meslekler': instance.meslekler,

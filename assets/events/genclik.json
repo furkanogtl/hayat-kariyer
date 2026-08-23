@@ -1,0 +1,324 @@
+[
+  {
+    "id": "universite_yurt_ev_01",
+    "baslik": "Yurt mu, ev mi?",
+    "metin": "Yurt ucuz ama saat sınırı var. Ev arkadaşlarıyla kalmak serbest, kirası belli değil.",
+    "tur": "hayat",
+    "agirlik": 10,
+    "bekleme": 24,
+    "kosullar": { "durumlar": ["ogrenci"], "yas": [18, 26] },
+    "secenekler": [
+      {
+        "etiket": "Yurtta kal",
+        "etkiler": { "nakit": -3000, "mutluluk": -3, "enerji": 4 }
+      },
+      {
+        "etiket": "Ev tut, arkadaşlarla paylaş",
+        "etkiler": { "nakit": -12000, "mutluluk": 6, "itibar": 3 }
+      }
+    ]
+  },
+  {
+    "id": "staj_firsati_01",
+    "baslik": "Yaz stajı çağrısı",
+    "metin": "Bir firma stajyer alıyor, ücret yok denecek kadar az. Yazın tamamı gidecek.",
+    "tur": "firsat",
+    "agirlik": 11,
+    "bekleme": 14,
+    "kosullar": { "durumlar": ["ogrenci"], "yas": [19, 27] },
+    "secenekler": [
+      {
+        "etiket": "Başvur, git",
+        "etkiler": { "enerji": -12, "nakit": 6000, "itibar": 4 },
+        "sonuclar": [
+          {
+            "sans": 0.55,
+            "metin": "Ekip seni sevdi, mezun olunca ara dediler.",
+            "etkiler": { "itibar": 5, "mutluluk": 6 }
+          },
+          {
+            "sans": 0.45,
+            "metin": "Yazın tamamı fotokopiyle geçti. Yine de ortamı gördün.",
+            "etkiler": { "mutluluk": -4 }
+          }
+        ]
+      },
+      {
+        "etiket": "Yazın memlekete dön",
+        "etkiler": { "enerji": 10, "mutluluk": 6 }
+      }
+    ]
+  },
+  {
+    "id": "harclik_bitti_01",
+    "baslik": "Ayın yirmisi, para bitti",
+    "metin": "Eve söylemek gurur meselesi. Arkadaşlar da aynı halde.",
+    "tur": "kriz",
+    "agirlik": 12,
+    "bekleme": 8,
+    "kosullar": { "durumlar": ["ogrenci"], "enCokNakit": 8000 },
+    "secenekler": [
+      {
+        "etiket": "Eve haber ver",
+        "etkiler": { "nakit": 5000, "mutluluk": -4, "itibar": -1 }
+      },
+      {
+        "etiket": "Garsonluk yap",
+        "etkiler": { "nakit": 9000, "enerji": -12 }
+      },
+      {
+        "etiket": "Ay sonunu idare et",
+        "etkiler": { "enerji": -8, "mutluluk": -6 }
+      }
+    ]
+  },
+  {
+    "id": "kulup_baskanligi_01",
+    "baslik": "Kulüpte başkanlık",
+    "metin": "Öğrenci kulübünde aday gösterildin. Etkinlik düzenlemek zaman ister, tanınmak da öyle.",
+    "tur": "firsat",
+    "agirlik": 8,
+    "bekleme": 30,
+    "kosullar": { "durumlar": ["ogrenci"], "enAzEnerji": 35 },
+    "secenekler": [
+      {
+        "etiket": "Adaylığı kabul et",
+        "etkiler": { "enerji": -12, "mutluluk": -2 },
+        "gecikmeTuru": 4,
+        "sonuclar": [
+          {
+            "sans": 0.6,
+            "metin": "Etkinlikler tuttu, kampüste ismin biliniyor.",
+            "etkiler": { "itibar": 10, "mutluluk": 8 }
+          },
+          {
+            "sans": 0.4,
+            "metin": "Katılım düşük kaldı, bütçeyi cebinden kapattın.",
+            "etkiler": { "itibar": 3, "nakit": -6000, "mutluluk": -4 }
+          }
+        ]
+      },
+      {
+        "etiket": "Derslerime bakayım",
+        "etkiler": { "itibar": -2, "enerji": 5 }
+      }
+    ]
+  },
+  {
+    "id": "sinav_haftasi_01",
+    "baslik": "Final haftası",
+    "metin": "Üç sınav üst üste. Kütüphanede yer bulmak bile ayrı bir mesele.",
+    "tur": "hayat",
+    "agirlik": 12,
+    "bekleme": 6,
+    "kosullar": { "durumlar": ["ogrenci"] },
+    "secenekler": [
+      {
+        "etiket": "Gece gündüz çalış",
+        "etkiler": { "enerji": -16, "mutluluk": -4 }
+      },
+      {
+        "etiket": "Geçer not yeter",
+        "etkiler": { "enerji": -4, "mutluluk": 3 }
+      }
+    ]
+  },
+  {
+    "id": "askerlik_tecili_01",
+    "baslik": "Tecil belgesi",
+    "metin": "Askerlik şubesi öğrenci belgesi istiyor. Halletmezsen celp gelir.",
+    "tur": "hayat",
+    "agirlik": 9,
+    "bekleme": 24,
+    "kosullar": {
+      "durumlar": ["ogrenci"],
+      "cinsiyet": "erkek",
+      "yas": [20, 29]
+    },
+    "secenekler": [
+      {
+        "etiket": "Bugün hallet",
+        "etkiler": { "enerji": -5 }
+      },
+      {
+        "etiket": "Sonra yaparım",
+        "etkiler": { "mutluluk": -5, "enerji": -3, "krediNotu": -2 }
+      }
+    ]
+  },
+  {
+    "id": "ilk_is_gorusmesi_01",
+    "baslik": "İlk ciddi iş görüşmesi",
+    "metin": "Takım elbise yok, deneyim yok, özgüven de tartışmalı. Görüşme yarın sabah.",
+    "tur": "firsat",
+    "agirlik": 11,
+    "bekleme": 12,
+    "kosullar": { "durumlar": ["issiz"], "yas": [20, 32] },
+    "secenekler": [
+      {
+        "etiket": "Hazırlan, git",
+        "etkiler": { "nakit": -4000, "enerji": -8 },
+        "sonuclar": [
+          {
+            "sans": 0.5,
+            "metin": "İyi geçti, olumlu dönüş sözü aldın.",
+            "etkiler": { "itibar": 5, "mutluluk": 8 }
+          },
+          {
+            "sans": 0.5,
+            "metin": "Sorular ağırdı. Yine de nasıl bir şey olduğunu gördün.",
+            "etkiler": { "mutluluk": -4, "itibar": 1 }
+          }
+        ]
+      },
+      {
+        "etiket": "Boş ver, uygun değilim",
+        "etkiler": { "mutluluk": -5, "itibar": -2 }
+      }
+    ]
+  },
+  {
+    "id": "ehliyet_kursu_01",
+    "baslik": "Ehliyet meselesi",
+    "metin": "Herkes alıyor, sürücü kursu ücreti her ay biraz daha artıyor. Şimdi mi, sonra mı?",
+    "tur": "hayat",
+    "agirlik": 8,
+    "bekleme": 60,
+    "tekSeferlik": true,
+    "kosullar": { "yas": [18, 35] },
+    "secenekler": [
+      {
+        "etiket": "Kursa yazıl",
+        "etkiler": { "nakit": -22000, "enerji": -8 },
+        "sonuclar": [
+          {
+            "sans": 0.7,
+            "metin": "İlk denemede aldın.",
+            "etkiler": { "mutluluk": 8 }
+          },
+          {
+            "sans": 0.3,
+            "metin": "Direksiyondan kaldın, ikinci sınav ücreti çıktı.",
+            "etkiler": { "nakit": -6000, "mutluluk": -4 }
+          }
+        ]
+      },
+      {
+        "etiket": "Şimdilik gerek yok",
+        "etkiler": {}
+      }
+    ]
+  },
+  {
+    "id": "arkadas_borc_istedi_01",
+    "baslik": "Arkadaşın sıkışmış",
+    "metin": "Kirasını denkleştiremiyor, senden istiyor. Aynı masada oturmaya devam edeceksiniz.",
+    "tur": "hayat",
+    "agirlik": 9,
+    "bekleme": 20,
+    "kosullar": { "yas": [18, 40], "enAzNakit": 10000 },
+    "secenekler": [
+      {
+        "etiket": "Ver",
+        "etkiler": { "nakit": -9000 },
+        "gecikmeTuru": 4,
+        "sonuclar": [
+          {
+            "sans": 0.55,
+            "metin": "Sözünde durdu, parayı getirdi.",
+            "etkiler": { "nakit": 9000, "itibar": 3 }
+          },
+          {
+            "sans": 0.45,
+            "metin": "Konu hiç açılmadı. Arkadaşlık da eskisi gibi değil.",
+            "etkiler": { "mutluluk": -6 }
+          }
+        ]
+      },
+      {
+        "etiket": "Bende de yok de",
+        "etkiler": { "itibar": -3, "mutluluk": -2 }
+      }
+    ]
+  },
+  {
+    "id": "gribe_yakalandin_01",
+    "baslik": "Yatağa düştün",
+    "metin": "Ateşin çıktı, bir hafta ayakta duramayacaksın. İşler ertelenmeyi kabul etmiyor.",
+    "tur": "kriz",
+    "agirlik": 11,
+    "bekleme": 14,
+    "secenekler": [
+      {
+        "etiket": "Dinlen, geçsin",
+        "etkiler": { "enerji": -8, "mutluluk": -3 }
+      },
+      {
+        "etiket": "İlaçla ayakta kal",
+        "etkiler": { "nakit": -4000, "enerji": -14, "mutluluk": -5 }
+      }
+    ]
+  },
+  {
+    "id": "tanidiktan_yatirim_tuyosu_01",
+    "baslik": "Kesin bilgi, yayalım",
+    "metin": "Tanıdığın 'içeriden duydum' diyor, bir hisse fırlayacakmış. Anlatırken çok emin.",
+    "tur": "teklif",
+    "agirlik": 9,
+    "bekleme": 24,
+    "kosullar": { "yas": [18, 70] },
+    "secenekler": [
+      {
+        "etiket": "Söylediğine güven",
+        "etkiler": { "mutluluk": 2 },
+        "gecikmeTuru": 3,
+        "sonuclar": [
+          {
+            "sans": 0.25,
+            "metin": "Gerçekten yükseldi. Bir daha aynı şansı bulur musun, belli değil.",
+            "etkiler": { "nakit": 60000, "mutluluk": 8 }
+          },
+          {
+            "sans": 0.75,
+            "metin": "Tüyo tutmadı. Tanıdığın telefonu geç açıyor.",
+            "etkiler": { "nakit": -40000, "mutluluk": -8, "itibar": -2 }
+          }
+        ]
+      },
+      {
+        "etiket": "Kendi kararımı veririm",
+        "etkiler": { "yetkinlik": { "finans": 1 } }
+      }
+    ]
+  },
+  {
+    "id": "spor_salonu_uyeligi_01",
+    "baslik": "Spor salonu kampanyası",
+    "metin": "Yıllık üyelikte indirim var. Gitmeye devam edersen ucuz, etmezsen pahalı.",
+    "tur": "hayat",
+    "agirlik": 8,
+    "bekleme": 36,
+    "secenekler": [
+      {
+        "etiket": "Yıllık al",
+        "etkiler": { "nakit": -15000 },
+        "sonuclar": [
+          {
+            "sans": 0.5,
+            "metin": "Düzenli gittin. Kondisyonun da moralin de yerinde.",
+            "etkiler": { "enerji": 14, "mutluluk": 6 }
+          },
+          {
+            "sans": 0.5,
+            "metin": "İki ay sonra bıraktın. Kart çekmecede duruyor.",
+            "etkiler": { "enerji": 3, "mutluluk": -3 }
+          }
+        ]
+      },
+      {
+        "etiket": "Parkta koşarım",
+        "etkiler": { "enerji": 5 }
+      }
+    ]
+  }
+]

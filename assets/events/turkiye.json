@@ -1,0 +1,407 @@
+[
+  {
+    "id": "kyk_borcu_01",
+    "baslik": "KYK borcu kapıya dayandı",
+    "metin": "Ödemesiz dönem bitti, ilk taksit tebligatı geldi. Borç, okurken aldığın rakam değil artık.",
+    "tur": "hayat",
+    "agirlik": 9,
+    "bekleme": 10,
+    "kosullar": { "yas": [24, 34], "enAzEgitim": "onlisans" },
+    "secenekler": [
+      {
+        "etiket": "Tek seferde kapat",
+        "etkiler": { "nakit": -95000, "krediNotu": 10, "mutluluk": -3 }
+      },
+      {
+        "etiket": "Taksitle öde",
+        "etkiler": { "nakit": -11000 }
+      },
+      {
+        "etiket": "Bu ay atla",
+        "etkiler": { "krediNotu": -8, "mutluluk": -2 }
+      }
+    ]
+  },
+  {
+    "id": "sgk_eksik_gun_01",
+    "baslik": "Hizmet dökümünde eksik gün",
+    "metin": "Eski işverenlerinden biri primini eksik yatırmış. Peşine düşmek dilekçe ve sıra demek.",
+    "tur": "hayat",
+    "agirlik": 7,
+    "bekleme": 40,
+    "kosullar": { "durumlar": ["calisan"], "yas": [26, 60] },
+    "secenekler": [
+      {
+        "etiket": "Şikâyet dilekçesi ver",
+        "etkiler": { "enerji": -8 },
+        "gecikmeTuru": 4,
+        "sonuclar": [
+          {
+            "sans": 0.5,
+            "metin": "Eksik günler kayda geçti, ödenmeyen primler tahsil edildi.",
+            "etkiler": { "nakit": 22000, "mutluluk": 4 }
+          },
+          {
+            "sans": 0.3,
+            "metin": "Dosya sürüncemede. Sonuç çıkacaksa yıllar sonra çıkar.",
+            "etkiler": { "mutluluk": -4 }
+          },
+          {
+            "sans": 0.2,
+            "metin": "Firma kapanmış, tahsilat kadük kaldı.",
+            "etkiler": { "mutluluk": -6 }
+          }
+        ]
+      },
+      {
+        "etiket": "Uğraşma",
+        "etkiler": { "mutluluk": -2 }
+      }
+    ]
+  },
+  {
+    "id": "icra_takibi_01",
+    "baslik": "Kapıya icra kâğıdı geldi",
+    "metin": "Gecikmiş kart borcu takibe düşmüş. Ödeme emrine yedi gün içinde cevap vermen gerekiyor.",
+    "tur": "kriz",
+    "agirlik": 11,
+    "bekleme": 18,
+    "kosullar": { "enCokKrediNotu": 45, "yas": [22, 65] },
+    "secenekler": [
+      {
+        "etiket": "Masrafıyla kapat",
+        "etkiler": { "nakit": -60000, "krediNotu": 12, "mutluluk": -5 }
+      },
+      {
+        "etiket": "Avukatla taksitlendir",
+        "etkiler": { "nakit": -18000, "enerji": -6 },
+        "sonuclar": [
+          {
+            "sans": 0.6,
+            "metin": "Taksitte anlaştınız. Dosya duruyor ama nefes aldın.",
+            "etkiler": { "krediNotu": 4 }
+          },
+          {
+            "sans": 0.4,
+            "metin": "Alacaklı yanaşmadı, haciz ihtarı geldi.",
+            "etkiler": { "krediNotu": -12, "mutluluk": -10 }
+          }
+        ]
+      },
+      {
+        "etiket": "Görmezden gel",
+        "etkiler": { "krediNotu": -18, "mutluluk": -8 }
+      }
+    ]
+  },
+  {
+    "id": "kredi_karti_asgari_01",
+    "baslik": "Ekstre geldi, kasa boş",
+    "metin": "Tamamını ödeyecek durumda değilsin. Asgariyi ödersen kalan borç faiziyle büyüyecek.",
+    "tur": "kriz",
+    "agirlik": 10,
+    "bekleme": 8,
+    "kosullar": { "enCokNakit": 12000, "yas": [21, 65] },
+    "secenekler": [
+      {
+        "etiket": "Asgariyi öde",
+        "etkiler": { "nakit": -4000, "krediNotu": -6, "mutluluk": -3 }
+      },
+      {
+        "etiket": "Yakınından borç al, kapat",
+        "etkiler": { "nakit": -14000, "itibar": -4, "krediNotu": 5 }
+      }
+    ]
+  },
+  {
+    "id": "tapuda_dusuk_gosterme_01",
+    "baslik": "Tapuda düşük gösterme teklifi",
+    "metin": "Satıcı harcı azaltmak için bedeli düşük yazmayı öneriyor. Aradaki farkı elden isteyecek.",
+    "tur": "teklif",
+    "agirlik": 6,
+    "bekleme": 48,
+    "kosullar": { "enAzNakit": 400000, "yas": [25, 60] },
+    "secenekler": [
+      {
+        "etiket": "Kabul et",
+        "gecikmeTuru": 6,
+        "sonuclar": [
+          {
+            "sans": 0.75,
+            "metin": "Kimse dönüp bakmadı. Harçtan arta kalan cebinde.",
+            "etkiler": { "nakit": 28000 }
+          },
+          {
+            "sans": 0.25,
+            "metin": "İnceleme geldi. Eksik harç, cezasıyla birlikte istendi.",
+            "etkiler": { "nakit": -75000, "krediNotu": -10, "mutluluk": -8 }
+          }
+        ]
+      },
+      {
+        "etiket": "Gerçek bedeli yazdır",
+        "etkiler": { "nakit": -28000, "krediNotu": 3 }
+      }
+    ]
+  },
+  {
+    "id": "arac_kredisi_baskisi_01",
+    "baslik": "Herkes araba değiştiriyor",
+    "metin": "Bacanağın sıfır araba almış, akşam yemeğinde tek konu o. Bankalar da taşıt kredisi kampanyası açmış.",
+    "tur": "hayat",
+    "agirlik": 8,
+    "bekleme": 36,
+    "kosullar": { "yas": [25, 55], "enAzKrediNotu": 55 },
+    "secenekler": [
+      {
+        "etiket": "Kredi çek, sıfır al",
+        "etkiler": { "nakit": -320000, "krediNotu": -10, "mutluluk": 12 }
+      },
+      {
+        "etiket": "İkinci ele bak",
+        "etkiler": { "nakit": -130000, "mutluluk": 5 }
+      },
+      {
+        "etiket": "İhtiyacım yok",
+        "etkiler": { "mutluluk": -3 }
+      }
+    ]
+  },
+  {
+    "id": "imar_affi_01",
+    "baslik": "İmar affı gündemde",
+    "metin": "Kaçak katlar için yeni bir düzenleme konuşuluyor. Emlakçılar şimdiden telefonlara sarılmış.",
+    "tur": "firsat",
+    "agirlik": 6,
+    "bekleme": 60,
+    "kosullar": { "enAzItibar": 10 },
+    "secenekler": [
+      {
+        "etiket": "Piyasayı takip et",
+        "gecikmeTuru": 5,
+        "sonuclar": [
+          {
+            "sans": 0.4,
+            "metin": "Düzenleme çıktı. Yapı kayıt belgesi alan herkesin malı değerlendi.",
+            "etkiler": {
+              "fiyatCarpani": { "gayrimenkul": 1.3, "arsa": 1.5 },
+              "mutluluk": 6
+            }
+          },
+          {
+            "sans": 0.6,
+            "metin": "Tasarı komisyonda kaldı. Konuşan çok, çıkan yok.",
+            "etkiler": {}
+          }
+        ]
+      },
+      {
+        "etiket": "Kulak asma",
+        "etkiler": {}
+      }
+    ]
+  },
+  {
+    "id": "market_zammi_01",
+    "baslik": "Market fişi kabardı",
+    "metin": "Aynı sepet geçen aya göre bambaşka bir rakam. Herkes markası düşük ürünlere kayıyor.",
+    "tur": "hayat",
+    "agirlik": 12,
+    "bekleme": 10,
+    "kosullar": { "rejimler": ["enflasyon", "kriz"] },
+    "secenekler": [
+      {
+        "etiket": "Sıkı bütçeye geç",
+        "etkiler": { "mutluluk": -5, "enerji": -5 }
+      },
+      {
+        "etiket": "Alışkanlığını bozma",
+        "etkiler": { "nakit": -20000 }
+      }
+    ]
+  },
+  {
+    "id": "kombi_arizasi_01",
+    "baslik": "Kombi kışın ortasında sustu",
+    "metin": "Usta bu modelin parçasının kalmadığını söylüyor. Üşümek birkaç gün sürer, hastalanmak daha uzun.",
+    "tur": "kriz",
+    "agirlik": 8,
+    "bekleme": 40,
+    "kosullar": { "yas": [21, 70] },
+    "secenekler": [
+      {
+        "etiket": "Yenisini taktır",
+        "etkiler": { "nakit": -42000, "mutluluk": -2 }
+      },
+      {
+        "etiket": "Tamire zorla",
+        "sonuclar": [
+          {
+            "sans": 0.45,
+            "metin": "Usta bir yerlerden parça buldu. Ucuz atlattın.",
+            "etkiler": { "nakit": -14000, "mutluluk": 2 }
+          },
+          {
+            "sans": 0.55,
+            "metin": "İki hafta sonra yine sustu. Sonunda yenisini aldın.",
+            "etkiler": { "nakit": -52000, "enerji": -8, "mutluluk": -6 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "borc_yapilandirma_01",
+    "baslik": "Borç yapılandırması açıklandı",
+    "metin": "Birikmiş vergi ve prim borçları taksitlendiriliyor. Başvuru için son gün yaklaşıyor.",
+    "tur": "firsat",
+    "agirlik": 6,
+    "bekleme": 60,
+    "kosullar": { "yas": [25, 62], "enCokKrediNotu": 60 },
+    "secenekler": [
+      {
+        "etiket": "Başvur",
+        "etkiler": { "nakit": -26000, "krediNotu": 14, "enerji": -4 }
+      },
+      {
+        "etiket": "Son güne bırak",
+        "etkiler": { "krediNotu": -5, "mutluluk": -3 }
+      }
+    ]
+  },
+  {
+    "id": "telefon_dolandiriciligi_01",
+    "baslik": "Bankadan aradıklarını söylüyorlar",
+    "metin": "Karşıdaki adam adını da ekstre tutarını da biliyor. Hesabın güvenli hesaba aktarılacakmış.",
+    "tur": "kriz",
+    "agirlik": 7,
+    "bekleme": 48,
+    "kosullar": { "enAzNakit": 40000 },
+    "secenekler": [
+      {
+        "etiket": "Söylediklerini yap",
+        "sonuclar": [
+          {
+            "sans": 0.8,
+            "metin": "Para gider gitmez hat kapandı. Şikâyet ettin ama iz yok.",
+            "etkiler": { "nakit": -70000, "mutluluk": -12 }
+          },
+          {
+            "sans": 0.2,
+            "metin": "Banka işlemi şüpheli bulup durdurdu. Ucuz kurtuldun.",
+            "etkiler": { "mutluluk": -5, "enerji": -4 }
+          }
+        ]
+      },
+      {
+        "etiket": "Kapat, şubeyi kendin ara",
+        "etkiler": { "enerji": -3, "krediNotu": 2 }
+      }
+    ]
+  },
+  {
+    "id": "apartman_yardim_01",
+    "baslik": "Apartmanda yardım kampanyası",
+    "metin": "Yönetim afet bölgesi için para topluyor. Bağış listesi kapıya asılacakmış.",
+    "tur": "hayat",
+    "agirlik": 8,
+    "bekleme": 30,
+    "secenekler": [
+      {
+        "etiket": "Yüklüce ver",
+        "etkiler": { "nakit": -18000, "itibar": 5, "mutluluk": 5 }
+      },
+      {
+        "etiket": "Herkes kadar ver",
+        "etkiler": { "nakit": -3500, "itibar": 1 }
+      },
+      {
+        "etiket": "Bu ay pas geç",
+        "etkiler": { "itibar": -3, "mutluluk": -2 }
+      }
+    ]
+  },
+  {
+    "id": "hemsehri_dernegi_01",
+    "baslik": "Dernekte bir görev boşaldı",
+    "metin": "Hemşehri derneğinin yönetimine senin ismin geçmiş. Ayda birkaç akşamını alacak.",
+    "tur": "firsat",
+    "agirlik": 7,
+    "bekleme": 48,
+    "kosullar": { "enAzItibar": 25, "yas": [28, 65] },
+    "secenekler": [
+      {
+        "etiket": "Görevi kabul et",
+        "etkiler": { "enerji": -10, "mutluluk": -2 },
+        "gecikmeTuru": 4,
+        "sonuclar": [
+          {
+            "sans": 0.6,
+            "metin": "Dernek işleri yürüdü, adın şehirde daha çok duyuluyor.",
+            "etkiler": { "itibar": 9 }
+          },
+          {
+            "sans": 0.4,
+            "metin": "Bütçe açığı çıktı, açığı yönetim kendi cebinden kapattı.",
+            "etkiler": { "itibar": 4, "nakit": -12000 }
+          }
+        ]
+      },
+      {
+        "etiket": "Kibarca reddet",
+        "etkiler": { "itibar": -2 }
+      }
+    ]
+  },
+  {
+    "id": "deprem_guclendirme_01",
+    "baslik": "Binada güçlendirme kararı",
+    "metin": "Kat malikleri toplandı, rapor riskli çıkmış. Payına düşen az bir para değil.",
+    "tur": "kriz",
+    "agirlik": 6,
+    "bekleme": 60,
+    "kosullar": { "enAzNakit": 150000, "yas": [28, 70] },
+    "secenekler": [
+      {
+        "etiket": "Payını öde",
+        "etkiler": { "nakit": -160000, "mutluluk": -4, "itibar": 2 }
+      },
+      {
+        "etiket": "Karara itiraz et",
+        "etkiler": { "itibar": -4 },
+        "gecikmeTuru": 5,
+        "sonuclar": [
+          {
+            "sans": 0.35,
+            "metin": "İtiraz tuttu, kapsam daraldı. Payın küçüldü.",
+            "etkiler": { "nakit": -55000 }
+          },
+          {
+            "sans": 0.65,
+            "metin": "İtiraz reddedildi. Gecikme zammıyla birlikte ödedin.",
+            "etkiler": { "nakit": -190000, "mutluluk": -8 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "asker_carsi_izni_01",
+    "baslik": "Çarşı izni",
+    "metin": "Aylardır ilk defa telefonuna doğru düzgün bakabiliyorsun. Arkadaşlar buluşalım diyor.",
+    "tur": "hayat",
+    "agirlik": 12,
+    "bekleme": 4,
+    "kosullar": { "durumlar": ["askerlik"] },
+    "secenekler": [
+      {
+        "etiket": "Buluş",
+        "etkiler": { "nakit": -2500, "mutluluk": 9, "enerji": -3 }
+      },
+      {
+        "etiket": "Uyumaya bak",
+        "etkiler": { "enerji": 12, "mutluluk": 2 }
+      }
+    ]
+  }
+]

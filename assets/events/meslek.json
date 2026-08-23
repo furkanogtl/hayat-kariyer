@@ -1,0 +1,1237 @@
+[
+  {
+    "id": "doktor_nobet_takasi_01",
+    "baslik": "Nöbet takası ricası",
+    "metin": "Meslektaşının işi çıkmış, hafta sonu nöbetini senden istiyor. Bu tür ricalar unutulmaz, ikisi de.",
+    "tur": "hayat",
+    "agirlik": 11,
+    "bekleme": 12,
+    "kosullar": { "meslekler": ["doktor"] },
+    "secenekler": [
+      {
+        "etiket": "Devral",
+        "etkiler": { "enerji": -14, "itibar": 4, "mutluluk": -3 }
+      },
+      {
+        "etiket": "Bu sefer olmaz de",
+        "etkiler": { "itibar": -3 }
+      }
+    ]
+  },
+  {
+    "id": "doktor_muayenehane_01",
+    "baslik": "Muayenehane açma fırsatı",
+    "metin": "Bir meslektaşın ortak muayenehane öneriyor. Kira ve cihaz masrafı peşin, hasta akışı belirsiz.",
+    "tur": "teklif",
+    "agirlik": 6,
+    "tekSeferlik": true,
+    "kosullar": { "meslekler": ["doktor"], "enAzItibar": 35, "enAzNakit": 500000 },
+    "secenekler": [
+      {
+        "etiket": "Ortak ol",
+        "etkiler": { "nakit": -500000, "enerji": -8 },
+        "gecikmeTuru": 12,
+        "sonuclar": [
+          {
+            "sans": 0.35,
+            "metin": "Hasta portföyü oturdu. Muayenehane kendi ayakları üstünde duruyor.",
+            "etkiler": { "nakit": 1600000, "itibar": 10, "mutluluk": 12 }
+          },
+          {
+            "sans": 0.4,
+            "metin": "İş idare ediyor, kâr yok. Masrafını çıkardınız.",
+            "etkiler": { "nakit": 520000 }
+          },
+          {
+            "sans": 0.25,
+            "metin": "Hasta gelmedi, ortağın çekildi. Kepenk indi.",
+            "etkiler": { "nakit": 120000, "mutluluk": -12, "itibar": -3 }
+          }
+        ]
+      },
+      {
+        "etiket": "Hastanede kal",
+        "etkiler": {}
+      }
+    ]
+  },
+  {
+    "id": "doktor_sikayet_01",
+    "baslik": "Hasta yakını şikâyet dilekçesi verdi",
+    "metin": "Komplikasyonu kabullenmediler, dosya idareye gitti. Süreç aylarca sürebilir.",
+    "tur": "kriz",
+    "agirlik": 8,
+    "bekleme": 40,
+    "kosullar": { "meslekler": ["doktor"] },
+    "secenekler": [
+      {
+        "etiket": "Avukat tut",
+        "etkiler": { "nakit": -60000, "enerji": -6 },
+        "gecikmeTuru": 8,
+        "sonuclar": [
+          {
+            "sans": 0.7,
+            "metin": "Dosya kapandı, kusur bulunmadı.",
+            "etkiler": { "mutluluk": 6 }
+          },
+          {
+            "sans": 0.3,
+            "metin": "Kısmi kusur çıktı. Tazminat ve itibar zararı.",
+            "etkiler": { "nakit": -180000, "itibar": -8, "mutluluk": -10 }
+          }
+        ]
+      },
+      {
+        "etiket": "Kendin savun",
+        "etkiler": { "enerji": -14, "mutluluk": -8 },
+        "gecikmeTuru": 8,
+        "sonuclar": [
+          {
+            "sans": 0.45,
+            "metin": "Kayıtların düzgündü, dosya kapandı.",
+            "etkiler": { "mutluluk": 4 }
+          },
+          {
+            "sans": 0.55,
+            "metin": "Süreç aleyhine döndü, tazminat ödedin.",
+            "etkiler": { "nakit": -220000, "itibar": -10, "mutluluk": -12 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "yazilim_remote_teklif_01",
+    "baslik": "Yurt dışından uzaktan iş teklifi",
+    "metin": "Bir ekip seni görüşmeye çağırdı, ödeme dövizle. Süreç birkaç turlu teknik mülakat demek.",
+    "tur": "teklif",
+    "agirlik": 7,
+    "bekleme": 30,
+    "kosullar": { "meslekler": ["yazilim_gelistirici"], "enAzItibar": 25 },
+    "secenekler": [
+      {
+        "etiket": "Mülakatlara gir",
+        "etkiler": { "enerji": -12 },
+        "gecikmeTuru": 3,
+        "sonuclar": [
+          {
+            "sans": 0.35,
+            "metin": "Teklif geldi, imzalar atıldı. Maaşın kura endeksli artık.",
+            "etkiler": { "nakit": 250000, "itibar": 6, "mutluluk": 12 }
+          },
+          {
+            "sans": 0.65,
+            "metin": "Son turda elendin. Yine de eksiğini gördün.",
+            "etkiler": { "yetkinlik": { "teknoloji": 3 }, "mutluluk": -4 }
+          }
+        ]
+      },
+      {
+        "etiket": "İlgilenmiyorum",
+        "etkiler": {}
+      }
+    ]
+  },
+  {
+    "id": "yazilim_canli_hata_01",
+    "baslik": "Canlıda veri kaybı",
+    "metin": "Gece yarısı telefonun çalıyor: müşteri verisi kayıp. Sabaha kadar ayaktasın.",
+    "tur": "kriz",
+    "agirlik": 10,
+    "bekleme": 20,
+    "kosullar": { "meslekler": ["yazilim_gelistirici"] },
+    "secenekler": [
+      {
+        "etiket": "Sabaha kadar çalış",
+        "etkiler": { "enerji": -20, "mutluluk": -5 },
+        "sonuclar": [
+          {
+            "sans": 0.65,
+            "metin": "Yedekten döndürdün. Sabah kimse ne olduğunu anlamadı.",
+            "etkiler": { "itibar": 5, "yetkinlik": { "teknoloji": 2 } }
+          },
+          {
+            "sans": 0.35,
+            "metin": "Verinin bir kısmı geri gelmedi. Müşteri tazminat konuşuyor.",
+            "etkiler": { "itibar": -6, "mutluluk": -8 }
+          }
+        ]
+      },
+      {
+        "etiket": "Sabah ekiple bak",
+        "etkiler": { "itibar": -5, "mutluluk": -3 }
+      }
+    ]
+  },
+  {
+    "id": "yazilim_yan_proje_01",
+    "baslik": "Tanıdıktan freelance iş",
+    "metin": "Küçük bir firmaya panel yazman isteniyor. Akşamlarını yiyecek ama ödeme peşin.",
+    "tur": "firsat",
+    "agirlik": 9,
+    "bekleme": 18,
+    "kosullar": { "meslekler": ["yazilim_gelistirici"], "enAzEnerji": 35 },
+    "secenekler": [
+      {
+        "etiket": "Al, yap",
+        "etkiler": { "enerji": -16, "nakit": 90000, "yetkinlik": { "teknoloji": 2 } }
+      },
+      {
+        "etiket": "Vaktim yok",
+        "etkiler": { "itibar": -2 }
+      }
+    ]
+  },
+  {
+    "id": "insaat_hakedis_gecikmesi_01",
+    "baslik": "Hakediş yine ödenmedi",
+    "metin": "Müteahhit 'para gelince' diyor, üçüncü ay. Şantiyede işçinin gözü sende.",
+    "tur": "kriz",
+    "agirlik": 10,
+    "bekleme": 16,
+    "kosullar": { "meslekler": ["insaat_muhendisi"] },
+    "secenekler": [
+      {
+        "etiket": "Diren, ödeme almadan imza atma",
+        "etkiler": { "enerji": -6 },
+        "sonuclar": [
+          {
+            "sans": 0.55,
+            "metin": "Para geldi. Sahada sözünün geçtiği anlaşıldı.",
+            "etkiler": { "nakit": 120000, "itibar": 5 }
+          },
+          {
+            "sans": 0.45,
+            "metin": "Patron seni sertlikle suçladı, arayı bozdun.",
+            "etkiler": { "itibar": -5, "mutluluk": -6 }
+          }
+        ]
+      },
+      {
+        "etiket": "Sabret",
+        "etkiler": { "mutluluk": -6, "nakit": 30000 }
+      }
+    ]
+  },
+  {
+    "id": "insaat_santiye_kazasi_01",
+    "baslik": "Şantiyede iş kazası",
+    "metin": "İskelede bir işçi düştü, ağır değil ama tutanak tutuldu. İmza senin, sorumluluk da.",
+    "tur": "kriz",
+    "agirlik": 7,
+    "bekleme": 48,
+    "kosullar": { "meslekler": ["insaat_muhendisi"] },
+    "secenekler": [
+      {
+        "etiket": "Her şeyi usulünce bildir",
+        "etkiler": { "enerji": -8, "mutluluk": -4, "krediNotu": 2 },
+        "gecikmeTuru": 6,
+        "sonuclar": [
+          {
+            "sans": 0.75,
+            "metin": "Eksiklik sende bulunmadı, dosya kapandı.",
+            "etkiler": { "itibar": 3 }
+          },
+          {
+            "sans": 0.25,
+            "metin": "Denetim eksiği çıktı, idari para cezası kesildi.",
+            "etkiler": { "nakit": -90000, "itibar": -5 }
+          }
+        ]
+      },
+      {
+        "etiket": "Patronun dediği gibi yaz",
+        "etkiler": { "mutluluk": -6 },
+        "gecikmeTuru": 6,
+        "sonuclar": [
+          {
+            "sans": 0.6,
+            "metin": "Kimse üstüne gitmedi. İçin rahat değil ama dosya kapandı.",
+            "etkiler": {}
+          },
+          {
+            "sans": 0.4,
+            "metin": "İşçi dava açtı, tutanaktaki çelişki ortaya çıktı.",
+            "etkiler": { "nakit": -200000, "itibar": -12, "mutluluk": -12 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "insaat_sehir_disi_gorev_01",
+    "baslik": "Şehir dışı şantiye şefliği",
+    "metin": "Büyük bir işte şeflik teklif ediliyor. Para iyi ama iki yıl haftalık otobüs demek.",
+    "tur": "teklif",
+    "agirlik": 6,
+    "bekleme": 36,
+    "kosullar": { "meslekler": ["insaat_muhendisi"], "enAzItibar": 20 },
+    "secenekler": [
+      {
+        "etiket": "Kabul et",
+        "etkiler": {
+          "nakit": 180000,
+          "enerji": -12,
+          "mutluluk": -8,
+          "yetkinlik": { "teknoloji": 5 },
+          "itibar": 6
+        }
+      },
+      {
+        "etiket": "Ailemden ayrılmam",
+        "etkiler": { "mutluluk": 3, "itibar": -2 }
+      }
+    ]
+  },
+  {
+    "id": "avukat_yuzdelik_dava_01",
+    "baslik": "Yüzdelik vekâlet teklifi",
+    "metin": "Müvekkil peşin ödeyemiyor, kazanırsan yüzde otuz veriyor. Dosya uzun sürecek.",
+    "tur": "firsat",
+    "agirlik": 8,
+    "bekleme": 30,
+    "kosullar": { "meslekler": ["avukat"] },
+    "secenekler": [
+      {
+        "etiket": "Dosyayı al",
+        "etkiler": { "enerji": -10 },
+        "gecikmeTuru": 14,
+        "sonuclar": [
+          {
+            "sans": 0.4,
+            "metin": "Dava kazanıldı. Payın hesabına geçti.",
+            "etkiler": { "nakit": 700000, "itibar": 8, "mutluluk": 10 }
+          },
+          {
+            "sans": 0.35,
+            "metin": "Sulh oldu. Küçük ama bir şey aldın.",
+            "etkiler": { "nakit": 150000, "itibar": 2 }
+          },
+          {
+            "sans": 0.25,
+            "metin": "Dava düştü. İki yıllık emek karşılıksız kaldı.",
+            "etkiler": { "mutluluk": -10 }
+          }
+        ]
+      },
+      {
+        "etiket": "Peşin olmadan olmaz",
+        "etkiler": { "itibar": -2 }
+      }
+    ]
+  },
+  {
+    "id": "avukat_musteri_odemiyor_01",
+    "baslik": "Müvekkil ücreti ödemiyor",
+    "metin": "Dava bitti, kazandın, telefonlara çıkmıyor. Meslektaşın 'icraya ver' diyor.",
+    "tur": "kriz",
+    "agirlik": 8,
+    "bekleme": 24,
+    "kosullar": { "meslekler": ["avukat"] },
+    "secenekler": [
+      {
+        "etiket": "İcra takibi başlat",
+        "etkiler": { "enerji": -5 },
+        "sonuclar": [
+          {
+            "sans": 0.6,
+            "metin": "Paranı aldın. Duyanlar bir daha oyalamaya kalkışmıyor.",
+            "etkiler": { "nakit": 110000, "itibar": 2 }
+          },
+          {
+            "sans": 0.4,
+            "metin": "Adamın üstüne bir şey çıkmadı, masraf sende kaldı.",
+            "etkiler": { "nakit": -15000, "mutluluk": -6 }
+          }
+        ]
+      },
+      {
+        "etiket": "Helal olsun de",
+        "etkiler": { "mutluluk": -4, "itibar": 2 }
+      }
+    ]
+  },
+  {
+    "id": "avukat_adli_yardim_01",
+    "baslik": "Barodan adli yardım görevi",
+    "metin": "Ücreti yok denecek kadar az, dosya ağır. Ama baroda görülür, konuşulur.",
+    "tur": "hayat",
+    "agirlik": 9,
+    "bekleme": 20,
+    "kosullar": { "meslekler": ["avukat"] },
+    "secenekler": [
+      {
+        "etiket": "Üstlen",
+        "etkiler": { "enerji": -10, "itibar": 6, "nakit": 8000, "yetkinlik": { "hukuk_kamu": 2 } }
+      },
+      {
+        "etiket": "Sıradakine devret",
+        "etkiler": { "itibar": -3 }
+      }
+    ]
+  },
+  {
+    "id": "ogretmen_ozel_ders_01",
+    "baslik": "Özel ders talebi",
+    "metin": "Bir veli sınav hazırlığı için ders istiyor. Hafta sonların dolacak.",
+    "tur": "firsat",
+    "agirlik": 11,
+    "bekleme": 12,
+    "kosullar": { "meslekler": ["ogretmen"], "enAzEnerji": 30 },
+    "secenekler": [
+      {
+        "etiket": "Kabul et",
+        "etkiler": { "enerji": -14, "nakit": 45000, "mutluluk": -2 }
+      },
+      {
+        "etiket": "Kendi öğrencime ders vermem",
+        "etkiler": { "itibar": 2, "mutluluk": 2 }
+      }
+    ]
+  },
+  {
+    "id": "ogretmen_veli_sikayeti_01",
+    "baslik": "Veli müdüre şikâyet etmiş",
+    "metin": "Not meselesi büyümüş, idare senden savunma istiyor. Öğretmenler odası ikiye bölündü.",
+    "tur": "kriz",
+    "agirlik": 9,
+    "bekleme": 24,
+    "kosullar": { "meslekler": ["ogretmen"] },
+    "secenekler": [
+      {
+        "etiket": "Kararının arkasında dur",
+        "etkiler": { "enerji": -6 },
+        "sonuclar": [
+          {
+            "sans": 0.6,
+            "metin": "İdare seni haklı buldu. Odada duruşun konuşuldu.",
+            "etkiler": { "itibar": 5, "mutluluk": 4 }
+          },
+          {
+            "sans": 0.4,
+            "metin": "Müdür 'velilerle uğraşamayız' dedi. Not düzeltildi.",
+            "etkiler": { "itibar": -4, "mutluluk": -8 }
+          }
+        ]
+      },
+      {
+        "etiket": "Notu düzelt, kapansın",
+        "etkiler": { "mutluluk": -5, "itibar": -2 }
+      }
+    ]
+  },
+  {
+    "id": "ogretmen_kurs_gorevi_01",
+    "baslik": "Destekleme kursu görevi",
+    "metin": "Hafta sonu kursunda ek ders var. Para fena değil ama iki günün gidiyor.",
+    "tur": "firsat",
+    "agirlik": 10,
+    "bekleme": 14,
+    "kosullar": { "meslekler": ["ogretmen"] },
+    "secenekler": [
+      {
+        "etiket": "Girerim",
+        "etkiler": { "enerji": -12, "nakit": 22000, "yetkinlik": { "hukuk_kamu": 1 } }
+      },
+      {
+        "etiket": "Bu dönem pas",
+        "etkiler": { "enerji": 4 }
+      }
+    ]
+  },
+  {
+    "id": "memur_gorevde_yukselme_01",
+    "baslik": "Görevde yükselme sınavı açıldı",
+    "metin": "Şeflik kadrosu için sınav var. Çalışmak akşamlarını alacak, geçen yıl kaçırmıştın.",
+    "tur": "firsat",
+    "agirlik": 9,
+    "bekleme": 24,
+    "kosullar": { "meslekler": ["memur"], "enAzEnerji": 30 },
+    "secenekler": [
+      {
+        "etiket": "Çalış, gir",
+        "etkiler": { "enerji": -18, "mutluluk": -4 },
+        "sonuclar": [
+          {
+            "sans": 0.5,
+            "metin": "Sınavı geçtin. Kadro sırası sana yaklaştı.",
+            "etkiler": { "yetkinlik": { "hukuk_kamu": 6 }, "itibar": 4, "mutluluk": 8 }
+          },
+          {
+            "sans": 0.5,
+            "metin": "Puanın yetmedi. Seneye yine var.",
+            "etkiler": { "yetkinlik": { "hukuk_kamu": 2 }, "mutluluk": -5 }
+          }
+        ]
+      },
+      {
+        "etiket": "Girme",
+        "etkiler": {}
+      }
+    ]
+  },
+  {
+    "id": "memur_ek_gorev_01",
+    "baslik": "Komisyon üyeliği",
+    "metin": "Amirin seni ihale komisyonuna yazdırmış. Sorumluluk var, huzur hakkı da.",
+    "tur": "teklif",
+    "agirlik": 9,
+    "bekleme": 18,
+    "kosullar": { "meslekler": ["memur"] },
+    "secenekler": [
+      {
+        "etiket": "Görevi al",
+        "etkiler": { "enerji": -8, "nakit": 15000, "itibar": 3 }
+      },
+      {
+        "etiket": "Mazeret bildir",
+        "etkiler": { "itibar": -3 }
+      }
+    ]
+  },
+  {
+    "id": "memur_sorusturma_01",
+    "baslik": "Hakkında soruşturma açıldı",
+    "metin": "Bir vatandaş dilekçe vermiş, müfettiş ifade istiyor. Dosya kapanana kadar rahat yok.",
+    "tur": "kriz",
+    "agirlik": 7,
+    "bekleme": 40,
+    "kosullar": { "meslekler": ["memur"] },
+    "secenekler": [
+      {
+        "etiket": "Belgeleriyle cevap ver",
+        "etkiler": { "enerji": -8, "mutluluk": -5 },
+        "gecikmeTuru": 5,
+        "sonuclar": [
+          {
+            "sans": 0.75,
+            "metin": "İşlem yapılmasına yer olmadığına karar verildi.",
+            "etkiler": { "mutluluk": 6 }
+          },
+          {
+            "sans": 0.25,
+            "metin": "Uyarı cezası verildi, sicile işlendi.",
+            "etkiler": { "itibar": -6, "mutluluk": -8 }
+          }
+        ]
+      },
+      {
+        "etiket": "Sendikadan avukat iste",
+        "etkiler": { "enerji": -4, "nakit": -12000 },
+        "gecikmeTuru": 5,
+        "sonuclar": [
+          {
+            "sans": 0.85,
+            "metin": "Dosya temiz kapandı.",
+            "etkiler": { "mutluluk": 5 }
+          },
+          {
+            "sans": 0.15,
+            "metin": "Uyarı cezası yine de yazıldı.",
+            "etkiler": { "itibar": -4, "mutluluk": -6 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "musavir_yeni_mukellef_01",
+    "baslik": "Yeni mükellef bağlandı",
+    "metin": "Büyümekte olan bir firma defterini sana açmak istiyor. İş yükü artacak, gelir de.",
+    "tur": "firsat",
+    "agirlik": 10,
+    "bekleme": 16,
+    "kosullar": { "meslekler": ["mali_musavir"], "enAzItibar": 15 },
+    "secenekler": [
+      {
+        "etiket": "Al",
+        "etkiler": { "enerji": -8, "nakit": 70000, "yetkinlik": { "finans": 2 } }
+      },
+      {
+        "etiket": "Kapasitem dolu",
+        "etkiler": { "mutluluk": 2 }
+      }
+    ]
+  },
+  {
+    "id": "musavir_sahte_fatura_01",
+    "baslik": "Mükellef fatura getirdi",
+    "metin": "Belgenin gerçek olmadığı belli. 'İşleyiver, iki ay sonra düzeltiriz' diyor.",
+    "tur": "teklif",
+    "agirlik": 7,
+    "bekleme": 36,
+    "kosullar": { "meslekler": ["mali_musavir"] },
+    "secenekler": [
+      {
+        "etiket": "İşle",
+        "etkiler": { "nakit": 60000 },
+        "gecikmeTuru": 10,
+        "sonuclar": [
+          {
+            "sans": 0.6,
+            "metin": "Kimse dokunmadı. Mükellef memnun, seni tanıdıklarına anlatıyor.",
+            "etkiler": { "itibar": 3 }
+          },
+          {
+            "sans": 0.4,
+            "metin": "Vergi incelemesi geldi. İmza senin, sorumluluk da senin.",
+            "etkiler": { "nakit": -350000, "itibar": -14, "mutluluk": -14, "krediNotu": -10 }
+          }
+        ]
+      },
+      {
+        "etiket": "Reddet",
+        "etkiler": { "nakit": -20000, "itibar": 2 }
+      }
+    ]
+  },
+  {
+    "id": "musavir_beyanname_donemi_01",
+    "baslik": "Beyanname dönemi",
+    "metin": "Son güne üç gün kaldı, mükelleflerin yarısı belgeyi hâlâ getirmedi. Ofiste ışıklar geç sönüyor.",
+    "tur": "hayat",
+    "agirlik": 12,
+    "bekleme": 8,
+    "kosullar": { "meslekler": ["mali_musavir"] },
+    "secenekler": [
+      {
+        "etiket": "Hepsini yetiştir",
+        "etkiler": { "enerji": -16, "itibar": 4, "nakit": 25000 }
+      },
+      {
+        "etiket": "Getirmeyene ceza yazılsın",
+        "etkiler": { "enerji": -6, "itibar": -4 }
+      }
+    ]
+  },
+  {
+    "id": "emlakci_kaparo_01",
+    "baslik": "Alıcı son anda vazgeçti",
+    "metin": "Kaparo elde, taraflar birbirine giriyor. İkisi de senden taraf tutmanı bekliyor.",
+    "tur": "kriz",
+    "agirlik": 10,
+    "bekleme": 18,
+    "kosullar": { "meslekler": ["emlak_danismani"] },
+    "secenekler": [
+      {
+        "etiket": "Satıcının yanında dur",
+        "etkiler": { "nakit": 40000, "itibar": -4 }
+      },
+      {
+        "etiket": "Ortayı bul, kaparoyu böl",
+        "etkiler": { "nakit": 12000, "itibar": 5, "enerji": -6 }
+      },
+      {
+        "etiket": "Dosyadan çekil",
+        "etkiler": { "mutluluk": -4, "itibar": -2 }
+      }
+    ]
+  },
+  {
+    "id": "emlakci_luks_portfoy_01",
+    "baslik": "Pahalı bir portföy düştü",
+    "metin": "Deniz gören daire senin ilanında. Komisyonu aylık kazancının katı, ama alıcı bulmak zaman ister.",
+    "tur": "firsat",
+    "agirlik": 8,
+    "bekleme": 24,
+    "kosullar": { "meslekler": ["emlak_danismani"], "enAzItibar": 25 },
+    "secenekler": [
+      {
+        "etiket": "Reklamına para yatır",
+        "etkiler": { "nakit": -30000, "enerji": -6 },
+        "gecikmeTuru": 5,
+        "sonuclar": [
+          {
+            "sans": 0.45,
+            "metin": "Satıldı. Komisyon hayatının en iyi ayını yaptı.",
+            "etkiler": { "nakit": 400000, "itibar": 8, "mutluluk": 12 }
+          },
+          {
+            "sans": 0.55,
+            "metin": "Süre doldu, mal sahibi başka ofise geçti.",
+            "etkiler": { "mutluluk": -8 }
+          }
+        ]
+      },
+      {
+        "etiket": "Normal ilan yeter",
+        "etkiler": {},
+        "gecikmeTuru": 5,
+        "sonuclar": [
+          {
+            "sans": 0.2,
+            "metin": "Beklemediğin bir alıcı çıktı.",
+            "etkiler": { "nakit": 380000, "itibar": 6, "mutluluk": 10 }
+          },
+          {
+            "sans": 0.8,
+            "metin": "İlan görüntülendi, telefon çalmadı.",
+            "etkiler": { "mutluluk": -3 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "emlakci_arkadan_anlasma_01",
+    "baslik": "Taraflar arkandan anlaşmış",
+    "metin": "Gezdirdiğin daire senin haberin olmadan satılmış. Komisyon yanmak üzere.",
+    "tur": "kriz",
+    "agirlik": 9,
+    "bekleme": 20,
+    "kosullar": { "meslekler": ["emlak_danismani"] },
+    "secenekler": [
+      {
+        "etiket": "Hukuki yola başvur",
+        "etkiler": { "nakit": -15000, "enerji": -6 },
+        "sonuclar": [
+          {
+            "sans": 0.55,
+            "metin": "Yer gösterme belgesi işe yaradı, komisyonu aldın.",
+            "etkiler": { "nakit": 90000, "itibar": 3 }
+          },
+          {
+            "sans": 0.45,
+            "metin": "Belge eksikti, dava düştü.",
+            "etkiler": { "mutluluk": -8 }
+          }
+        ]
+      },
+      {
+        "etiket": "Ders olsun de",
+        "etkiler": { "mutluluk": -5, "yetkinlik": { "ticaret": 2 } }
+      }
+    ]
+  },
+  {
+    "id": "satis_hedef_baskisi_01",
+    "baslik": "Ay sonu hedefi tutmuyor",
+    "metin": "Bölge müdürü tabloyu her gün paylaşıyor, sen alttan üçüncüsün. Üç gün kaldı.",
+    "tur": "kriz",
+    "agirlik": 11,
+    "bekleme": 12,
+    "kosullar": { "meslekler": ["satis_temsilcisi"] },
+    "secenekler": [
+      {
+        "etiket": "Gece gündüz ara",
+        "etkiler": { "enerji": -16 },
+        "sonuclar": [
+          {
+            "sans": 0.55,
+            "metin": "Son gün iki satış geldi, hedefi zar zor tutturdun.",
+            "etkiler": { "nakit": 55000, "itibar": 4, "mutluluk": 5 }
+          },
+          {
+            "sans": 0.45,
+            "metin": "Tutmadı. Toplantıda ismin okundu.",
+            "etkiler": { "itibar": -5, "mutluluk": -10 }
+          }
+        ]
+      },
+      {
+        "etiket": "Müşteriye erken indirim ver",
+        "etkiler": { "nakit": 20000, "itibar": -3 }
+      }
+    ]
+  },
+  {
+    "id": "satis_buyuk_musteri_01",
+    "baslik": "Zincir müşteri kapıda",
+    "metin": "Büyük bir alıcı teklif istiyor. Fiyatı kırarsan iş senin, primin küçülür.",
+    "tur": "firsat",
+    "agirlik": 9,
+    "bekleme": 20,
+    "kosullar": { "meslekler": ["satis_temsilcisi"], "enAzItibar": 15 },
+    "secenekler": [
+      {
+        "etiket": "Fiyatı kır, işi al",
+        "etkiler": { "nakit": 60000, "itibar": 5, "yetkinlik": { "ticaret": 2 } }
+      },
+      {
+        "etiket": "Listede dur",
+        "sonuclar": [
+          {
+            "sans": 0.4,
+            "metin": "Müşteri kaliteyi seçti. Prim tam geldi.",
+            "etkiler": { "nakit": 150000, "itibar": 6, "mutluluk": 8 }
+          },
+          {
+            "sans": 0.6,
+            "metin": "İş rakibe gitti.",
+            "etkiler": { "mutluluk": -6 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "satis_temsil_masrafi_01",
+    "baslik": "Bayi yemeği",
+    "metin": "Müşteriyi ağırlamak sana düşüyor, şirket masrafın yarısını karşılıyor. Kalanı cepten.",
+    "tur": "hayat",
+    "agirlik": 10,
+    "bekleme": 14,
+    "kosullar": { "meslekler": ["satis_temsilcisi"] },
+    "secenekler": [
+      {
+        "etiket": "İyi bir yerde ağırla",
+        "etkiler": { "nakit": -18000, "itibar": 5, "enerji": -5 }
+      },
+      {
+        "etiket": "Ofiste toplantı yeter",
+        "etkiler": { "itibar": -3 }
+      }
+    ]
+  },
+  {
+    "id": "tamirci_cikma_parca_01",
+    "baslik": "Çıkma parça teklifi",
+    "metin": "Müşteriye sıfır parça fiyatı verdin, tedarikçi çıkma öneriyor. Aradaki fark cebinde kalır.",
+    "tur": "teklif",
+    "agirlik": 9,
+    "bekleme": 24,
+    "kosullar": { "meslekler": ["oto_tamircisi"] },
+    "secenekler": [
+      {
+        "etiket": "Çıkma tak",
+        "etkiler": { "nakit": 35000 },
+        "gecikmeTuru": 6,
+        "sonuclar": [
+          {
+            "sans": 0.65,
+            "metin": "Araç sorunsuz gidiyor. Kimsenin haberi olmadı.",
+            "etkiler": {}
+          },
+          {
+            "sans": 0.35,
+            "metin": "Parça kısa sürede pes etti. Müşteri mahalleye anlattı.",
+            "etkiler": { "nakit": -45000, "itibar": -10, "mutluluk": -8 }
+          }
+        ]
+      },
+      {
+        "etiket": "Sıfır tak, dediğin gibi",
+        "etkiler": { "itibar": 3 }
+      }
+    ]
+  },
+  {
+    "id": "tamirci_filo_anlasmasi_01",
+    "baslik": "Filo bakım anlaşması",
+    "metin": "Bir nakliyeci bütün araçlarının bakımını sana vermek istiyor. Düzenli iş, ama peşin yatırım şart.",
+    "tur": "firsat",
+    "agirlik": 7,
+    "bekleme": 36,
+    "kosullar": { "meslekler": ["oto_tamircisi"], "enAzItibar": 20, "enAzNakit": 100000 },
+    "secenekler": [
+      {
+        "etiket": "Alet al, anlaşmayı yap",
+        "etkiler": { "nakit": -100000, "enerji": -6 },
+        "gecikmeTuru": 8,
+        "sonuclar": [
+          {
+            "sans": 0.6,
+            "metin": "Anlaşma yürüdü. Ay başları artık belli.",
+            "etkiler": { "nakit": 320000, "itibar": 7, "mutluluk": 10 }
+          },
+          {
+            "sans": 0.4,
+            "metin": "Firma küçüldü, araç sayısı yarıya indi.",
+            "etkiler": { "nakit": 90000, "mutluluk": -6 }
+          }
+        ]
+      },
+      {
+        "etiket": "Şimdilik dükkân yeter",
+        "etkiler": {}
+      }
+    ]
+  },
+  {
+    "id": "tamirci_el_yaralanmasi_01",
+    "baslik": "Elini makineye kaptırdın",
+    "metin": "Ciddi değil ama dikiş atıldı. Usta elinin birkaç hafta iş görmemesi demek.",
+    "tur": "kriz",
+    "agirlik": 7,
+    "bekleme": 48,
+    "kosullar": { "meslekler": ["oto_tamircisi"] },
+    "secenekler": [
+      {
+        "etiket": "Rapor al, dinlen",
+        "etkiler": { "enerji": 6, "nakit": -30000, "mutluluk": -4 }
+      },
+      {
+        "etiket": "Tek elle çalış",
+        "etkiler": { "enerji": -18, "mutluluk": -6 }
+      }
+    ]
+  },
+  {
+    "id": "asci_denetim_01",
+    "baslik": "Habersiz hijyen denetimi",
+    "metin": "Ekip mutfağa girdi, depoyu açıyorlar. Bir iki eksik olduğunu ikimiz de biliyoruz.",
+    "tur": "kriz",
+    "agirlik": 9,
+    "bekleme": 30,
+    "kosullar": { "meslekler": ["asci"] },
+    "secenekler": [
+      {
+        "etiket": "Açık ol, eksikleri kabul et",
+        "sonuclar": [
+          {
+            "sans": 0.6,
+            "metin": "Uyarıyla kapattılar, süre verdiler.",
+            "etkiler": { "nakit": -15000, "enerji": -5 }
+          },
+          {
+            "sans": 0.4,
+            "metin": "Ceza kesildi, mutfak iki gün kapalı kaldı.",
+            "etkiler": { "nakit": -60000, "itibar": -5, "mutluluk": -6 }
+          }
+        ]
+      },
+      {
+        "etiket": "Tanıdık ara",
+        "etkiler": { "itibar": -3 },
+        "sonuclar": [
+          {
+            "sans": 0.5,
+            "metin": "Telefon işe yaradı, tutanak yumuşadı.",
+            "etkiler": { "nakit": -8000 }
+          },
+          {
+            "sans": 0.5,
+            "metin": "Denetçi rahatsız oldu, her maddeyi yazdı.",
+            "etkiler": { "nakit": -90000, "itibar": -6, "mutluluk": -8 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "asci_catering_01",
+    "baslik": "Düğün yemeği teklifi",
+    "metin": "Üç yüz kişilik bir düğün için seni istiyorlar. Tek başına altından kalkılmaz, ekip tutman gerek.",
+    "tur": "firsat",
+    "agirlik": 9,
+    "bekleme": 20,
+    "kosullar": { "meslekler": ["asci"], "enAzEnerji": 35 },
+    "secenekler": [
+      {
+        "etiket": "Ekip topla, yap",
+        "etkiler": { "nakit": -25000, "enerji": -18 },
+        "sonuclar": [
+          {
+            "sans": 0.7,
+            "metin": "Yemek konuşuldu. İki düğün daha bağlandı.",
+            "etkiler": { "nakit": 140000, "itibar": 8, "mutluluk": 8 }
+          },
+          {
+            "sans": 0.3,
+            "metin": "Servis aksadı, ödemenin bir kısmını kestiler.",
+            "etkiler": { "nakit": 50000, "itibar": -4, "mutluluk": -6 }
+          }
+        ]
+      },
+      {
+        "etiket": "Kaldıramam",
+        "etkiler": { "itibar": -2 }
+      }
+    ]
+  },
+  {
+    "id": "asci_menu_yenileme_01",
+    "baslik": "Menüyü yenileme kavgası",
+    "metin": "İşletmeci maliyeti düşürmek için porsiyonu küçültmek istiyor. Mutfak senin adınla anılıyor.",
+    "tur": "hayat",
+    "agirlik": 9,
+    "bekleme": 24,
+    "kosullar": { "meslekler": ["asci"] },
+    "secenekler": [
+      {
+        "etiket": "Diren",
+        "etkiler": { "mutluluk": 4, "itibar": 4, "enerji": -5 }
+      },
+      {
+        "etiket": "Dediğini yap",
+        "etkiler": { "nakit": 15000, "itibar": -5, "mutluluk": -5 }
+      }
+    ]
+  },
+  {
+    "id": "icerik_viral_01",
+    "baslik": "Bir video patladı",
+    "metin": "Gece paylaştığın kısa video sabaha milyonlara ulaşmış. Telefon susmuyor.",
+    "tur": "firsat",
+    "agirlik": 8,
+    "bekleme": 30,
+    "kosullar": { "meslekler": ["icerik_ureticisi"] },
+    "secenekler": [
+      {
+        "etiket": "Üstüne git, seri yap",
+        "etkiler": { "enerji": -14 },
+        "sonuclar": [
+          {
+            "sans": 0.5,
+            "metin": "Kitlen kalıcı oldu, reklam gelirleri katlandı.",
+            "etkiler": { "nakit": 200000, "itibar": 10, "mutluluk": 10 }
+          },
+          {
+            "sans": 0.5,
+            "metin": "İlgi bir haftada söndü. Elinde yorgunluk kaldı.",
+            "etkiler": { "nakit": 40000, "itibar": 3, "mutluluk": -4 }
+          }
+        ]
+      },
+      {
+        "etiket": "Normal düzenine dön",
+        "etkiler": { "nakit": 30000, "itibar": 3 }
+      }
+    ]
+  },
+  {
+    "id": "icerik_supheli_sponsor_01",
+    "baslik": "Şüpheli sponsorluk teklifi",
+    "metin": "Bir yatırım uygulaması, kazanç vaadiyle reklam istiyor. Ödeme yüksek, sorular rahatsız edici.",
+    "tur": "teklif",
+    "agirlik": 8,
+    "bekleme": 30,
+    "kosullar": { "meslekler": ["icerik_ureticisi"], "enAzItibar": 20 },
+    "secenekler": [
+      {
+        "etiket": "Reklamı çek",
+        "etkiler": { "nakit": 180000 },
+        "gecikmeTuru": 8,
+        "sonuclar": [
+          {
+            "sans": 0.45,
+            "metin": "Uygulama kapandı, parasını kaybedenler seni etiketliyor.",
+            "etkiler": { "itibar": -18, "mutluluk": -12 }
+          },
+          {
+            "sans": 0.55,
+            "metin": "Ses çıkmadı. Yorumlarda birkaç kişi hâlâ hatırlatıyor.",
+            "etkiler": { "itibar": -3 }
+          }
+        ]
+      },
+      {
+        "etiket": "Reddet, izleyicine anlat",
+        "etkiler": { "itibar": 6, "mutluluk": 4 }
+      }
+    ]
+  },
+  {
+    "id": "icerik_erisim_engeli_01",
+    "baslik": "Kanalına erişim kısıtı geldi",
+    "metin": "Bir şikâyet üzerine içeriklerin öne çıkarılmıyor. Gelirin bir anda dibe vurdu.",
+    "tur": "kriz",
+    "agirlik": 8,
+    "bekleme": 30,
+    "kosullar": { "meslekler": ["icerik_ureticisi"] },
+    "secenekler": [
+      {
+        "etiket": "İtiraz süreci başlat",
+        "etkiler": { "enerji": -8, "nakit": -20000 },
+        "gecikmeTuru": 4,
+        "sonuclar": [
+          {
+            "sans": 0.55,
+            "metin": "Kısıt kalktı. Kayıp ayları geri gelmiyor ama kanal yaşıyor.",
+            "etkiler": { "mutluluk": 6 }
+          },
+          {
+            "sans": 0.45,
+            "metin": "İtiraz reddedildi. Sıfırdan kitle kurman gerekecek.",
+            "etkiler": { "itibar": -8, "mutluluk": -12 }
+          }
+        ]
+      },
+      {
+        "etiket": "Başka mecraya taşın",
+        "etkiler": { "enerji": -12, "itibar": -4, "yetkinlik": { "medya": 3 } }
+      }
+    ]
+  },
+  {
+    "id": "pilot_saglik_raporu_01",
+    "baslik": "Sağlık kontrolünde uyarı",
+    "metin": "Tansiyon değerlerin sınırda çıktı. Doktor 'bir sonraki kontrole kadar toparla' diyor.",
+    "tur": "kriz",
+    "agirlik": 8,
+    "bekleme": 36,
+    "kosullar": { "meslekler": ["pilot"] },
+    "secenekler": [
+      {
+        "etiket": "Düzene gir, tempoyu düşür",
+        "etkiler": { "enerji": 10, "nakit": -25000, "mutluluk": -3 }
+      },
+      {
+        "etiket": "Şansını dene",
+        "etkiler": {},
+        "gecikmeTuru": 6,
+        "sonuclar": [
+          {
+            "sans": 0.6,
+            "metin": "Değerler kendiliğinden düzeldi, lisans yenilendi.",
+            "etkiler": { "mutluluk": 5 }
+          },
+          {
+            "sans": 0.4,
+            "metin": "Rapor gecikti, iki ay yer görevine alındın.",
+            "etkiler": { "nakit": -150000, "enerji": -10, "mutluluk": -10 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "pilot_ek_ucus_01",
+    "baslik": "Tarife dışı görev",
+    "metin": "Ek uçuş için seni arıyorlar, harcırah dövizle ödeniyor. İzin günün gidecek.",
+    "tur": "firsat",
+    "agirlik": 11,
+    "bekleme": 10,
+    "kosullar": { "meslekler": ["pilot"] },
+    "secenekler": [
+      {
+        "etiket": "Kabul et",
+        "etkiler": { "enerji": -14, "nakit": 90000, "mutluluk": -3, "itibar": 2 }
+      },
+      {
+        "etiket": "İznimi kullanacağım",
+        "etkiler": { "enerji": 8, "mutluluk": 5 }
+      }
+    ]
+  },
+  {
+    "id": "pilot_yolcu_krizi_01",
+    "baslik": "Kabinde olay çıktı",
+    "metin": "Uzun gecikmeden sonra bir yolcu kontrolden çıktı. Karar senin, tutanak da senin.",
+    "tur": "kriz",
+    "agirlik": 9,
+    "bekleme": 20,
+    "kosullar": { "meslekler": ["pilot"] },
+    "secenekler": [
+      {
+        "etiket": "Yolcuyu indir",
+        "etkiler": { "enerji": -8, "mutluluk": -4, "itibar": 3 }
+      },
+      {
+        "etiket": "İdare et, uçuşu tamamla",
+        "sonuclar": [
+          {
+            "sans": 0.6,
+            "metin": "Olay büyümeden bitti. Şirket sessizliği tercih etti.",
+            "etkiler": { "enerji": -6 }
+          },
+          {
+            "sans": 0.4,
+            "metin": "Olay inişte büyüdü, sorumluluk sana yazıldı.",
+            "etkiler": { "itibar": -6, "mutluluk": -8 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ciftci_zirai_don_01",
+    "baslik": "Zirai don",
+    "metin": "Bir gecede sıcaklık düştü, çiçek yanmış. Bu yıl ne kadarı kurtulur belli değil.",
+    "tur": "kriz",
+    "agirlik": 9,
+    "bekleme": 24,
+    "kosullar": { "meslekler": ["ciftci"] },
+    "secenekler": [
+      {
+        "etiket": "Sigortaya başvur",
+        "etkiler": { "enerji": -6 },
+        "gecikmeTuru": 4,
+        "sonuclar": [
+          {
+            "sans": 0.55,
+            "metin": "Ekspertiz hasarı kabul etti, ödeme yapıldı.",
+            "etkiler": { "nakit": 90000 }
+          },
+          {
+            "sans": 0.45,
+            "metin": "Hasar oranı düşük bulundu, eline geçen az oldu.",
+            "etkiler": { "nakit": 20000, "mutluluk": -8 }
+          }
+        ]
+      },
+      {
+        "etiket": "Kalanı kurtarmaya bak",
+        "etkiler": { "enerji": -16, "nakit": 30000, "mutluluk": -5 }
+      }
+    ]
+  },
+  {
+    "id": "ciftci_destekleme_01",
+    "baslik": "Destekleme ödemesi açıklandı",
+    "metin": "Başvuru için evrak toplaman, birkaç kez ilçeye gitmen gerekiyor. Ödeme geç ama geliyor.",
+    "tur": "firsat",
+    "agirlik": 11,
+    "bekleme": 12,
+    "kosullar": { "meslekler": ["ciftci"] },
+    "secenekler": [
+      {
+        "etiket": "Evrakları hazırla",
+        "etkiler": { "enerji": -8 },
+        "gecikmeTuru": 5,
+        "sonuclar": [
+          {
+            "sans": 0.8,
+            "metin": "Ödeme hesaba geçti.",
+            "etkiler": { "nakit": 70000, "mutluluk": 5 }
+          },
+          {
+            "sans": 0.2,
+            "metin": "Bir belge eksik çıktı, başvuru bir sonraki döneme kaldı.",
+            "etkiler": { "mutluluk": -6 }
+          }
+        ]
+      },
+      {
+        "etiket": "Uğraşamam",
+        "etkiler": { "mutluluk": -3 }
+      }
+    ]
+  },
+  {
+    "id": "ciftci_tuccar_pazarligi_01",
+    "baslik": "Tüccar tarlada",
+    "metin": "Peşin ama düşük fiyat veriyor. Beklersen fiyat yükselebilir, ürün de bozulabilir.",
+    "tur": "teklif",
+    "agirlik": 10,
+    "bekleme": 14,
+    "kosullar": { "meslekler": ["ciftci"] },
+    "secenekler": [
+      {
+        "etiket": "Peşine sat",
+        "etkiler": { "nakit": 80000 }
+      },
+      {
+        "etiket": "Bekle, fiyat artsın",
+        "gecikmeTuru": 3,
+        "sonuclar": [
+          {
+            "sans": 0.45,
+            "metin": "Fiyat yükseldi, iyi bir alıcı buldun.",
+            "etkiler": { "nakit": 160000, "mutluluk": 8, "yetkinlik": { "tarim": 2 } }
+          },
+          {
+            "sans": 0.35,
+            "metin": "Fiyat aynı kaldı, depo masrafı çıktı.",
+            "etkiler": { "nakit": 70000 }
+          },
+          {
+            "sans": 0.2,
+            "metin": "Ürünün bir kısmı elde kaldı.",
+            "etkiler": { "nakit": 35000, "mutluluk": -10 }
+          }
+        ]
+      }
+    ]
+  }
+]
