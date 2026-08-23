@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:hayat_kariyer/core/engine/portfoy_motoru.dart';
 import 'package:hayat_kariyer/core/engine/rejim.dart';
 import 'package:hayat_kariyer/core/engine/tur_processor.dart';
 import 'package:hayat_kariyer/core/models/egitim_seviyesi.dart';
@@ -243,6 +244,137 @@ void main() {
       expect(sonuc.raporlar.length, lessThan(12));
       expect(sonuc.raporlar.last.terfiEtti, isTrue);
       expect(sonuc.durum.tur, sonuc.raporlar.length);
+    });
+  });
+
+  group('Portföy boru hattına bağlı', () {
+    test('emirler piyasa oynamadan ÖNCEKİ fiyattan işlenir', () {
+      final d = baslat(oyuncu: memur(nakit: 5000000));
+      final gorulenFiyat = d.piyasa.fiyat('altin');
+      final s = motor.turuBitir(
+        d,
+        TurGirdisi(
+          zaman: ZamanDagilimi.dengeli(),
+          emirler: const [Alim('altin', 100)],
+        ),
+      );
+      final pozisyon = s.durum.portfoy.pozisyonlar['altin']!;
+      // Maliyet gördüğü fiyat + komisyon olmalı; tur sonundaki fiyat değil.
+      expect(pozisyon.ortalamaMaliyet, closeTo(gorulenFiyat * 1.01, 1));
+      expect(s.durum.piyasa.fiyat('altin'), isNot(gorulenFiyat));
+    });
+
+    test('net değer nakit ve portföyü birlikte sayar', () {
+      final d = baslat(oyuncu: memur(nakit: 5000000));
+      final s = motor.turuBitir(
+        d,
+        TurGirdisi(
+          zaman: ZamanDagilimi.dengeli(),
+          emirler: const [Alim('hisse_sanayi', 1000)],
+        ),
+      );
+      expect(s.rapor.portfoyDegeri, greaterThan(0));
+      expect(
+        s.rapor.netDeger,
+        s.durum.oyuncu.nakit + s.rapor.portfoyDegeri,
+      );
+    });
+
+    test('kira geliri nakde ekleniyor', () {
+      final zengin = memur(nakit: 20000000);
+      final kirasiz = baslat(oyuncu: zengin);
+      final s = motor.turuBitir(
+        kirasiz,
+        TurGirdisi(
+          zaman: ZamanDagilimi.dengeli(),
+          emirler: const [Alim('gayrimenkul', 2)],
+        ),
+      );
+      expect(s.rapor.kiraGeliri, greaterThan(0));
+      // Aynı turda hem daire parası çıkmış hem kira girmiş olmalı.
+      expect(s.rapor.nakitDegisimi, lessThan(0));
+      final ikinciTur = tek(s.durum);
+      expect(ikinciTur.rapor.kiraGeliri, greaterThan(0));
+    });
+
+    test('gecikmeli satış üç tur sonra nakde döner', () {
+      var d = baslat(oyuncu: memur(nakit: 20000000));
+      d = motor
+          .turuBitir(
+            d,
+            TurGirdisi(
+              zaman: ZamanDagilimi.dengeli(),
+              emirler: const [Alim('gayrimenkul', 1)],
+            ),
+          )
+          .durum;
+      d = motor
+          .turuBitir(
+            d,
+            TurGirdisi(
+              zaman: ZamanDagilimi.dengeli(),
+              emirler: const [Satim('gayrimenkul', 1)],
+            ),
+          )
+          .durum;
+      // Emrin verildiği turun sonunda sayaç bir azalır; kalan iki tur
+      // sonunda kapanır. Oyuncu açısından toplam üç "turu bitir".
+      expect(d.portfoy.bekleyenSatislar.single.kalanTur, 2);
+
+      final raporlar = <TurRaporu>[];
+      for (var i = 0; i < 2; i++) {
+        final s = tek(d);
+        d = s.durum;
+        raporlar.add(s.rapor);
+      }
+      expect(raporlar.first.tamamlananSatislar, isEmpty);
+      expect(raporlar.last.tamamlananSatislar, hasLength(1));
+      expect(raporlar.last.tamamlananSatislar.single.tutar, greaterThan(0));
+      expect(d.portfoy.adet('gayrimenkul'), 0);
+      expect(d.portfoy.bekleyenSatislar, isEmpty);
+    });
+
+    test('reddedilen emir rapora yazılır ve oyunu bozmaz', () {
+      final d = baslat(oyuncu: memur(nakit: 1000));
+      final s = motor.turuBitir(
+        d,
+        TurGirdisi(
+          zaman: ZamanDagilimi.dengeli(),
+          emirler: const [Alim('gayrimenkul', 1)],
+        ),
+      );
+      expect(s.rapor.emirSonuclari.single.hata, EmirHatasi.yetersizNakit);
+      expect(s.durum.portfoy.bosMu, isTrue);
+    });
+
+    test('yatırım yapan oyuncu nakitte bekleyeni açık ara geçer', () {
+      // Aynı tohum, aynı kariyer: biri her yıl birikimini borsaya koyuyor.
+      OyunDurumu oyna({required bool yatirimYap}) {
+        var d = baslat(oyuncu: memur(sehir: Sehir.konya, nakit: 0));
+        for (var i = 0; i < 480; i++) {
+          final emirler = <Emir>[];
+          if (yatirimYap && i % 12 == 11 && d.oyuncu.nakit > 0) {
+            final adet =
+                (d.oyuncu.nakit * 0.9) / d.piyasa.fiyat('hisse_sanayi');
+            if (adet >= 1) emirler.add(Alim('hisse_sanayi', adet));
+          }
+          d = motor
+              .turuBitir(
+                d,
+                TurGirdisi(zaman: ZamanDagilimi.dengeli(), emirler: emirler),
+              )
+              .durum;
+        }
+        return d;
+      }
+
+      final nakitci = oyna(yatirimYap: false);
+      final yatirimci = oyna(yatirimYap: true);
+      expect(
+        yatirimci.reelNetDeger,
+        greaterThan(nakitci.reelNetDeger * 3),
+        reason: 'nakit tutmak cezalandırılmalı',
+      );
     });
   });
 

@@ -82,6 +82,8 @@ class VarlikTanimi {
     this.ortakAgirlik = 0.0,
     this.aylikGetiriOrani = 0.0,
     this.satisSuresiTur = 0,
+    this.islemMaliyeti = 0.0,
+    this.bolunebilir = true,
   });
 
   final String id;
@@ -104,6 +106,13 @@ class VarlikTanimi {
 
   /// Satış emrinin gerçekleşmesi kaç tur sürer. 0 = anında.
   final int satisSuresiTur;
+
+  /// Alım ve satımın her birinde ödenen oran (komisyon, makas, harç).
+  /// Gayrimenkulde yüksek tutuldu: alıp satarak para kazanmak zor olmalı.
+  final double islemMaliyeti;
+
+  /// Kesirli alınabilir mi. Daire ve arsa bölünmez.
+  final bool bolunebilir;
 
   bool get likit => satisSuresiTur == 0;
 
@@ -139,6 +148,7 @@ class HisseSektoru {
         baslangicFiyati: 100,
         ortakFaktor: OrtakFaktor.piyasa,
         ortakAgirlik: 0.7,
+        islemMaliyeti: 0.002,
         parametreler: {
           for (final r in Rejim.values)
             r: GbmParametresi(
@@ -167,6 +177,7 @@ const List<VarlikTanimi> temelVarliklar = [
   // baskısı budur.
   VarlikTanimi(
     id: 'mevduat',
+    islemMaliyeti: 0.0,
     tur: VarlikTuru.mevduat,
     baslangicFiyati: 100,
     parametreler: {
@@ -179,6 +190,7 @@ const List<VarlikTanimi> temelVarliklar = [
   // Altın: krizde ve enflasyonda patlar, büyümede geride kalır.
   VarlikTanimi(
     id: 'altin',
+    islemMaliyeti: 0.010,
     tur: VarlikTuru.altin,
     baslangicFiyati: 4500,
     ortakFaktor: OrtakFaktor.kur,
@@ -192,6 +204,7 @@ const List<VarlikTanimi> temelVarliklar = [
   ),
   VarlikTanimi(
     id: 'doviz',
+    islemMaliyeti: 0.003,
     tur: VarlikTuru.doviz,
     baslangicFiyati: 42,
     ortakFaktor: OrtakFaktor.kur,
@@ -206,6 +219,8 @@ const List<VarlikTanimi> temelVarliklar = [
   // Gayrimenkul: düşük oynaklık + kira geliri, ama satışı üç tur sürer.
   VarlikTanimi(
     id: 'gayrimenkul',
+    islemMaliyeti: 0.040,
+    bolunebilir: false,
     tur: VarlikTuru.gayrimenkul,
     baslangicFiyati: 3500000,
     aylikGetiriOrani: 0.004,
@@ -220,6 +235,8 @@ const List<VarlikTanimi> temelVarliklar = [
   // Arsa: gelir yok, likit değil. Değeri imar olayıyla sıçrar.
   VarlikTanimi(
     id: 'arsa',
+    islemMaliyeti: 0.040,
+    bolunebilir: false,
     tur: VarlikTuru.arsa,
     baslangicFiyati: 1200000,
     satisSuresiTur: 3,
@@ -232,6 +249,7 @@ const List<VarlikTanimi> temelVarliklar = [
   ),
   VarlikTanimi(
     id: 'kripto',
+    islemMaliyeti: 0.005,
     tur: VarlikTuru.kripto,
     baslangicFiyati: 3500000,
     ortakFaktor: OrtakFaktor.piyasa,

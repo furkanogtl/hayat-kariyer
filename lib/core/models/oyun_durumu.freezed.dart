@@ -17,7 +17,7 @@ mixin _$OyunDurumu {
 
 /// Oyunun tohumu. Aynı tohum + aynı kararlar = aynı oyun.
 /// Bug tekrar üretimi buna bağlı.
- int get anaTohum; Oyuncu get oyuncu; PiyasaDurumu get piyasa;/// Maaşların bağlı olduğu fiyat endeksi.
+ int get anaTohum; Oyuncu get oyuncu; PiyasaDurumu get piyasa; Portfoy get portfoy;/// Maaşların bağlı olduğu fiyat endeksi.
 ///
 /// Enflasyon endeksinden ayrı tutuluyor çünkü maaş yılda bir (ocakta)
 /// zamlanır, giderler her ay artar. Aradaki makas oyunun en gerçekçi
@@ -36,16 +36,16 @@ $OyunDurumuCopyWith<OyunDurumu> get copyWith => _$OyunDurumuCopyWithImpl<OyunDur
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is OyunDurumu&&(identical(other.anaTohum, anaTohum) || other.anaTohum == anaTohum)&&(identical(other.oyuncu, oyuncu) || other.oyuncu == oyuncu)&&(identical(other.piyasa, piyasa) || other.piyasa == piyasa)&&(identical(other.maasEndeksi, maasEndeksi) || other.maasEndeksi == maasEndeksi)&&(identical(other.kayitSurumu, kayitSurumu) || other.kayitSurumu == kayitSurumu));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is OyunDurumu&&(identical(other.anaTohum, anaTohum) || other.anaTohum == anaTohum)&&(identical(other.oyuncu, oyuncu) || other.oyuncu == oyuncu)&&(identical(other.piyasa, piyasa) || other.piyasa == piyasa)&&(identical(other.portfoy, portfoy) || other.portfoy == portfoy)&&(identical(other.maasEndeksi, maasEndeksi) || other.maasEndeksi == maasEndeksi)&&(identical(other.kayitSurumu, kayitSurumu) || other.kayitSurumu == kayitSurumu));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,anaTohum,oyuncu,piyasa,maasEndeksi,kayitSurumu);
+int get hashCode => Object.hash(runtimeType,anaTohum,oyuncu,piyasa,portfoy,maasEndeksi,kayitSurumu);
 
 @override
 String toString() {
-  return 'OyunDurumu(anaTohum: $anaTohum, oyuncu: $oyuncu, piyasa: $piyasa, maasEndeksi: $maasEndeksi, kayitSurumu: $kayitSurumu)';
+  return 'OyunDurumu(anaTohum: $anaTohum, oyuncu: $oyuncu, piyasa: $piyasa, portfoy: $portfoy, maasEndeksi: $maasEndeksi, kayitSurumu: $kayitSurumu)';
 }
 
 
@@ -56,11 +56,11 @@ abstract mixin class $OyunDurumuCopyWith<$Res>  {
   factory $OyunDurumuCopyWith(OyunDurumu value, $Res Function(OyunDurumu) _then) = _$OyunDurumuCopyWithImpl;
 @useResult
 $Res call({
- int anaTohum, Oyuncu oyuncu, PiyasaDurumu piyasa, double maasEndeksi, int kayitSurumu
+ int anaTohum, Oyuncu oyuncu, PiyasaDurumu piyasa, Portfoy portfoy, double maasEndeksi, int kayitSurumu
 });
 
 
-$OyuncuCopyWith<$Res> get oyuncu;$PiyasaDurumuCopyWith<$Res> get piyasa;
+$OyuncuCopyWith<$Res> get oyuncu;$PiyasaDurumuCopyWith<$Res> get piyasa;$PortfoyCopyWith<$Res> get portfoy;
 
 }
 /// @nodoc
@@ -73,12 +73,13 @@ class _$OyunDurumuCopyWithImpl<$Res>
 
 /// Create a copy of OyunDurumu
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? anaTohum = null,Object? oyuncu = null,Object? piyasa = null,Object? maasEndeksi = null,Object? kayitSurumu = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? anaTohum = null,Object? oyuncu = null,Object? piyasa = null,Object? portfoy = null,Object? maasEndeksi = null,Object? kayitSurumu = null,}) {
   return _then(_self.copyWith(
 anaTohum: null == anaTohum ? _self.anaTohum : anaTohum // ignore: cast_nullable_to_non_nullable
 as int,oyuncu: null == oyuncu ? _self.oyuncu : oyuncu // ignore: cast_nullable_to_non_nullable
 as Oyuncu,piyasa: null == piyasa ? _self.piyasa : piyasa // ignore: cast_nullable_to_non_nullable
-as PiyasaDurumu,maasEndeksi: null == maasEndeksi ? _self.maasEndeksi : maasEndeksi // ignore: cast_nullable_to_non_nullable
+as PiyasaDurumu,portfoy: null == portfoy ? _self.portfoy : portfoy // ignore: cast_nullable_to_non_nullable
+as Portfoy,maasEndeksi: null == maasEndeksi ? _self.maasEndeksi : maasEndeksi // ignore: cast_nullable_to_non_nullable
 as double,kayitSurumu: null == kayitSurumu ? _self.kayitSurumu : kayitSurumu // ignore: cast_nullable_to_non_nullable
 as int,
   ));
@@ -100,6 +101,15 @@ $PiyasaDurumuCopyWith<$Res> get piyasa {
   
   return $PiyasaDurumuCopyWith<$Res>(_self.piyasa, (value) {
     return _then(_self.copyWith(piyasa: value));
+  });
+}/// Create a copy of OyunDurumu
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$PortfoyCopyWith<$Res> get portfoy {
+  
+  return $PortfoyCopyWith<$Res>(_self.portfoy, (value) {
+    return _then(_self.copyWith(portfoy: value));
   });
 }
 }
@@ -183,10 +193,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int anaTohum,  Oyuncu oyuncu,  PiyasaDurumu piyasa,  double maasEndeksi,  int kayitSurumu)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int anaTohum,  Oyuncu oyuncu,  PiyasaDurumu piyasa,  Portfoy portfoy,  double maasEndeksi,  int kayitSurumu)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _OyunDurumu() when $default != null:
-return $default(_that.anaTohum,_that.oyuncu,_that.piyasa,_that.maasEndeksi,_that.kayitSurumu);case _:
+return $default(_that.anaTohum,_that.oyuncu,_that.piyasa,_that.portfoy,_that.maasEndeksi,_that.kayitSurumu);case _:
   return orElse();
 
 }
@@ -204,10 +214,10 @@ return $default(_that.anaTohum,_that.oyuncu,_that.piyasa,_that.maasEndeksi,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int anaTohum,  Oyuncu oyuncu,  PiyasaDurumu piyasa,  double maasEndeksi,  int kayitSurumu)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int anaTohum,  Oyuncu oyuncu,  PiyasaDurumu piyasa,  Portfoy portfoy,  double maasEndeksi,  int kayitSurumu)  $default,) {final _that = this;
 switch (_that) {
 case _OyunDurumu():
-return $default(_that.anaTohum,_that.oyuncu,_that.piyasa,_that.maasEndeksi,_that.kayitSurumu);case _:
+return $default(_that.anaTohum,_that.oyuncu,_that.piyasa,_that.portfoy,_that.maasEndeksi,_that.kayitSurumu);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -224,10 +234,10 @@ return $default(_that.anaTohum,_that.oyuncu,_that.piyasa,_that.maasEndeksi,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int anaTohum,  Oyuncu oyuncu,  PiyasaDurumu piyasa,  double maasEndeksi,  int kayitSurumu)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int anaTohum,  Oyuncu oyuncu,  PiyasaDurumu piyasa,  Portfoy portfoy,  double maasEndeksi,  int kayitSurumu)?  $default,) {final _that = this;
 switch (_that) {
 case _OyunDurumu() when $default != null:
-return $default(_that.anaTohum,_that.oyuncu,_that.piyasa,_that.maasEndeksi,_that.kayitSurumu);case _:
+return $default(_that.anaTohum,_that.oyuncu,_that.piyasa,_that.portfoy,_that.maasEndeksi,_that.kayitSurumu);case _:
   return null;
 
 }
@@ -239,7 +249,7 @@ return $default(_that.anaTohum,_that.oyuncu,_that.piyasa,_that.maasEndeksi,_that
 @JsonSerializable()
 
 class _OyunDurumu extends OyunDurumu {
-  const _OyunDurumu({required this.anaTohum, required this.oyuncu, required this.piyasa, this.maasEndeksi = 1.0, this.kayitSurumu = 1}): super._();
+  const _OyunDurumu({required this.anaTohum, required this.oyuncu, required this.piyasa, this.portfoy = const Portfoy(), this.maasEndeksi = 1.0, this.kayitSurumu = 1}): super._();
   factory _OyunDurumu.fromJson(Map<String, dynamic> json) => _$OyunDurumuFromJson(json);
 
 /// Oyunun tohumu. Aynı tohum + aynı kararlar = aynı oyun.
@@ -247,6 +257,7 @@ class _OyunDurumu extends OyunDurumu {
 @override final  int anaTohum;
 @override final  Oyuncu oyuncu;
 @override final  PiyasaDurumu piyasa;
+@override@JsonKey() final  Portfoy portfoy;
 /// Maaşların bağlı olduğu fiyat endeksi.
 ///
 /// Enflasyon endeksinden ayrı tutuluyor çünkü maaş yılda bir (ocakta)
@@ -269,16 +280,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OyunDurumu&&(identical(other.anaTohum, anaTohum) || other.anaTohum == anaTohum)&&(identical(other.oyuncu, oyuncu) || other.oyuncu == oyuncu)&&(identical(other.piyasa, piyasa) || other.piyasa == piyasa)&&(identical(other.maasEndeksi, maasEndeksi) || other.maasEndeksi == maasEndeksi)&&(identical(other.kayitSurumu, kayitSurumu) || other.kayitSurumu == kayitSurumu));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OyunDurumu&&(identical(other.anaTohum, anaTohum) || other.anaTohum == anaTohum)&&(identical(other.oyuncu, oyuncu) || other.oyuncu == oyuncu)&&(identical(other.piyasa, piyasa) || other.piyasa == piyasa)&&(identical(other.portfoy, portfoy) || other.portfoy == portfoy)&&(identical(other.maasEndeksi, maasEndeksi) || other.maasEndeksi == maasEndeksi)&&(identical(other.kayitSurumu, kayitSurumu) || other.kayitSurumu == kayitSurumu));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,anaTohum,oyuncu,piyasa,maasEndeksi,kayitSurumu);
+int get hashCode => Object.hash(runtimeType,anaTohum,oyuncu,piyasa,portfoy,maasEndeksi,kayitSurumu);
 
 @override
 String toString() {
-  return 'OyunDurumu(anaTohum: $anaTohum, oyuncu: $oyuncu, piyasa: $piyasa, maasEndeksi: $maasEndeksi, kayitSurumu: $kayitSurumu)';
+  return 'OyunDurumu(anaTohum: $anaTohum, oyuncu: $oyuncu, piyasa: $piyasa, portfoy: $portfoy, maasEndeksi: $maasEndeksi, kayitSurumu: $kayitSurumu)';
 }
 
 
@@ -289,11 +300,11 @@ abstract mixin class _$OyunDurumuCopyWith<$Res> implements $OyunDurumuCopyWith<$
   factory _$OyunDurumuCopyWith(_OyunDurumu value, $Res Function(_OyunDurumu) _then) = __$OyunDurumuCopyWithImpl;
 @override @useResult
 $Res call({
- int anaTohum, Oyuncu oyuncu, PiyasaDurumu piyasa, double maasEndeksi, int kayitSurumu
+ int anaTohum, Oyuncu oyuncu, PiyasaDurumu piyasa, Portfoy portfoy, double maasEndeksi, int kayitSurumu
 });
 
 
-@override $OyuncuCopyWith<$Res> get oyuncu;@override $PiyasaDurumuCopyWith<$Res> get piyasa;
+@override $OyuncuCopyWith<$Res> get oyuncu;@override $PiyasaDurumuCopyWith<$Res> get piyasa;@override $PortfoyCopyWith<$Res> get portfoy;
 
 }
 /// @nodoc
@@ -306,12 +317,13 @@ class __$OyunDurumuCopyWithImpl<$Res>
 
 /// Create a copy of OyunDurumu
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? anaTohum = null,Object? oyuncu = null,Object? piyasa = null,Object? maasEndeksi = null,Object? kayitSurumu = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? anaTohum = null,Object? oyuncu = null,Object? piyasa = null,Object? portfoy = null,Object? maasEndeksi = null,Object? kayitSurumu = null,}) {
   return _then(_OyunDurumu(
 anaTohum: null == anaTohum ? _self.anaTohum : anaTohum // ignore: cast_nullable_to_non_nullable
 as int,oyuncu: null == oyuncu ? _self.oyuncu : oyuncu // ignore: cast_nullable_to_non_nullable
 as Oyuncu,piyasa: null == piyasa ? _self.piyasa : piyasa // ignore: cast_nullable_to_non_nullable
-as PiyasaDurumu,maasEndeksi: null == maasEndeksi ? _self.maasEndeksi : maasEndeksi // ignore: cast_nullable_to_non_nullable
+as PiyasaDurumu,portfoy: null == portfoy ? _self.portfoy : portfoy // ignore: cast_nullable_to_non_nullable
+as Portfoy,maasEndeksi: null == maasEndeksi ? _self.maasEndeksi : maasEndeksi // ignore: cast_nullable_to_non_nullable
 as double,kayitSurumu: null == kayitSurumu ? _self.kayitSurumu : kayitSurumu // ignore: cast_nullable_to_non_nullable
 as int,
   ));
@@ -334,6 +346,15 @@ $PiyasaDurumuCopyWith<$Res> get piyasa {
   
   return $PiyasaDurumuCopyWith<$Res>(_self.piyasa, (value) {
     return _then(_self.copyWith(piyasa: value));
+  });
+}/// Create a copy of OyunDurumu
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$PortfoyCopyWith<$Res> get portfoy {
+  
+  return $PortfoyCopyWith<$Res>(_self.portfoy, (value) {
+    return _then(_self.copyWith(portfoy: value));
   });
 }
 }

@@ -29,6 +29,15 @@ class PiyasaSimulatoru {
   /// aşırı bir şok fiyatı anlamsız kılabilir; oyun için sert bir zemin.
   static const double enAzTurGetirisi = -0.75;
 
+  /// Tek turluk getirinin tavanı.
+  ///
+  /// Tabanla SİMETRİK olması için var. Yalnızca alttan kırpmak, maaş
+  /// şokunda düzeltilen hatanın aynısını yapardı: en kötü sonuçlar
+  /// budanır, en iyiler serbest kalır ve oynak varlıklar sistematik
+  /// olarak fazladan kazanır. İkisi de ~4 sigma uzaklıkta, yani normal
+  /// oyunda hiç devreye girmez.
+  static const double enCokTurGetirisi = 3.0;
+
   PiyasaDurumu baslangic({Rejim rejim = Rejim.buyume}) => PiyasaDurumu(
         rejim: rejim,
         fiyatlar: {for (final v in varliklar) v.id: v.baslangicFiyati},
@@ -108,8 +117,9 @@ class PiyasaSimulatoru {
 
       final sigma = p.oynaklik;
       final logGetiri = p.drift + sigma * z;
-      var carpan = math.exp(logGetiri);
-      if (carpan < 1 + enAzTurGetirisi) carpan = 1 + enAzTurGetirisi;
+      final carpan = math
+          .exp(logGetiri)
+          .clamp(1 + enAzTurGetirisi, 1 + enCokTurGetirisi);
 
       final mevcut = oncekiler[varlik.id] ?? varlik.baslangicFiyati;
       yeniler[varlik.id] = mevcut * carpan;

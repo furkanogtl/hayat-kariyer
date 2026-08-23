@@ -8,6 +8,7 @@ import '../models/zaman_dagilimi.dart';
 import '../rng/rastgele_kaynak.dart';
 import 'kariyer_motoru.dart';
 import 'piyasa_simulatoru.dart';
+import 'portfoy_motoru.dart';
 import 'rejim.dart';
 
 /// Tur işleyicinin denge sabitleri.
@@ -47,6 +48,11 @@ class TurRaporu {
     required this.maasZammiYapildi,
     required this.paraReformuYapildi,
     required this.performans,
+    required this.kiraGeliri,
+    required this.portfoyDegeri,
+    required this.netDeger,
+    this.emirSonuclari = const [],
+    this.tamamlananSatislar = const [],
     this.terfiEtti = false,
     this.yeniKademeAdi,
     this.istenCikarildi = false,
@@ -70,6 +76,18 @@ class TurRaporu {
   final bool paraReformuYapildi;
 
   final double performans;
+
+  /// Kira ve temettü toplamı.
+  final int kiraGeliri;
+  final int portfoyDegeri;
+  final int netDeger;
+
+  /// Verilen emirlerin sonuçları; reddedilenler dahil.
+  final List<EmirSonucu> emirSonuclari;
+
+  /// Bu tur olgunlaşan gecikmeli satışlar.
+  final List<TamamlananSatis> tamamlananSatislar;
+
   final bool terfiEtti;
   final String? yeniKademeAdi;
   final bool istenCikarildi;
@@ -94,35 +112,48 @@ class TurSonucu {
 /// eklendikçe buraya girecek. Girdinin tek bir nesnede toplanması, "3 ay
 /// atla" gibi toplu ilerlemeyi ve testte senaryo kurmayı kolaylaştırıyor.
 class TurGirdisi {
-  const TurGirdisi({required this.zaman});
+  const TurGirdisi({required this.zaman, this.emirler = const []});
 
-  TurGirdisi.varsayilan() : zaman = ZamanDagilimi.dengeli();
+  TurGirdisi.varsayilan()
+      : zaman = ZamanDagilimi.dengeli(),
+        emirler = const [];
 
   final ZamanDagilimi zaman;
+
+  /// Yatırım ekranında verilen alım-satım emirleri.
+  final List<Emir> emirler;
 }
 
 /// "Turu bitir" düğmesinin arkasındaki boru hattı.
 ///
 /// SIRA SÖZLEŞMEDİR ve testle sabitlenmiştir:
+///   0. Alım-satım emirleri — OYUNCUNUN GÖRDÜĞÜ fiyatlarla
 ///   1. Piyasa hareket eder (rejim, enflasyon, fiyatlar)
 ///   2. Ocaksa maaş endeksi güncellenir (zam)
 ///   3. Kariyer işlenir (gelir, terfi, statlar) — maaş GEÇEN yılın endeksiyle
-///   4. Yaşam gideri düşer — GÜNCEL enflasyonla
-///   5. Nakit mahsuplaşır, eksi bakiye faiz işletir, kredi notu güncellenir
-///   6. Tur ilerler (yaş, kariyer sayaçları, SGK primi)
+///   4. Kira geliri ve olgunlaşan gecikmeli satışlar — YENİ fiyatlarla
+///   5. Yaşam gideri düşer — GÜNCEL enflasyonla
+///   6. Nakit mahsuplaşır, eksi bakiye faiz işletir, kredi notu güncellenir
+///   7. Tur ilerler (yaş, kariyer sayaçları, SGK primi)
 ///
-/// 3. ve 4. adımın farklı endeks kullanması bilinçlidir: maaş yılda bir
+/// 0. adımın piyasadan ÖNCE olması bilinçli: oyuncu ekranda gördüğü fiyattan
+/// alır, sonra piyasa oynar. Aksi halde "aldığım fiyat bu değildi" olurdu.
+///
+/// 3. ve 5. adımın farklı endeks kullanması da bilinçli: maaş yılda bir
 /// zamlanır, market her ay zamlanır. Aradaki makas oyunun ana baskısıdır.
 class TurProcessor {
   TurProcessor({
     required this.katalog,
     PiyasaSimulatoru? piyasa,
+    PortfoyMotoru? portfoy,
     this.kariyer = const KariyerMotoru(),
     this.ayarlar = const TurAyarlari(),
-  }) : piyasa = piyasa ?? PiyasaSimulatoru();
+  })  : piyasa = piyasa ?? PiyasaSimulatoru(),
+        portfoy = portfoy ?? PortfoyMotoru();
 
   final MeslekKatalogu katalog;
   final PiyasaSimulatoru piyasa;
+  final PortfoyMotoru portfoy;
   final KariyerMotoru kariyer;
   final TurAyarlari ayarlar;
 
@@ -141,6 +172,15 @@ class TurProcessor {
   TurSonucu turuBitir(OyunDurumu durum, TurGirdisi girdi) {
     final kaynak = RastgeleKaynak(durum.anaTohum);
     final sonrakiTur = durum.tur + 1;
+
+    // 0. Emirler — oyuncunun gördüğü fiyatlarla, piyasa oynamadan önce.
+    final emirSonucu = portfoy.emirleriIsle(
+      durum.portfoy,
+      durum.oyuncu.nakit,
+      durum.piyasa,
+      girdi.emirler,
+    );
+    var guncelPortfoy = emirSonucu.portfoy;
 
     // 1. Piyasa
     final yeniPiyasa = piyasa.turIsle(
@@ -166,31 +206,43 @@ class TurProcessor {
       maasEndeksi: maasEndeksi,
     );
 
-    // 4. Yaşam gideri — güncel enflasyonla, maaş endeksiyle DEĞİL.
+    // 4. Portföy: kira geliri ve olgunlaşan satışlar — yeni fiyatlarla.
+    final portfoySonucu = portfoy.turIsle(guncelPortfoy, yeniPiyasa);
+    guncelPortfoy = portfoySonucu.portfoy;
+    final satisGeliri = portfoySonucu.satislar
+        .fold<int>(0, (toplam, s) => toplam + s.tutar);
+
+    // 5. Yaşam gideri — güncel enflasyonla, maaş endeksiyle DEĞİL.
     final yasamGideri = _yasamGideri(durum.oyuncu.sehir, yeniPiyasa);
 
-    // 5. Mahsuplaşma
+    // 6. Mahsuplaşma
     var oyuncu = kariyerSonucu.oyuncu;
-    final onceki = oyuncu.nakit;
+    final onceki = durum.oyuncu.nakit;
     var faizGideri = 0;
-    if (onceki < 0) {
-      faizGideri = (-onceki * ayarlar.eksiBakiyeFaizi).round();
+    final emirSonrasiNakit = onceki + emirSonucu.nakitDegisimi;
+    if (emirSonrasiNakit < 0) {
+      faizGideri = (-emirSonrasiNakit * ayarlar.eksiBakiyeFaizi).round();
     }
-    oyuncu = oyuncu.nakitDegistir(
-      kariyerSonucu.netGelir - yasamGideri - faizGideri,
-    );
+    oyuncu = oyuncu.copyWith(nakit: emirSonrasiNakit).nakitDegistir(
+          kariyerSonucu.netGelir +
+              portfoySonucu.kiraGeliri +
+              satisGeliri -
+              yasamGideri -
+              faizGideri,
+        );
     oyuncu = oyuncu.krediNotuDegistir(
       oyuncu.nakit < 0
           ? -ayarlar.borcluKrediNotuDususu
           : ayarlar.duzenliKrediNotuArtisi,
     );
 
-    // 6. Tur ilerlet
+    // 7. Tur ilerlet
     oyuncu = oyuncu.turIlerlet();
 
     final yeniDurum = durum.copyWith(
       oyuncu: oyuncu,
       piyasa: yeniPiyasa,
+      portfoy: guncelPortfoy,
       maasEndeksi: maasEndeksi,
     );
 
@@ -210,6 +262,11 @@ class TurProcessor {
         maasZammiYapildi: zamZamani,
         paraReformuYapildi: yeniPiyasa.paraReformuYapildi,
         performans: kariyerSonucu.performans,
+        kiraGeliri: portfoySonucu.kiraGeliri,
+        portfoyDegeri: yeniDurum.portfoyDegeri,
+        netDeger: yeniDurum.netDeger,
+        emirSonuclari: emirSonucu.sonuclar,
+        tamamlananSatislar: portfoySonucu.satislar,
         terfiEtti: kariyerSonucu.terfiEtti,
         yeniKademeAdi: kariyerSonucu.yeniKademeAdi,
         istenCikarildi: kariyerSonucu.istenCikarildi,
@@ -241,6 +298,7 @@ class TurProcessor {
   }
 
   bool _dikkatGerektirir(TurRaporu r) =>
+      r.tamamlananSatislar.isNotEmpty ||
       r.istenCikarildi ||
       r.terfiEtti ||
       r.mezunOldu ||

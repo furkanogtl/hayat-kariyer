@@ -215,7 +215,7 @@ void main() {
       }
     });
 
-    test('tek turda fiyat tabanın altına düşmez', () {
+    test('tek turluk getiri iki yönlü de sınırlı', () {
       for (var tohum = 0; tohum < 10; tohum++) {
         final kaynak = RastgeleKaynak(tohum);
         var d = motor.baslangic();
@@ -225,7 +225,10 @@ void main() {
             final getiri = sonraki.fiyat(v.id) / d.fiyat(v.id) - 1;
             expect(
               getiri,
-              greaterThanOrEqualTo(PiyasaSimulatoru.enAzTurGetirisi - 1e-9),
+              inInclusiveRange(
+                PiyasaSimulatoru.enAzTurGetirisi - 1e-9,
+                PiyasaSimulatoru.enCokTurGetirisi + 1e-9,
+              ),
               reason: v.id,
             );
           }

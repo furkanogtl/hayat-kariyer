@@ -2,6 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'oyuncu.dart';
 import 'piyasa_durumu.dart';
+import 'portfoy.dart';
 
 part 'oyun_durumu.freezed.dart';
 part 'oyun_durumu.g.dart';
@@ -21,6 +22,7 @@ abstract class OyunDurumu with _$OyunDurumu {
     required int anaTohum,
     required Oyuncu oyuncu,
     required PiyasaDurumu piyasa,
+    @Default(Portfoy()) Portfoy portfoy,
 
     /// Maaşların bağlı olduğu fiyat endeksi.
     ///
@@ -48,9 +50,20 @@ abstract class OyunDurumu with _$OyunDurumu {
   double get alimGucuKaybi =>
       1 - maasEndeksi / piyasa.enflasyonEndeksi;
 
+  /// Portföyün güncel piyasa değeri (ham TL).
+  int get portfoyDegeri => portfoy.piyasaDegeri(piyasa.fiyatlar).round();
+
+  /// Ana skor. Borç sistemi eklenince borçlar da buradan düşülecek.
+  int get netDeger => oyuncu.netDeger(varliklar: portfoyDegeri);
+
+  /// Net değerin oyun başı parasına indirgenmiş hali. Skor ekranı bunu
+  /// gösterir; nominal rakam enflasyonla şişip anlamsızlaşır.
+  int get reelNetDeger => piyasa.reeleCevir(netDeger);
+
   /// Kayıttan yüklenen veriyi güvenli hale getirir.
   OyunDurumu duzelt() => copyWith(
         oyuncu: oyuncu.duzelt(),
+        portfoy: portfoy.duzelt(),
         maasEndeksi: maasEndeksi <= 0 ? 1.0 : maasEndeksi,
       );
 }

@@ -10,6 +10,9 @@ _OyunDurumu _$OyunDurumuFromJson(Map<String, dynamic> json) => _OyunDurumu(
   anaTohum: (json['anaTohum'] as num).toInt(),
   oyuncu: Oyuncu.fromJson(json['oyuncu'] as Map<String, dynamic>),
   piyasa: PiyasaDurumu.fromJson(json['piyasa'] as Map<String, dynamic>),
+  portfoy: json['portfoy'] == null
+      ? const Portfoy()
+      : Portfoy.fromJson(json['portfoy'] as Map<String, dynamic>),
   maasEndeksi: (json['maasEndeksi'] as num?)?.toDouble() ?? 1.0,
   kayitSurumu: (json['kayitSurumu'] as num?)?.toInt() ?? 1,
 );
@@ -19,6 +22,7 @@ Map<String, dynamic> _$OyunDurumuToJson(_OyunDurumu instance) =>
       'anaTohum': instance.anaTohum,
       'oyuncu': instance.oyuncu,
       'piyasa': instance.piyasa,
+      'portfoy': instance.portfoy,
       'maasEndeksi': instance.maasEndeksi,
       'kayitSurumu': instance.kayitSurumu,
     };
