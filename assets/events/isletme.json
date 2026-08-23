@@ -1,0 +1,495 @@
+[
+  {
+    "id": "kafe_zabita_denetimi_01",
+    "baslik": "Zabıta kapıda",
+    "metin": "Ruhsat, tabela, masa sayısı derken defter açıldı. Müşteriler de bakıyor.",
+    "tur": "kriz",
+    "agirlik": 18,
+    "bekleme": 24,
+    "secenekler": [
+      {
+        "etiket": "Eksikleri kabul et, düzelt",
+        "etkiler": {
+          "nakit": -30000,
+          "enerji": -6
+        }
+      },
+      {
+        "etiket": "İtiraz et",
+        "sonuclar": [
+          {
+            "sans": 0.45,
+            "metin": "Haklı çıktın, tutanak iptal oldu.",
+            "etkiler": {
+              "enerji": -8,
+              "itibar": 2
+            }
+          },
+          {
+            "sans": 0.55,
+            "metin": "Ceza kesildi, üstüne iki gün kapatma yediniz.",
+            "etkiler": {
+              "nakit": -70000,
+              "mutluluk": -6,
+              "isletmeStat": {
+                "musteriTabani": -6
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "kafe_usta_barista_ayrildi_01",
+    "baslik": "Usta baristan istifa etti",
+    "metin": "Çırağı yetiştiremeden gitti. Müdavimler farkı ilk fincanda anlıyor.",
+    "tur": "kriz",
+    "agirlik": 22,
+    "bekleme": 18,
+    "kosullar": {
+      "enAzIhmalTuru": 2
+    },
+    "secenekler": [
+      {
+        "etiket": "Maaşı yükselt, kal ikna et",
+        "etkiler": {
+          "nakit": -45000,
+          "isletmeStat": {
+            "personelMoral": 10
+          }
+        }
+      },
+      {
+        "etiket": "Yenisini bul, idare et",
+        "etkiler": {
+          "enerji": -10,
+          "isletmeStat": {
+            "musteriTabani": -10,
+            "personelMoral": -5
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "kafe_yorum_bombasi_01",
+    "baslik": "Kötü yorum yayıldı",
+    "metin": "Bir müşteri hesabı paylaşmış, altına yüzlerce yorum gelmiş. Telefon susuyor.",
+    "tur": "kriz",
+    "agirlik": 16,
+    "bekleme": 30,
+    "secenekler": [
+      {
+        "etiket": "Kamuoyuna cevap ver",
+        "etkiler": {
+          "enerji": -6
+        },
+        "sonuclar": [
+          {
+            "sans": 0.5,
+            "metin": "Samimi bulundu, tartışma lehine döndü.",
+            "etkiler": {
+              "itibar": 3,
+              "isletmeStat": {
+                "musteriTabani": 4
+              }
+            }
+          },
+          {
+            "sans": 0.5,
+            "metin": "Tartışma büyüdü, bir hafta gündemde kaldın.",
+            "etkiler": {
+              "itibar": -5,
+              "mutluluk": -8,
+              "isletmeStat": {
+                "musteriTabani": -12
+              }
+            }
+          }
+        ]
+      },
+      {
+        "etiket": "Sessiz kal, geçsin",
+        "etkiler": {
+          "mutluluk": -4,
+          "isletmeStat": {
+            "musteriTabani": -6
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "kafe_sahne_gecesi_01",
+    "baslik": "Canlı müzik teklifi",
+    "metin": "Yerel bir grup perşembe akşamları çalmak istiyor. Ekipman ve ses yalıtımı sende.",
+    "tur": "firsat",
+    "agirlik": 18,
+    "bekleme": 36,
+    "secenekler": [
+      {
+        "etiket": "Sahneyi kur",
+        "etkiler": {
+          "nakit": -60000,
+          "enerji": -6
+        },
+        "gecikmeTuru": 4,
+        "sonuclar": [
+          {
+            "sans": 0.55,
+            "metin": "Perşembeler doldu taştı, mekân bir kimlik kazandı.",
+            "etkiler": {
+              "mutluluk": 8,
+              "itibar": 4,
+              "isletmeStat": {
+                "musteriTabani": 15
+              }
+            }
+          },
+          {
+            "sans": 0.45,
+            "metin": "Komşular gürültüden şikâyetçi, saat kısıtı geldi.",
+            "etkiler": {
+              "nakit": -20000,
+              "mutluluk": -5,
+              "isletmeStat": {
+                "musteriTabani": 3
+              }
+            }
+          }
+        ]
+      },
+      {
+        "etiket": "Mekânın havası bozulmasın",
+        "etkiler": {}
+      }
+    ]
+  },
+  {
+    "id": "kafe_tedarikci_zammi_01",
+    "baslik": "Kahve çekirdeğine zam",
+    "metin": "Tedarikçi yeni listeyi gönderdi. Menü fiyatını artırırsan müdavim homurdanacak.",
+    "tur": "hayat",
+    "agirlik": 22,
+    "bekleme": 12,
+    "secenekler": [
+      {
+        "etiket": "Menüye yansıt",
+        "etkiler": {
+          "isletmeStat": {
+            "musteriTabani": -5
+          }
+        }
+      },
+      {
+        "etiket": "Farkı sen yut",
+        "etkiler": {
+          "nakit": -25000,
+          "mutluluk": -2
+        }
+      },
+      {
+        "etiket": "Daha ucuz çekirdeğe geç",
+        "etkiler": {
+          "nakit": 8000,
+          "isletmeStat": {
+            "musteriTabani": -9,
+            "personelMoral": -4
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "kafe_sube_teklifi_01",
+    "baslik": "İkinci şube teklifi",
+    "metin": "Bir yatırımcı adını kullanıp yeni şube açmak istiyor. Ortaklık payı ve kontrol tartışmalı.",
+    "tur": "teklif",
+    "agirlik": 10,
+    "tekSeferlik": true,
+    "kosullar": {
+      "enAzItibar": 35
+    },
+    "secenekler": [
+      {
+        "etiket": "Anlaşmayı yap",
+        "etkiler": {
+          "nakit": 200000,
+          "enerji": -8
+        },
+        "gecikmeTuru": 8,
+        "sonuclar": [
+          {
+            "sans": 0.4,
+            "metin": "Şube tuttu, marka iki mekânla anılıyor.",
+            "etkiler": {
+              "nakit": 900000,
+              "itibar": 10,
+              "isletmeStat": {
+                "musteriTabani": 8
+              }
+            }
+          },
+          {
+            "sans": 0.6,
+            "metin": "Şube kalitesi tutturamadı, isim zarar gördü.",
+            "etkiler": {
+              "itibar": -8,
+              "mutluluk": -8,
+              "isletmeStat": {
+                "musteriTabani": -14
+              }
+            }
+          }
+        ]
+      },
+      {
+        "etiket": "İsmimi kimseye vermem",
+        "etkiler": {
+          "itibar": -2
+        }
+      }
+    ]
+  },
+  {
+    "id": "galeri_hasar_kayitli_01",
+    "baslik": "Hasar kaydı meselesi",
+    "metin": "Alıcı sormadı, sen de söylemedin. Aracın geçmişi ekspertizde görünmeyebilir.",
+    "tur": "teklif",
+    "agirlik": 18,
+    "bekleme": 20,
+    "secenekler": [
+      {
+        "etiket": "Sat, sorun çıkmaz",
+        "etkiler": {
+          "nakit": 120000
+        },
+        "gecikmeTuru": 5,
+        "sonuclar": [
+          {
+            "sans": 0.55,
+            "metin": "Ses çıkmadı. Araç yolda, alıcı memnun görünüyor.",
+            "etkiler": {}
+          },
+          {
+            "sans": 0.45,
+            "metin": "Alıcı öğrendi, hem parayı hem itibarını geri istiyor.",
+            "etkiler": {
+              "nakit": -220000,
+              "itibar": -10,
+              "isletmeStat": {
+                "musteriTabani": -15
+              }
+            }
+          }
+        ]
+      },
+      {
+        "etiket": "Kaydı göster, fiyatı düşür",
+        "etkiler": {
+          "nakit": 40000,
+          "itibar": 3,
+          "isletmeStat": {
+            "musteriTabani": 4
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "galeri_stok_bayatladi_01",
+    "baslik": "Stok elde kaldı",
+    "metin": "Bakmadığın haftalarda araçlar meydanda yaşlandı. Her geçen ay değer kaybı.",
+    "tur": "kriz",
+    "agirlik": 22,
+    "bekleme": 14,
+    "kosullar": {
+      "enAzIhmalTuru": 2
+    },
+    "secenekler": [
+      {
+        "etiket": "Zararına elden çıkar",
+        "etkiler": {
+          "nakit": -180000,
+          "isletmeStat": {
+            "stokKalitesi": 12
+          }
+        }
+      },
+      {
+        "etiket": "Bekle, fiyat toparlar",
+        "etkiler": {
+          "mutluluk": -5,
+          "isletmeStat": {
+            "stokKalitesi": -10
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "galeri_filo_alimi_01",
+    "baslik": "Kurumsal filo yenilemesi",
+    "metin": "Bir firma on araçlık filosunu değiştiriyor. İhaleye girmek için teminat gerekiyor.",
+    "tur": "firsat",
+    "agirlik": 16,
+    "bekleme": 30,
+    "kosullar": {
+      "enAzItibar": 25
+    },
+    "secenekler": [
+      {
+        "etiket": "Teminatı yatır, teklif ver",
+        "etkiler": {
+          "nakit": -150000,
+          "enerji": -8
+        },
+        "gecikmeTuru": 3,
+        "sonuclar": [
+          {
+            "sans": 0.4,
+            "metin": "İhale sende. Tek seferde yıllık cironun bir kısmı geldi.",
+            "etkiler": {
+              "nakit": 800000,
+              "itibar": 6,
+              "isletmeStat": {
+                "musteriTabani": 10
+              }
+            }
+          },
+          {
+            "sans": 0.6,
+            "metin": "Başka galeri daha düşük verdi. Teminat geri geldi.",
+            "etkiler": {
+              "nakit": 150000,
+              "mutluluk": -5
+            }
+          }
+        ]
+      },
+      {
+        "etiket": "Bu boy bana göre değil",
+        "etkiler": {
+          "itibar": -2
+        }
+      }
+    ]
+  },
+  {
+    "id": "galeri_senet_odenmedi_01",
+    "baslik": "Senet ödenmedi",
+    "metin": "Vadeli sattığın aracın taksiti yattı yatacak derken üç ay oldu. Adam ortalıkta yok.",
+    "tur": "kriz",
+    "agirlik": 20,
+    "bekleme": 20,
+    "secenekler": [
+      {
+        "etiket": "Avukatla üstüne git",
+        "etkiler": {
+          "nakit": -40000,
+          "enerji": -6
+        },
+        "sonuclar": [
+          {
+            "sans": 0.5,
+            "metin": "Araç haczedildi, alacağını tahsil ettin.",
+            "etkiler": {
+              "nakit": 260000
+            }
+          },
+          {
+            "sans": 0.5,
+            "metin": "Araç çoktan el değiştirmiş. Dosya boşa gitti.",
+            "etkiler": {
+              "mutluluk": -10
+            }
+          }
+        ]
+      },
+      {
+        "etiket": "Zararı yaz, dersini al",
+        "etkiler": {
+          "nakit": -120000,
+          "mutluluk": -6,
+          "yetkinlik": {
+            "ticaret": 2
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "galeri_kur_soku_stok_01",
+    "baslik": "Kur fırladı, stok değerlendi",
+    "metin": "Meydandaki araçların hepsi bir gecede pahalandı. Şimdi satsan mı, beklesen mi?",
+    "tur": "firsat",
+    "agirlik": 20,
+    "bekleme": 24,
+    "kosullar": {
+      "rejimler": [
+        "kriz",
+        "enflasyon"
+      ]
+    },
+    "secenekler": [
+      {
+        "etiket": "Hemen sat, kârı realize et",
+        "etkiler": {
+          "nakit": 350000,
+          "isletmeStat": {
+            "stokKalitesi": -12
+          }
+        }
+      },
+      {
+        "etiket": "Bekle, daha da çıkar",
+        "gecikmeTuru": 3,
+        "sonuclar": [
+          {
+            "sans": 0.4,
+            "metin": "Kur tırmanmaya devam etti. Beklemek kazandırdı.",
+            "etkiler": {
+              "nakit": 700000,
+              "mutluluk": 8
+            }
+          },
+          {
+            "sans": 0.6,
+            "metin": "Kur geri geldi, alıcı da kaçtı. Stok elde kaldı.",
+            "etkiler": {
+              "mutluluk": -6,
+              "isletmeStat": {
+                "stokKalitesi": -8
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "galeri_ekspertiz_anlasmasi_01",
+    "baslik": "Ekspertiz firmasıyla anlaşma",
+    "metin": "Bağımsız ekspertiz raporunu her araçta vermeyi öneriyorlar. Maliyet var, güven de.",
+    "tur": "firsat",
+    "agirlik": 16,
+    "bekleme": 48,
+    "secenekler": [
+      {
+        "etiket": "Anlaşmayı yap",
+        "etkiler": {
+          "nakit": -70000,
+          "itibar": 4,
+          "isletmeStat": {
+            "musteriTabani": 12
+          }
+        }
+      },
+      {
+        "etiket": "Gerek yok, müşteri güveniyor",
+        "etkiler": {}
+      }
+    ]
+  }
+]

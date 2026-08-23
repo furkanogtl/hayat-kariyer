@@ -1,3 +1,4 @@
+import '../models/isletme.dart';
 import '../models/olay.dart';
 import '../models/olay_katalogu.dart';
 import '../models/oyun_durumu.dart';
@@ -81,10 +82,17 @@ class SecimSonucu {
 class OlayMotoru {
   const OlayMotoru({
     required this.katalog,
+    this.isletmeKartlari = const {},
     this.ayarlar = const OlayAyarlari(),
   });
 
   final OlayKatalogu katalog;
+
+  /// Olay kimliği → işletme tanım kimliği.
+  /// `IsletmeKatalogu.olayHavuzuDizini()` üretir. Boşsa işletme kartı yok
+  /// demektir; motor işletme sistemi olmadan da çalışır.
+  final Map<String, String> isletmeKartlari;
+
   final OlayAyarlari ayarlar;
 
   /// Oyuncunun şu anda karşılaşabileceği kartlar.
@@ -97,6 +105,11 @@ class OlayMotoru {
         if (durum.tur - gorulduguTur < olay.bekleme) continue;
       }
       if (!olay.kosullar.uygunMu(durum.oyuncu, durum.piyasa)) continue;
+      // İşletme kartı, o işletmeye sahip olmayana çıkmaz.
+      if (isletmeKartlari.containsKey(olay.id) &&
+          hedefIsletme(olay, durum) == null) {
+        continue;
+      }
       sonuc.add(olay);
     }
     return sonuc;
@@ -128,6 +141,29 @@ class OlayMotoru {
     return OlayDestesi(secilenler);
   }
 
+  /// Kartın hedef aldığı işletme örneği. İşletme kartı değilse ya da uygun
+  /// örnek yoksa null.
+  ///
+  /// Aynı türden iki işletme varsa en çok ihmal edileni seçilir; kart zaten
+  /// çoğunlukla ihmalin bedelini anlatıyor. Eşitlikte kimlik sırası —
+  /// seçim belirlenimli olmalı, kayıt tekrar üretilebilsin.
+  Isletme? hedefIsletme(Olay olay, OyunDurumu durum) {
+    final tanimId = isletmeKartlari[olay.id];
+    if (tanimId == null) return null;
+
+    final adaylar = durum.isletmeler
+        .where((i) => i.tanimId == tanimId && !i.satista)
+        .where((i) =>
+            olay.kosullar.enAzIhmalTuru == null ||
+            i.ihmalTuru >= olay.kosullar.enAzIhmalTuru!)
+        .toList()
+      ..sort((a, b) {
+        final fark = b.ihmalTuru.compareTo(a.ihmalTuru);
+        return fark != 0 ? fark : a.id.compareTo(b.id);
+      });
+    return adaylar.isEmpty ? null : adaylar.first;
+  }
+
   /// Kartın seçim havuzundaki ağırlığı. Fırsat kartları itibara bağlıdır.
   double _agirlik(Olay olay, OyunDurumu durum) {
     if (olay.tur != OlayTuru.firsat) return olay.agirlik;
@@ -145,8 +181,9 @@ class OlayMotoru {
   ) {
     final secenek =
         olay.secenekler[secenekIndeksi.clamp(0, olay.secenekler.length - 1)];
+    final hedefId = hedefIsletme(olay, durum)?.id;
 
-    var guncel = _etkileriUygula(durum, secenek.etkiler);
+    var guncel = _etkileriUygula(durum, secenek.etkiler, hedefId);
     guncel = guncel.copyWith(
       olayGecmisi: {...guncel.olayGecmisi, olay.id: durum.tur},
     );
@@ -164,6 +201,7 @@ class OlayMotoru {
               olayId: olay.id,
               secenekIndeksi: secenekIndeksi,
               kalanTur: secenek.gecikmeTuru,
+              hedefIsletmeId: hedefId,
             ),
           ],
         ),
@@ -173,7 +211,7 @@ class OlayMotoru {
 
     final sonuc = _dalSec(secenek, akis);
     return SecimSonucu(
-      durum: _etkileriUygula(guncel, sonuc.etkiler),
+      durum: _etkileriUygula(guncel, sonuc.etkiler, hedefId),
       acilanSonuc: sonuc,
     );
   }
@@ -202,7 +240,7 @@ class OlayMotoru {
       final secenek = olay.secenekler[
           bekleyen.secenekIndeksi.clamp(0, olay.secenekler.length - 1)];
       final sonuc = _dalSec(secenek, akis);
-      guncel = _etkileriUygula(guncel, sonuc.etkiler);
+      guncel = _etkileriUygula(guncel, sonuc.etkiler, bekleyen.hedefIsletmeId);
       acilanlar.add(
         AcigaCikanSonuc(olay: olay, secenek: secenek, sonuc: sonuc),
       );
@@ -222,7 +260,11 @@ class OlayMotoru {
   ///
   /// Para tutarları TABAN TL yazıldığı için enflasyon endeksiyle çarpılır;
   /// stat değişimleri doğrudan uygulanır (onlar zaten ölçeksiz).
-  OyunDurumu _etkileriUygula(OyunDurumu durum, OlayEtkileri etkiler) {
+  OyunDurumu _etkileriUygula(
+    OyunDurumu durum,
+    OlayEtkileri etkiler, [
+    String? hedefIsletmeId,
+  ]) {
     if (etkiler.bosMu) return durum;
 
     var oyuncu = durum.oyuncu;
@@ -251,7 +293,26 @@ class OlayMotoru {
       portfoy = _varlikDegistir(portfoy, g.key, g.value, piyasa.fiyat(g.key));
     }
 
-    return durum.copyWith(oyuncu: oyuncu, piyasa: piyasa, portfoy: portfoy);
+    var isletmeler = durum.isletmeler;
+    if (etkiler.isletmeStat.isNotEmpty && hedefIsletmeId != null) {
+      isletmeler = [
+        for (final i in isletmeler)
+          if (i.id != hedefIsletmeId)
+            i
+          else
+            etkiler.isletmeStat.entries.fold(
+              i,
+              (guncel, g) => guncel.statDegistir(g.key, g.value),
+            ),
+      ];
+    }
+
+    return durum.copyWith(
+      oyuncu: oyuncu,
+      piyasa: piyasa,
+      portfoy: portfoy,
+      isletmeler: isletmeler,
+    );
   }
 
   /// Olayla gelen (ya da giden) varlık. Hediye edilen varlığın maliyeti

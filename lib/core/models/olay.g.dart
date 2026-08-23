@@ -29,6 +29,11 @@ _OlayEtkileri _$OlayEtkileriFromJson(Map<String, dynamic> json) =>
             (k, e) => MapEntry(k, (e as num).toDouble()),
           ) ??
           const <String, double>{},
+      isletmeStat:
+          (json['isletmeStat'] as Map<String, dynamic>?)?.map(
+            (k, e) => MapEntry(k, (e as num).toInt()),
+          ) ??
+          const <String, int>{},
     );
 
 Map<String, dynamic> _$OlayEtkileriToJson(_OlayEtkileri instance) =>
@@ -43,6 +48,7 @@ Map<String, dynamic> _$OlayEtkileriToJson(_OlayEtkileri instance) =>
       ),
       'fiyatCarpani': instance.fiyatCarpani,
       'varlik': instance.varlik,
+      'isletmeStat': instance.isletmeStat,
     };
 
 const _$SektorEnumMap = {
@@ -127,6 +133,7 @@ _OlayKosullari _$OlayKosullariFromJson(Map<String, dynamic> json) =>
         _$EgitimSeviyesiEnumMap,
         json['enAzEgitim'],
       ),
+      enAzIhmalTuru: (json['enAzIhmalTuru'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$OlayKosullariToJson(
@@ -147,6 +154,7 @@ Map<String, dynamic> _$OlayKosullariToJson(
   'durumlar': instance.durumlar?.map((e) => _$KariyerTuruEnumMap[e]!).toList(),
   'cinsiyet': _$CinsiyetEnumMap[instance.cinsiyet],
   'enAzEgitim': _$EgitimSeviyesiEnumMap[instance.enAzEgitim],
+  'enAzIhmalTuru': instance.enAzIhmalTuru,
 };
 
 const _$SehirEnumMap = {
@@ -188,6 +196,7 @@ _BekleyenOlay _$BekleyenOlayFromJson(Map<String, dynamic> json) =>
       olayId: json['olayId'] as String,
       secenekIndeksi: (json['secenekIndeksi'] as num).toInt(),
       kalanTur: (json['kalanTur'] as num).toInt(),
+      hedefIsletmeId: json['hedefIsletmeId'] as String?,
     );
 
 Map<String, dynamic> _$BekleyenOlayToJson(_BekleyenOlay instance) =>
@@ -195,6 +204,7 @@ Map<String, dynamic> _$BekleyenOlayToJson(_BekleyenOlay instance) =>
       'olayId': instance.olayId,
       'secenekIndeksi': instance.secenekIndeksi,
       'kalanTur': instance.kalanTur,
+      'hedefIsletmeId': instance.hedefIsletmeId,
     };
 
 _Olay _$OlayFromJson(Map<String, dynamic> json) => _Olay(

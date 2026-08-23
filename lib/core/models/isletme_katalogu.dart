@@ -61,6 +61,16 @@ class IsletmeKatalogu {
       .where((t) => t.girisSarti.karsilaniyorMu(oyuncu))
       .toList();
 
+  /// Olay kimliği → işletme tanım kimliği.
+  ///
+  /// Kartın hangi işletmeye ait olduğu TEK YERDE tutuluyor: işletmenin
+  /// `olayHavuzu` alanında. Kartın kendi koşullarına da işletme kimliği
+  /// yazılsaydı iki doğruluk kaynağı olurdu.
+  Map<String, String> olayHavuzuDizini() => {
+        for (final t in _tanimlar.values)
+          for (final olayId in t.olayHavuzu) olayId: t.id,
+      };
+
   List<String> dogrula() {
     final hatalar = <String>[
       for (final id in cakisanKimlikler) 'yinelenen işletme kimliği: $id',

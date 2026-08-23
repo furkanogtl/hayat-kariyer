@@ -62,6 +62,11 @@ abstract class OlayEtkileri with _$OlayEtkileri {
 
     /// Portföye eklenen (ya da eksiyle çıkarılan) adet.
     @Default(<String, double>{}) Map<String, double> varlik,
+
+    /// HEDEF işletmenin özel statlarına etki: `{"musteriTabani": -12}`.
+    /// Hedef, kartın hangi işletmenin `olayHavuzu`ndan geldiğiyle belli
+    /// olur; kart ayrıca işletme adı taşımaz.
+    @Default(<String, int>{}) Map<String, int> isletmeStat,
   }) = _OlayEtkileri;
 
   factory OlayEtkileri.fromJson(Map<String, dynamic> json) =>
@@ -75,7 +80,8 @@ abstract class OlayEtkileri with _$OlayEtkileri {
       krediNotu == 0 &&
       yetkinlik.isEmpty &&
       fiyatCarpani.isEmpty &&
-      varlik.isEmpty;
+      varlik.isEmpty &&
+      isletmeStat.isEmpty;
 }
 
 /// Bir seçeneğin olası sonuçlarından biri.
@@ -152,6 +158,10 @@ abstract class OlayKosullari with _$OlayKosullari {
     List<KariyerTuru>? durumlar,
     Cinsiyet? cinsiyet,
     EgitimSeviyesi? enAzEgitim,
+
+    /// İşletme kartları için: hedef işletme bu kadar turdur ihmal edilmiş
+    /// olmalı. "Bakmadığın kafede personel kavgası" kartlarının kapısı.
+    int? enAzIhmalTuru,
   }) = _OlayKosullari;
 
   factory OlayKosullari.fromJson(Map<String, dynamic> json) =>
@@ -211,6 +221,11 @@ abstract class BekleyenOlay with _$BekleyenOlay {
     required String olayId,
     required int secenekIndeksi,
     required int kalanTur,
+
+    /// İşletme kartıysa hangi işletme örneğine ait. Sonuç açığa çıkınca
+    /// AYNI işletmeye uygulanmalı; oyuncu bu arada ikinci bir kafe açmış
+    /// olabilir.
+    String? hedefIsletmeId,
   }) = _BekleyenOlay;
 
   factory BekleyenOlay.fromJson(Map<String, dynamic> json) =>

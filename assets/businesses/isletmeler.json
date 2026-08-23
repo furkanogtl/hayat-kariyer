@@ -9,8 +9,14 @@
     "ceoEtkinligi": 0.7,
     "degerCarpani": 3.0,
     "satisSuresiTur": 3,
-    "baslangicStatlari": { "musteriTabani": 60, "personelMoral": 60 },
-    "girisSarti": { "enAzYas": 22, "itibar": 10 },
+    "baslangicStatlari": {
+      "musteriTabani": 60,
+      "personelMoral": 60
+    },
+    "girisSarti": {
+      "enAzYas": 22,
+      "itibar": 10
+    },
     "gelirler": [
       {
         "ad": "Satış cirosu",
@@ -20,10 +26,26 @@
       }
     ],
     "giderler": [
-      { "ad": "Dükkân kirası", "tur": "sabit", "taban": 45000 },
-      { "ad": "Personel", "tur": "sabit", "taban": 60000 },
-      { "ad": "Sabit giderler", "tur": "sabit", "taban": 12000 },
-      { "ad": "Malzeme", "tur": "cirodan_pay", "oran": 0.35 },
+      {
+        "ad": "Dükkân kirası",
+        "tur": "sabit",
+        "taban": 45000
+      },
+      {
+        "ad": "Personel",
+        "tur": "sabit",
+        "taban": 60000
+      },
+      {
+        "ad": "Sabit giderler",
+        "tur": "sabit",
+        "taban": 12000
+      },
+      {
+        "ad": "Malzeme",
+        "tur": "cirodan_pay",
+        "oran": 0.35
+      },
       {
         "ad": "Ruhsat ve sigorta",
         "tur": "sabit",
@@ -31,7 +53,14 @@
         "periyotTur": 12
       }
     ],
-    "olayHavuzu": []
+    "olayHavuzu": [
+      "kafe_zabita_denetimi_01",
+      "kafe_usta_barista_ayrildi_01",
+      "kafe_yorum_bombasi_01",
+      "kafe_sahne_gecesi_01",
+      "kafe_tedarikci_zammi_01",
+      "kafe_sube_teklifi_01"
+    ]
   },
   {
     "id": "oto_galeri",
@@ -43,8 +72,14 @@
     "ceoEtkinligi": 0.7,
     "degerCarpani": 2.5,
     "satisSuresiTur": 4,
-    "baslangicStatlari": { "stokKalitesi": 50, "musteriTabani": 30 },
-    "girisSarti": { "enAzYas": 24, "itibar": 20 },
+    "baslangicStatlari": {
+      "stokKalitesi": 50,
+      "musteriTabani": 30
+    },
+    "girisSarti": {
+      "enAzYas": 24,
+      "itibar": 20
+    },
     "gelirler": [
       {
         "ad": "Araç satış cirosu",
@@ -54,11 +89,34 @@
       }
     ],
     "giderler": [
-      { "ad": "Stok yenileme", "tur": "cirodan_pay", "oran": 0.72 },
-      { "ad": "Noter, plaka, vergi", "tur": "cirodan_pay", "oran": 0.05 },
-      { "ad": "Galeri kirası", "tur": "sabit", "taban": 90000 },
-      { "ad": "Personel", "tur": "sabit", "taban": 120000 }
+      {
+        "ad": "Stok yenileme",
+        "tur": "cirodan_pay",
+        "oran": 0.72
+      },
+      {
+        "ad": "Noter, plaka, vergi",
+        "tur": "cirodan_pay",
+        "oran": 0.05
+      },
+      {
+        "ad": "Galeri kirası",
+        "tur": "sabit",
+        "taban": 90000
+      },
+      {
+        "ad": "Personel",
+        "tur": "sabit",
+        "taban": 120000
+      }
     ],
-    "olayHavuzu": []
+    "olayHavuzu": [
+      "galeri_hasar_kayitli_01",
+      "galeri_stok_bayatladi_01",
+      "galeri_filo_alimi_01",
+      "galeri_senet_odenmedi_01",
+      "galeri_kur_soku_stok_01",
+      "galeri_ekspertiz_anlasmasi_01"
+    ]
   }
 ]

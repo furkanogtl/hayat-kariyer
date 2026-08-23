@@ -169,7 +169,19 @@ class TurProcessor {
     this.kariyer = const KariyerMotoru(),
     this.ayarlar = const TurAyarlari(),
   })  : piyasa = piyasa ?? PiyasaSimulatoru(),
-        portfoy = portfoy ?? PortfoyMotoru();
+        portfoy = portfoy ?? PortfoyMotoru() {
+    // Sessiz bağlama hatası: işletme tanımları kart havuzu bildirdiği halde
+    // olay motoruna kart→işletme dizini verilmemişse o kartlar İŞLETMESİ
+    // OLMAYAN herkese çıkar. Testte patlasın, oyunda değil.
+    assert(
+      olay == null ||
+          isletme == null ||
+          isletme!.katalog.olayHavuzuDizini().isEmpty ||
+          olay!.isletmeKartlari.isNotEmpty,
+      'OlayMotoru.isletmeKartlari boş: '
+      'IsletmeKatalogu.olayHavuzuDizini() geçilmeli',
+    );
+  }
 
   final MeslekKatalogu katalog;
   final PiyasaSimulatoru piyasa;

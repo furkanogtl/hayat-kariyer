@@ -27,7 +27,9 @@ class IsletmeAyarlari {
   /// İlgi oranı bunun altındaysa ihmal sayacı işler.
   final double ihmalEsigi = 0.5;
 
-  /// Bu kadar tur üst üste ihmal edilen işletmede kriz olayı beklenir.
+  /// Bu kadar tur üst üste ihmal edilen işletmede kriz eşiği AŞILIR.
+  /// Uyarı yalnız eşiğin geçildiği turda verilir; her tur verilseydi
+  /// bilerek ihmal eden oyuncu bir daha hiç tur atlayamazdı.
   final int ihmalKriziEsigi = 3;
 
   /// CEO'lu işletme brüt kârının bu kadarını kaybeder. Genel müdür
@@ -273,7 +275,7 @@ class IsletmeMotoru {
         netKar: netKar,
         ilgiOrani: oran,
         ihmalEdildi: ihmal,
-        krizRiski: isletme.ihmalTuru >= ayarlar.ihmalKriziEsigi,
+        krizRiski: isletme.ihmalTuru == ayarlar.ihmalKriziEsigi,
         zimmetOldu: zimmet,
       );
 

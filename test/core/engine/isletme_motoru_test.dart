@@ -147,17 +147,29 @@ void main() {
       }
       expect(isletme.ihmalTuru, 4);
 
-      final rapor = _isle(
-        isletmeler: [isletme],
-        ilgi: const IlgiDagilimi(),
-      ).raporlar.single;
-      expect(rapor.krizRiski, isTrue);
-
       final duzelen = _isle(
         isletmeler: [isletme],
         ilgi: const IlgiDagilimi(puanlar: {'kafe#1': 2}),
       ).isletmeler.single;
       expect(duzelen.ihmalTuru, 0);
+    });
+
+    test('kriz uyarısı yalnız eşik turunda verilir', () {
+      // Her tur verilseydi bilerek ihmal eden oyuncu bir daha hiç tur
+      // atlayamazdı: "1 yıl atla" sonsuza kadar ilk turda kesilirdi.
+      var isletme = _ornek();
+      final uyarilar = <bool>[];
+      for (var t = 0; t < 6; t++) {
+        final s = _isle(
+          isletmeler: [isletme],
+          ilgi: const IlgiDagilimi(),
+          tur: t,
+        );
+        isletme = s.isletmeler.single;
+        uyarilar.add(s.raporlar.single.krizRiski);
+      }
+      expect(uyarilar.where((u) => u).length, 1);
+      expect(uyarilar.indexOf(true), 2); // ihmalTuru 3'e çıktığı tur
     });
 
     test('çöküş büyümeden hızlı', () {

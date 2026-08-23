@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:hayat_kariyer/core/models/isletme_katalogu.dart';
 import 'package:hayat_kariyer/core/models/meslek_katalogu.dart';
 import 'package:hayat_kariyer/core/models/olay.dart';
 import 'package:hayat_kariyer/core/models/egitim_seviyesi.dart';
@@ -36,6 +37,16 @@ OlayKatalogu katalogYukle() {
     dosyalar.map((f) => f.readAsStringSync()),
   );
 }
+
+/// İşletmelerin `olayHavuzu` alanlarında geçen kart kimlikleri. Bunlar
+/// yalnız o işletmeye sahip oyuncuya çıkar; genel havuz sayımına girmemeli.
+Set<String> isletmeKartlari() => IsletmeKatalogu.jsonMetinlerinden(
+      Directory('assets/businesses')
+          .listSync()
+          .whereType<File>()
+          .where((f) => f.path.endsWith('.json'))
+          .map((f) => f.readAsStringSync()),
+    ).olayHavuzuDizini().keys.toSet();
 
 MeslekKatalogu meslekKatalogYukle() {
   final dizin = Directory('assets/careers');
@@ -159,17 +170,26 @@ void main() {
 
   group('denge', () {
     test('bedava büyük para yok', () {
-      // Anlık ve dalsız bir seçenek serbest kazanç demektir: oyuncu bekleme
-      // ya da risk üstlenmeden alır. Bu yüzden tavanı düşük tutuluyor;
-      // büyük paralar gecikmeli ya da dallı seçeneklerden gelmeli.
+      // Anlık, dalsız VE bedelsiz bir seçenek serbest kazanç demektir.
+      // İlk yazımda ölçüt yalnız nakitti; işletme kartları gelince
+      // "stokunu eritip 350.000 al" gibi gerçek bedeli olan takaslar
+      // haksız yere takıldı. Doğru soru: karşılığında bir şey ödendi mi?
       const tavan = 200000;
       for (final olay in katalog.tumu) {
         for (final s in olay.secenekler) {
           if (s.dallaniyor || s.gecikmeli) continue;
+          if (s.etkiler.nakit <= tavan) continue;
+          final bedelVar = s.etkiler.enerji < 0 ||
+              s.etkiler.mutluluk < 0 ||
+              s.etkiler.itibar < 0 ||
+              s.etkiler.krediNotu < 0 ||
+              s.etkiler.isletmeStat.values.any((v) => v < 0) ||
+              s.etkiler.varlik.values.any((v) => v < 0);
           expect(
-            s.etkiler.nakit,
-            lessThanOrEqualTo(tavan),
-            reason: '${olay.id}/${s.etiket}: risksiz ${s.etkiler.nakit} TL',
+            bedelVar,
+            isTrue,
+            reason: '${olay.id}/${s.etiket}: '
+                'bedelsiz ${s.etkiler.nakit} TL',
           );
         }
       }
@@ -276,8 +296,10 @@ void main() {
       // oyuncu tipini dışarıda bırakmamalı. 18 yaşındaki öğrenci
       // ölçüldüğünde havuzunda 2 kart olduğu ortaya çıktı: oyunun ilk
       // yılları bomboştu.
+      final isletmeninkiler = isletmeKartlari();
       for (final ornek in _ornekOyuncular.entries) {
         final havuz = katalog.tumu
+            .where((o) => !isletmeninkiler.contains(o.id))
             .where((o) => o.kosullar.uygunMu(ornek.value, _piyasa))
             .length;
         expect(

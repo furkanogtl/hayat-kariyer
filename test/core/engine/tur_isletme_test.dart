@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hayat_kariyer/core/engine/isletme_motoru.dart';
+import 'package:hayat_kariyer/core/engine/olay_motoru.dart';
 import 'package:hayat_kariyer/core/engine/tur_processor.dart';
 import 'package:hayat_kariyer/core/models/egitim_seviyesi.dart';
 import 'package:hayat_kariyer/core/models/ilgi_dagilimi.dart';
@@ -10,10 +11,12 @@ import 'package:hayat_kariyer/core/models/isletme.dart';
 import 'package:hayat_kariyer/core/models/isletme_katalogu.dart';
 import 'package:hayat_kariyer/core/models/kariyer_durumu.dart';
 import 'package:hayat_kariyer/core/models/meslek_katalogu.dart';
+import 'package:hayat_kariyer/core/models/olay_katalogu.dart';
 import 'package:hayat_kariyer/core/models/oyun_durumu.dart';
 import 'package:hayat_kariyer/core/models/oyuncu.dart';
 import 'package:hayat_kariyer/core/models/sehir.dart';
 import 'package:hayat_kariyer/core/models/zaman_dagilimi.dart';
+import 'package:hayat_kariyer/core/rng/rastgele_kaynak.dart';
 
 /// İşletme sisteminin boru hattına bağlandığını doğrular: modeller ve motor
 /// ayrı ayrı çalışsa da "turu bitir"e basınca gerçekten para hareket etmeli.
@@ -27,6 +30,14 @@ MeslekKatalogu _meslekler() => MeslekKatalogu.jsonMetinlerinden(
 
 IsletmeKatalogu _isletmeler() => IsletmeKatalogu.jsonMetinlerinden(
       Directory('assets/businesses')
+          .listSync()
+          .whereType<File>()
+          .where((f) => f.path.endsWith('.json'))
+          .map((f) => f.readAsStringSync()),
+    );
+
+OlayKatalogu _kartlar() => OlayKatalogu.jsonMetinlerinden(
+      Directory('assets/events')
           .listSync()
           .whereType<File>()
           .where((f) => f.path.endsWith('.json'))
@@ -208,6 +219,138 @@ void main() {
         12,
       );
       expect(sonuc.raporlar.length, 12);
+    });
+  });
+
+  group('işletme kartları', () {
+    final olayKatalogu = _kartlar();
+    final olayMotoru = OlayMotoru(
+      katalog: olayKatalogu,
+      isletmeKartlari: isletmeKatalogu.olayHavuzuDizini(),
+    );
+    final denetim = olayKatalogu.bul('kafe_zabita_denetimi_01')!;
+    final baristaKarti = olayKatalogu.bul('kafe_usta_barista_ayrildi_01')!;
+
+    test('işletmesi olmayana işletme kartı çıkmaz', () {
+      final havuz = olayMotoru.uygunKartlar(baslat());
+      expect(havuz.map((o) => o.id), isNot(contains(denetim.id)));
+      // Genel kartlar etkilenmemeli.
+      expect(havuz, isNotEmpty);
+    });
+
+    test('kafesi olana çıkar, galeri kartı yine çıkmaz', () {
+      final havuz = olayMotoru.uygunKartlar(
+        baslat(isletmeler: [kafe()]),
+      );
+      final kimlikler = havuz.map((o) => o.id);
+      expect(kimlikler, contains(denetim.id));
+      expect(kimlikler, isNot(contains('galeri_stok_bayatladi_01')));
+    });
+
+    test('ihmal kartı yalnız ihmal edilmiş işletmeye çıkar', () {
+      final bakilan = baslat(isletmeler: [kafe()]);
+      final ihmalEdilen =
+          baslat(isletmeler: [kafe().copyWith(ihmalTuru: 3)]);
+      expect(
+        olayMotoru.uygunKartlar(bakilan).map((o) => o.id),
+        isNot(contains(baristaKarti.id)),
+      );
+      expect(
+        olayMotoru.uygunKartlar(ihmalEdilen).map((o) => o.id),
+        contains(baristaKarti.id),
+      );
+    });
+
+    test('seçim hedef işletmenin statını değiştirir', () {
+      final durum = baslat(isletmeler: [kafe(musteri: 70)]);
+      final sonuc = olayMotoru.secimYap(
+        durum,
+        olayKatalogu.bul('kafe_tedarikci_zammi_01')!,
+        0, // "Menüye yansıt": musteriTabani -5
+        RastgeleKaynak(1).akis('olay', tur: 1),
+      );
+      expect(sonuc.durum.isletmeler.single.stat('musteriTabani'), 65);
+    });
+
+    test('gecikmeli sonuç aynı işletmeye vurur', () {
+      // Oyuncu bu arada ikinci bir kafe açmış olabilir; sonuç kararın
+      // verildiği işletmeye uygulanmalı.
+      var durum = baslat(isletmeler: [kafe(musteri: 70)]);
+      final akis = RastgeleKaynak(7).akis('olay', tur: 1);
+      durum = olayMotoru
+          .secimYap(durum, olayKatalogu.bul('kafe_sahne_gecesi_01')!, 0, akis)
+          .durum;
+      expect(durum.bekleyenOlaylar.single.hedefIsletmeId, 'kafe#1');
+
+      // İkinci kafe açılıyor ve bekleme bitiyor.
+      durum = durum.copyWith(
+        isletmeler: [
+          ...durum.isletmeler,
+          kafe(musteri: 40).copyWith(id: 'kafe#2'),
+        ],
+        bekleyenOlaylar: [
+          durum.bekleyenOlaylar.single.copyWith(kalanTur: 1),
+        ],
+      );
+      final sonuc = olayMotoru.bekleyenleriIsle(
+        durum,
+        RastgeleKaynak(7).akis('olay_bekleyen', tur: 2),
+      );
+      expect(sonuc.sonuclar, hasLength(1));
+      expect(
+        sonuc.durum.isletmeler.firstWhere((i) => i.id == 'kafe#2').stat(
+              'musteriTabani',
+            ),
+        40,
+        reason: 'sonuç yanlış işletmeye uygulanmış',
+      );
+      expect(
+        sonuc.durum.isletmeler
+            .firstWhere((i) => i.id == 'kafe#1')
+            .stat('musteriTabani'),
+        isNot(70),
+      );
+    });
+
+    test('satıştaki işletme kart hedefi olmaz', () {
+      final durum = baslat(
+        isletmeler: [kafe().copyWith(satisKalanTur: 2)],
+      );
+      expect(
+        olayMotoru.uygunKartlar(durum).map((o) => o.id),
+        isNot(contains(denetim.id)),
+      );
+    });
+
+    test('eksik bağlama derlemede değil testte patlar', () {
+      // Dizin verilmezse işletme kartları herkese sızar; bu sessiz bir
+      // hata olurdu.
+      expect(
+        () => TurProcessor(
+          katalog: _meslekler(),
+          isletme: isletmeMotoru,
+          olay: OlayMotoru(katalog: olayKatalogu),
+        ),
+        throwsA(isA<AssertionError>()),
+      );
+      // Doğru bağlandığında sorun yok.
+      expect(
+        TurProcessor(
+          katalog: _meslekler(),
+          isletme: isletmeMotoru,
+          olay: olayMotoru,
+        ),
+        isNotNull,
+      );
+    });
+
+    test('havuzdaki her kart gerçekten bir işletmeye bağlı', () {
+      final dizin = isletmeKatalogu.olayHavuzuDizini();
+      for (final girdi in dizin.entries) {
+        expect(olayKatalogu.bul(girdi.key), isNotNull, reason: girdi.key);
+        expect(isletmeKatalogu.bul(girdi.value), isNotNull);
+      }
+      expect(dizin, isNotEmpty);
     });
   });
 
