@@ -195,6 +195,26 @@
     }
   },
 
+  "kararBekliyor": "{sayi} karar bekliyor",
+  "@kararBekliyor": {
+    "placeholders": { "sayi": { "type": "int" } }
+  },
+  "kararlariGor": "Kararı ver",
+  "kartTuruFirsat": "Fırsat",
+  "kartTuruKriz": "Kriz",
+  "kartTuruTeklif": "Teklif",
+  "kartTuruHayat": "Hayat",
+  "sonucBekliyor": "Sonucu {tur} ay sonra belli olacak.",
+  "@sonucBekliyor": {
+    "placeholders": { "tur": { "type": "int" } }
+  },
+  "gecmisKararlar": "Geçmiş kararların",
+  "kartKaldi": "{sayi} kart daha var",
+  "@kartKaldi": {
+    "placeholders": { "sayi": { "type": "int" } }
+  },
+  "kararVermedenTurBitmez": "Önce bekleyen kararı ver.",
+
   "hataBaslik": "Bir şeyler ters gitti",
   "yukleniyor": "Yükleniyor…"
 }

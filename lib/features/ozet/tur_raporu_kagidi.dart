@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 
+import '../../core/engine/olay_motoru.dart';
 import '../../core/engine/tur_processor.dart';
 import '../../l10n/uygulama_metinleri.dart';
 import '../../shared/bicimleme.dart';
 import '../../shared/etiketler.dart';
 import '../../shared/tema.dart';
 import '../../shared/widgets/oyun_widgetlari.dart';
+
+/// Rapor kâğıdının test anahtarı.
+///
+/// Rapor ve olay kartı aynı anda açılabildiği için (rapor kapanınca kart
+/// geliyor) ikisi tipe bakarak ayırt edilemiyor.
+const Key turRaporuAnahtari = Key('turRaporu');
 
 /// Tur sonu raporunu alttan açılan kâğıt olarak gösterir.
 ///
@@ -19,11 +26,14 @@ Future<void> turRaporunuGoster(
       context: context,
       isScrollControlled: true,
       showDragHandle: true,
-      builder: (context) => _TurRaporuKagidi(raporlar: raporlar),
+      builder: (context) => _TurRaporuKagidi(
+        key: turRaporuAnahtari,
+        raporlar: raporlar,
+      ),
     );
 
 class _TurRaporuKagidi extends StatelessWidget {
-  const _TurRaporuKagidi({required this.raporlar});
+  const _TurRaporuKagidi({super.key, required this.raporlar});
 
   final List<TurRaporu> raporlar;
 
@@ -96,6 +106,39 @@ class _TurRaporuKagidi extends StatelessWidget {
                   ],
                 ),
               ),
+              // Turlar önce verilmiş kararların açığa çıkan sonuçları.
+              // Gecikmeli kartın zarı burada atıldı; oyuncu ne olduğunu
+              // ancak bu satırdan öğreniyor.
+              if (_acilanlar.isNotEmpty) ...[
+                const SizedBox(height: 16),
+                Text(
+                  m.gecmisKararlar,
+                  style: tema.textTheme.titleSmall?.copyWith(
+                    color: tema.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                for (final a in _acilanlar)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: OyunKarti(
+                      dolgu: 12,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            a.olay.baslik,
+                            style: tema.textTheme.labelMedium?.copyWith(
+                              color: tema.colorScheme.onSurfaceVariant,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(a.sonuc.metin),
+                        ],
+                      ),
+                    ),
+                  ),
+              ],
               ..._olaylar(m).map(
                 (metin) => Padding(
                   padding: const EdgeInsets.only(top: 10),
@@ -127,6 +170,10 @@ class _TurRaporuKagidi extends StatelessWidget {
       ),
     );
   }
+
+  /// Bu turlarda açığa çıkan gecikmeli sonuçlar.
+  List<AcigaCikanSonuc> get _acilanlar =>
+      [for (final r in raporlar) ...r.acilanOlaylar];
 
   /// Her raporun, ilk rapora göre bileşik fiyat endeksi.
   List<double> _endeksler() {

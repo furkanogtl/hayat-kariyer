@@ -1,6 +1,7 @@
 import '../models/borc.dart';
 import '../models/kariyer_durumu.dart';
 import '../models/meslek_katalogu.dart';
+import '../models/olay.dart';
 import '../models/oyun_durumu.dart';
 import '../models/oyuncu.dart';
 import '../models/piyasa_durumu.dart';
@@ -583,6 +584,27 @@ class TurProcessor {
     return motor.desteCek(
       durum,
       RastgeleKaynak(durum.anaTohum).akis('olay_deste', tur: durum.tur + 1),
+    );
+  }
+
+  /// Oyuncunun kart seçimini uygular.
+  ///
+  /// Akış adına KART KİMLİĞİ giriyor. `RastgeleKaynak.akis` aynı üçlü için
+  /// akışı baştan verdiğinden, tek isim kullanılsaydı aynı turdaki iki
+  /// kartın dalı aynı zarla çözülür ve sonuçlar birbirine kilitlenirdi.
+  ///
+  /// Zar, seçilen SEÇENEĞE bağlı değil: oyuncu aynı kartta A yerine B'yi
+  /// seçince zar yeniden atılmaz. Kayıt/yükleme geldiğinde "beğenmediğim
+  /// sonucu geri al, aynı seçeneği tekrar dene" işe yaramayacak.
+  SecimSonucu secimUygula(OyunDurumu durum, Olay kart, int secenekIndeksi) {
+    final motor = olay;
+    if (motor == null) return SecimSonucu(durum: durum);
+    return motor.secimYap(
+      durum,
+      kart,
+      secenekIndeksi,
+      RastgeleKaynak(durum.anaTohum)
+          .akis('olay_secim:${kart.id}', tur: durum.tur + 1),
     );
   }
 

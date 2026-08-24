@@ -9,6 +9,7 @@ import '../../core/models/egitim_seviyesi.dart';
 import '../../core/models/isletme_katalogu.dart';
 import '../../core/models/kariyer_durumu.dart';
 import '../../core/models/meslek_katalogu.dart';
+import '../../core/models/olay.dart';
 import '../../core/models/olay_katalogu.dart';
 import '../../core/models/oyun_durumu.dart';
 import '../../core/models/oyuncu.dart';
@@ -62,20 +63,38 @@ final turProcessorProvider = Provider<TurProcessor>((ref) {
   );
 });
 
-/// Bir oyun oturumu: kayda yazılan durum + son turun raporları.
+/// Bir oyun oturumu: kayda yazılan durum + ekranın ihtiyaç duyduğu geçici
+/// veriler.
 ///
-/// Raporlar kayda GİRMEZ; ekranın "bu ay ne oldu" özetini gösterebilmesi
-/// için tutulan geçici veridir.
+/// Raporlar ve bekleyen kartlar kayda GİRMEZ. Deste zaten `desteCek` ile
+/// durumdan SAF olarak türetiliyor; kayıttan dönen oyuncu aynı kartları
+/// görür. Burada tutulmasının tek sebebi, kartlar cevaplandıkça durumun
+/// değişmesi: her seçimden sonra yeniden çekilseydi deste altta değişirdi.
 @immutable
 class Oturum {
-  const Oturum({required this.durum, this.sonRaporlar = const []});
+  const Oturum({
+    required this.durum,
+    this.sonRaporlar = const [],
+    this.bekleyenKartlar = const [],
+  });
 
   final OyunDurumu durum;
   final List<TurRaporu> sonRaporlar;
 
-  Oturum kopya({OyunDurumu? durum, List<TurRaporu>? sonRaporlar}) => Oturum(
+  /// Bu tur oyuncuya sunulan, henüz cevaplanmamış kartlar.
+  final List<Olay> bekleyenKartlar;
+
+  bool get kararBekliyor => bekleyenKartlar.isNotEmpty;
+
+  Oturum kopya({
+    OyunDurumu? durum,
+    List<TurRaporu>? sonRaporlar,
+    List<Olay>? bekleyenKartlar,
+  }) =>
+      Oturum(
         durum: durum ?? this.durum,
         sonRaporlar: sonRaporlar ?? this.sonRaporlar,
+        bekleyenKartlar: bekleyenKartlar ?? this.bekleyenKartlar,
       );
 }
 
@@ -101,8 +120,8 @@ class OyunNotifier extends Notifier<Oturum?> {
       sehir: sehir,
       egitim: egitim,
     );
-    state = Oturum(
-      durum: _motor.yeniOyun(
+    state = _oturumKur(
+      _motor.yeniOyun(
         oyuncu: oyuncu,
         // Tohum kayda yazılır; aynı tohum + aynı kararlar = aynı oyun.
         anaTohum: tohum ?? DateTime.now().microsecondsSinceEpoch & 0x7fffffff,
@@ -114,7 +133,7 @@ class OyunNotifier extends Notifier<Oturum?> {
   /// Kayıttan yükleme ve testler için doğrudan durum verir.
   void durumaGec(OyunDurumu durum) {
     final duzeltilmis = durum.duzelt();
-    state = Oturum(durum: duzeltilmis);
+    state = _oturumKur(duzeltilmis);
     ref.read(zamanProvider.notifier).varsayilanaDon(
           calisiyor: duzeltilmis.oyuncu.kariyer is Calisan,
         );
@@ -125,7 +144,7 @@ class OyunNotifier extends Notifier<Oturum?> {
     if (oturum == null) return;
     final oncekiTur = oturum.durum.oyuncu.kariyer.turu;
     final sonuc = _motor.turuBitir(oturum.durum, girdi);
-    state = Oturum(durum: sonuc.durum, sonRaporlar: [sonuc.rapor]);
+    state = _oturumKur(sonuc.durum, raporlar: [sonuc.rapor]);
     _zamaniTazele(oncekiTur, sonuc.durum);
   }
 
@@ -136,7 +155,7 @@ class OyunNotifier extends Notifier<Oturum?> {
     if (oturum == null) return;
     final oncekiTur = oturum.durum.oyuncu.kariyer.turu;
     final sonuc = _motor.turlariAtla(oturum.durum, girdi, adet);
-    state = Oturum(durum: sonuc.durum, sonRaporlar: sonuc.raporlar);
+    state = _oturumKur(sonuc.durum, raporlar: sonuc.raporlar);
     _zamaniTazele(oncekiTur, sonuc.durum);
   }
 
@@ -150,6 +169,41 @@ class OyunNotifier extends Notifier<Oturum?> {
     ref
         .read(zamanProvider.notifier)
         .varsayilanaDon(calisiyor: sonraki is Calisan);
+  }
+
+  /// Yeni duruma geçerken bu turun destesini de çeker.
+  ///
+  /// Deste durumdan SAF olarak türetiliyor; tek yerden çekilmesi, kartların
+  /// hem tur sonunda hem kayıttan dönüşte aynı biçimde gelmesini sağlıyor.
+  Oturum _oturumKur(OyunDurumu durum, {List<TurRaporu> raporlar = const []}) =>
+      Oturum(
+        durum: durum,
+        sonRaporlar: raporlar,
+        bekleyenKartlar: _motor.desteCek(durum).kartlar,
+      );
+
+  /// Oyuncunun bir karta verdiği cevabı uygular.
+  ///
+  /// Kart desteden BURADA DÜŞMEZ: sonuç metni okunana kadar ekranda
+  /// kalması gerekiyor. Düşürme [kartiKapat] ile yapılır.
+  ///
+  /// Deste yeniden çekilmez; seçim nakdi ve itibarı değiştirdiği için
+  /// yeniden çekilseydi kalan kartlar oyuncunun gözü önünde değişirdi.
+  SecimSonucu? secimYap(Olay kart, int secenekIndeksi) {
+    final oturum = state;
+    if (oturum == null) return null;
+    final sonuc = _motor.secimUygula(oturum.durum, kart, secenekIndeksi);
+    state = oturum.kopya(durum: sonuc.durum);
+    return sonuc;
+  }
+
+  /// Sıradaki karta geçer.
+  void kartiKapat() {
+    final oturum = state;
+    if (oturum == null || oturum.bekleyenKartlar.isEmpty) return;
+    state = oturum.kopya(
+      bekleyenKartlar: oturum.bekleyenKartlar.sublist(1),
+    );
   }
 
   /// Rapor kartı kapatıldığında çağrılır.

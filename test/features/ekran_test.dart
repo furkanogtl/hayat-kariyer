@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:hayat_kariyer/core/engine/tur_processor.dart';
 import 'package:hayat_kariyer/data/isletme_yukleyici.dart';
 import 'package:hayat_kariyer/data/meslek_yukleyici.dart';
 import 'package:hayat_kariyer/data/olay_yukleyici.dart';
 import 'package:hayat_kariyer/features/kabuk/uygulama.dart';
+import 'package:hayat_kariyer/features/olay/olay_karti_sayfasi.dart';
+import 'package:hayat_kariyer/features/ozet/tur_raporu_kagidi.dart';
 import 'package:hayat_kariyer/features/oyun/oyun_saglayicilar.dart';
 
 /// Ekranların uçtan uca dumanı: açılıştan turu bitirmeye kadar.
@@ -49,8 +52,22 @@ void main() {
   }
 
   /// Yeni oyun ekranındaki "Hayata Başla".
+  ///
+  /// Oyun KART BEKLEYEREK başlayabilir (deste turn 0 durumundan çekiliyor).
+  /// O durumda "Turu Bitir" kapalı olur; testlerin çoğu turu bitirmek
+  /// istediği için açılıştaki kartlar burada cevaplanıyor.
   Future<void> oyunaBasla(WidgetTester tester) async {
     await tester.tap(find.byType(FilledButton));
+    await tester.pumpAndSettle();
+    final kap = ProviderScope.containerOf(
+      tester.element(find.byType(NavigationBar)),
+    );
+    final notifier = kap.read(oyunProvider.notifier);
+    while (kap.read(oyunProvider)!.kararBekliyor) {
+      notifier
+        ..secimYap(kap.read(oyunProvider)!.bekleyenKartlar.first, 0)
+        ..kartiKapat();
+    }
     await tester.pumpAndSettle();
   }
 
@@ -73,15 +90,17 @@ void main() {
     // Özet ekranındaki tek dolgulu düğme "Turu Bitir".
     await tester.tap(find.byType(FilledButton));
     await tester.pumpAndSettle();
-    expect(find.byType(BottomSheet), findsOneWidget);
+    expect(find.byKey(turRaporuAnahtari), findsOneWidget);
 
-    // Rapordaki "Devam" kâğıdı kapatır.
+    // Rapordaki "Devam" kâğıdı kapatır. Rapordan sonra olay kartı
+    // açılabildiği için "hiç kâğıt kalmadı" diye bakılmıyor; tohum
+    // rastgele olduğundan o kontrol kararsız olurdu.
     await tester.tap(find.descendant(
-      of: find.byType(BottomSheet),
+      of: find.byKey(turRaporuAnahtari),
       matching: find.byType(FilledButton),
     ));
     await tester.pumpAndSettle();
-    expect(find.byType(BottomSheet), findsNothing);
+    expect(find.byKey(turRaporuAnahtari), findsNothing);
   });
 
   testWidgets('bütün sekmeler hatasız açılıyor', (tester) async {
@@ -113,6 +132,73 @@ void main() {
     // Talep beklerken zaman varsayılanı çalışmaya dönmüş olmalı; yoksa
     // oyuncu işe girdiği ay kovulur.
     expect(kap.read(zamanProvider).calisma, greaterThan(0));
+  });
+
+  /// Kart çıkana kadar turu bitirir. Kart çıkma ihtimali %25.
+  Future<void> kartaKadarOyna(WidgetTester tester) async {
+    final kap = ProviderScope.containerOf(
+      tester.element(find.byType(NavigationBar)),
+    );
+    for (var i = 0; i < 60 && !kap.read(oyunProvider)!.kararBekliyor; i++) {
+      kap
+          .read(oyunProvider.notifier)
+          .turuBitir(TurGirdisi(zaman: kap.read(zamanProvider)));
+    }
+    kap.read(oyunProvider.notifier).raporlariTemizle();
+    await tester.pumpAndSettle();
+    expect(kap.read(oyunProvider)!.kararBekliyor, isTrue);
+  }
+
+  testWidgets('kart beklerken turu bitir kapalı', (tester) async {
+    // Çekirdek döngüde kart turun bitmesinden ÖNCE gelir; oyuncu kartı
+    // görmezden gelip ilerleyememeli, yoksa içerik boşa gider.
+    await ac(tester);
+    await oyunaBasla(tester);
+    await kartaKadarOyna(tester);
+
+    final turuBitir = tester.widget<FilledButton>(
+      find.byType(FilledButton).first,
+    );
+    expect(turuBitir.onPressed, isNull);
+    final atlamalar = tester
+        .widgetList<OutlinedButton>(find.byType(OutlinedButton))
+        .where((d) => d.onPressed == null);
+    expect(atlamalar, hasLength(2));
+  });
+
+  testWidgets('kart cevaplanınca tur açılır', (tester) async {
+    await ac(tester);
+    await oyunaBasla(tester);
+    await kartaKadarOyna(tester);
+
+    final kap = ProviderScope.containerOf(
+      tester.element(find.byType(NavigationBar)),
+    );
+    // Uyarı kartındaki "Kararı ver" kâğıdı açar.
+    await tester.tap(find.byType(TextButton).first);
+    await tester.pumpAndSettle();
+    expect(find.byKey(olayKartiAnahtari), findsOneWidget);
+
+    // Bütün kartları ilk seçenekle cevapla.
+    while (kap.read(oyunProvider)!.kararBekliyor) {
+      // Seçenekler OutlinedButton, sonuç ekranındaki "Devam" FilledButton.
+      await tester.tap(find.descendant(
+        of: find.byKey(olayKartiAnahtari),
+        matching: find.byType(OutlinedButton),
+      ).first);
+      await tester.pumpAndSettle();
+      await tester.tap(find.descendant(
+        of: find.byKey(olayKartiAnahtari),
+        matching: find.byType(FilledButton),
+      ));
+      await tester.pumpAndSettle();
+    }
+    // Kâğıt kendiliğinden kapanır ve tur yeniden bitirilebilir olur.
+    expect(find.byKey(olayKartiAnahtari), findsNothing);
+    expect(
+      tester.widget<FilledButton>(find.byType(FilledButton).first).onPressed,
+      isNotNull,
+    );
   });
 
   testWidgets('bekleyen talep varken atlama kapalı', (tester) async {

@@ -2,6 +2,7 @@ import '../core/engine/rejim.dart';
 import '../core/models/egitim_seviyesi.dart';
 import '../core/models/kariyer_durumu.dart';
 import '../core/models/meslek_katalogu.dart';
+import '../core/models/olay.dart';
 import '../core/models/sehir.dart';
 import '../core/models/sektor.dart';
 import '../l10n/uygulama_metinleri.dart';
@@ -56,6 +57,15 @@ extension SektorEtiketi on Sektor {
         Sektor.lojistik => m.sektorLojistik,
         Sektor.tarim => m.sektorTarim,
         Sektor.turizm => m.sektorTurizm,
+      };
+}
+
+extension OlayTuruEtiketi on OlayTuru {
+  String ad(UygulamaMetinleri m) => switch (this) {
+        OlayTuru.firsat => m.kartTuruFirsat,
+        OlayTuru.kriz => m.kartTuruKriz,
+        OlayTuru.teklif => m.kartTuruTeklif,
+        OlayTuru.hayat => m.kartTuruHayat,
       };
 }
 

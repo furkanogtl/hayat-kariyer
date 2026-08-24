@@ -10,6 +10,7 @@ import '../../shared/bicimleme.dart';
 import '../../shared/etiketler.dart';
 import '../../shared/tema.dart';
 import '../../shared/widgets/oyun_widgetlari.dart';
+import '../olay/olay_karti_sayfasi.dart';
 import '../oyun/oyun_saglayicilar.dart';
 import 'tur_raporu_kagidi.dart';
 
@@ -28,7 +29,8 @@ class OzetEkrani extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final m = UygulamaMetinleri.of(context);
     final tema = Theme.of(context);
-    final durum = ref.watch(oyunProvider)!.durum;
+    final oturum = ref.watch(oyunProvider)!;
+    final durum = oturum.durum;
     final oyuncu = durum.oyuncu;
     final katalog = ref.watch(kataloglarProvider).requireValue.meslekler;
     final zaman = ref.watch(zamanProvider);
@@ -36,10 +38,18 @@ class OzetEkrani extends ConsumerWidget {
     // İşe giriş gibi TEK SEFERLİK komutlar atlama boyunca tekrar tekrar
     // uygulanırdı; bekleyen komut varken yalnız tek tur işlenebilir.
     final atlanabilir = ref.watch(taleplerProvider).bosMu;
+    // Karar kartı çıkmışsa tur bitirilemez: çekirdek döngüde kartlar
+    // turun bitmesinden ÖNCE gelir. Yoksa oyuncu kartı görmezden gelip
+    // ilerler ve içerik boşa gider.
+    final kararBekliyor = oturum.kararBekliyor;
 
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
       children: [
+        if (kararBekliyor) ...[
+          _KararUyarisi(sayi: oturum.bekleyenKartlar.length),
+          const SizedBox(height: 12),
+        ],
         ServetKarti(durum: durum),
         const SizedBox(height: 12),
         OyunKarti(
@@ -119,24 +129,40 @@ class OzetEkrani extends ConsumerWidget {
         const _ZamanKarti(),
         const SizedBox(height: 20),
         FilledButton(
-          onPressed: () => _turuIsle(context, ref, 1),
+          onPressed:
+              kararBekliyor ? null : () => _turuIsle(context, ref, 1),
           child: Text(m.turuBitir),
         ),
+        // Kapalı düğmenin sebebi yazılmazsa oyuncu neden ilerleyemediğini
+        // anlamıyor: oyun kart bekleyerek de başlayabiliyor.
+        if (kararBekliyor)
+          Padding(
+            padding: const EdgeInsets.only(top: 6),
+            child: Text(
+              m.kararVermedenTurBitmez,
+              textAlign: TextAlign.center,
+              style: tema.textTheme.bodySmall?.copyWith(
+                color: tema.oyun.uyari,
+              ),
+            ),
+          ),
         const SizedBox(height: 8),
         Row(
           children: [
             Expanded(
               child: OutlinedButton(
-                onPressed:
-                    atlanabilir ? () => _turuIsle(context, ref, 3) : null,
+                onPressed: atlanabilir && !kararBekliyor
+                    ? () => _turuIsle(context, ref, 3)
+                    : null,
                 child: Text(m.ucAyAtla),
               ),
             ),
             const SizedBox(width: 12),
             Expanded(
               child: OutlinedButton(
-                onPressed:
-                    atlanabilir ? () => _turuIsle(context, ref, 12) : null,
+                onPressed: atlanabilir && !kararBekliyor
+                    ? () => _turuIsle(context, ref, 12)
+                    : null,
                 child: Text(m.birYilAtla),
               ),
             ),
@@ -173,9 +199,51 @@ class OzetEkrani extends ConsumerWidget {
     }
     ref.read(taleplerProvider.notifier).temizle();
     final raporlar = ref.read(oyunProvider)?.sonRaporlar ?? const <TurRaporu>[];
-    if (raporlar.isEmpty || !context.mounted) return;
-    await turRaporunuGoster(context, raporlar);
-    notifier.raporlariTemizle();
+    if (raporlar.isNotEmpty && context.mounted) {
+      await turRaporunuGoster(context, raporlar);
+      notifier.raporlariTemizle();
+    }
+    // Rapordan sonra bu turun kartları: çekirdek döngüde karar kartı
+    // turun kapanışını değil AÇILIŞINI karşılar.
+    if (context.mounted && (ref.read(oyunProvider)?.kararBekliyor ?? false)) {
+      await olayKartlariniGoster(context);
+    }
+  }
+}
+
+/// Bekleyen karar kartı uyarısı. Kart kâğıdı elle kapatılmış olabilir;
+/// oyuncu buradan geri dönebilsin.
+class _KararUyarisi extends ConsumerWidget {
+  const _KararUyarisi({required this.sayi});
+
+  final int sayi;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final m = UygulamaMetinleri.of(context);
+    final tema = Theme.of(context);
+    return Card(
+      color: tema.colorScheme.primaryContainer,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 8, 8, 8),
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(
+                m.kararBekliyor(sayi),
+                style: tema.textTheme.titleSmall?.copyWith(
+                  color: tema.colorScheme.onPrimaryContainer,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () => olayKartlariniGoster(context),
+              child: Text(m.kararlariGor),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 

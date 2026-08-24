@@ -164,6 +164,82 @@ void main() {
     expect(kap.read(zamanProvider).egitim, 0);
   });
 
+  group('olay kartları', () {
+    /// Kart çıkana kadar tur işler. Kart çıkma ihtimali %25 olduğu için
+    /// birkaç turda kesin çıkıyor; çıkmazsa test anlamsız olur, o yüzden
+    /// üst sınır var.
+    Future<ProviderContainer> kartaKadarOyna() async {
+      final kap = await kur();
+      yeniOyun(kap);
+      final meslek = ilkIs(kap);
+      kap.read(oyunProvider.notifier).turuBitir(
+            TurGirdisi(
+              zaman: ZamanDagilimi.dengeli(),
+              iseGirTalebi: meslek.id,
+            ),
+          );
+      for (var i = 0; i < 60 && !kap.read(oyunProvider)!.kararBekliyor; i++) {
+        kap
+            .read(oyunProvider.notifier)
+            .turuBitir(TurGirdisi(zaman: ZamanDagilimi.dengeli()));
+      }
+      expect(
+        kap.read(oyunProvider)!.kararBekliyor,
+        isTrue,
+        reason: '60 turda hiç kart çıkmadı',
+      );
+      return kap;
+    }
+
+    test('deste tur işlendikçe çekiliyor', () async {
+      final kap = await kartaKadarOyna();
+      final oturum = kap.read(oyunProvider)!;
+      expect(oturum.bekleyenKartlar, isNotEmpty);
+      // Deste durumdan SAF olarak türetiliyor: motor aynı durumdan aynı
+      // desteyi vermeli, yoksa kayıttan dönen oyuncu başka kart görürdü.
+      expect(
+        kap
+            .read(turProcessorProvider)
+            .desteCek(oturum.durum)
+            .kartlar
+            .map((k) => k.id),
+        oturum.bekleyenKartlar.map((k) => k.id),
+      );
+    });
+
+    test('seçim kartı desteden düşürmez, kapatma düşürür', () async {
+      // Sonuç metni okunmadan sıradaki karta atlanmamalı.
+      final kap = await kartaKadarOyna();
+      final notifier = kap.read(oyunProvider.notifier);
+      final kart = kap.read(oyunProvider)!.bekleyenKartlar.first;
+      final adet = kap.read(oyunProvider)!.bekleyenKartlar.length;
+
+      expect(notifier.secimYap(kart, 0), isNotNull);
+      expect(kap.read(oyunProvider)!.bekleyenKartlar, hasLength(adet));
+
+      notifier.kartiKapat();
+      expect(kap.read(oyunProvider)!.bekleyenKartlar, hasLength(adet - 1));
+    });
+
+    test('seçim oyun durumunu gerçekten değiştiriyor', () async {
+      final kap = await kartaKadarOyna();
+      final once = kap.read(oyunProvider)!.durum;
+      final kart = kap.read(oyunProvider)!.bekleyenKartlar.first;
+      kap.read(oyunProvider.notifier).secimYap(kart, 0);
+      final sonra = kap.read(oyunProvider)!.durum;
+      // Kart geçmişine yazılmış olmalı: aynı kart hemen tekrar çıkmasın.
+      expect(sonra.olayGecmisi[kart.id], isNotNull);
+      expect(sonra, isNot(once));
+    });
+
+    test('kart bekleyen turda tur bitirilmemeli', () async {
+      // Ekran bunu düğmeyi kapatarak zorluyor; burada sözleşmenin
+      // sağlayıcı tarafı sınanıyor.
+      final kap = await kartaKadarOyna();
+      expect(kap.read(oyunProvider)!.kararBekliyor, isTrue);
+    });
+  });
+
   test('tur raporu üretiliyor ve temizlenebiliyor', () async {
     final kap = await kur();
     yeniOyun(kap);

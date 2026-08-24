@@ -410,6 +410,42 @@ class UygulamaMetinleriTr extends UygulamaMetinleri {
   }
 
   @override
+  String kararBekliyor(int sayi) {
+    return '$sayi karar bekliyor';
+  }
+
+  @override
+  String get kararlariGor => 'Kararı ver';
+
+  @override
+  String get kartTuruFirsat => 'Fırsat';
+
+  @override
+  String get kartTuruKriz => 'Kriz';
+
+  @override
+  String get kartTuruTeklif => 'Teklif';
+
+  @override
+  String get kartTuruHayat => 'Hayat';
+
+  @override
+  String sonucBekliyor(int tur) {
+    return 'Sonucu $tur ay sonra belli olacak.';
+  }
+
+  @override
+  String get gecmisKararlar => 'Geçmiş kararların';
+
+  @override
+  String kartKaldi(int sayi) {
+    return '$sayi kart daha var';
+  }
+
+  @override
+  String get kararVermedenTurBitmez => 'Önce bekleyen kararı ver.';
+
+  @override
   String get hataBaslik => 'Bir şeyler ters gitti';
 
   @override

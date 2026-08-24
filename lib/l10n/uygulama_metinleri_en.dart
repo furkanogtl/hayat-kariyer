@@ -410,6 +410,42 @@ class UygulamaMetinleriEn extends UygulamaMetinleri {
   }
 
   @override
+  String kararBekliyor(int sayi) {
+    return '$sayi decision pending';
+  }
+
+  @override
+  String get kararlariGor => 'Decide';
+
+  @override
+  String get kartTuruFirsat => 'Opportunity';
+
+  @override
+  String get kartTuruKriz => 'Crisis';
+
+  @override
+  String get kartTuruTeklif => 'Offer';
+
+  @override
+  String get kartTuruHayat => 'Life';
+
+  @override
+  String sonucBekliyor(int tur) {
+    return 'The outcome will be clear in $tur months.';
+  }
+
+  @override
+  String get gecmisKararlar => 'Your past decisions';
+
+  @override
+  String kartKaldi(int sayi) {
+    return '$sayi more cards';
+  }
+
+  @override
+  String get kararVermedenTurBitmez => 'Answer the pending decision first.';
+
+  @override
   String get hataBaslik => 'Something went wrong';
 
   @override

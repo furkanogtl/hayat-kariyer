@@ -135,6 +135,17 @@
   "sartYetkinlik": "{sektor} competence {deger}",
   "sartYas": "Ages {enAz}-{enCok}",
 
+  "kararBekliyor": "{sayi} decision pending",
+  "kararlariGor": "Decide",
+  "kartTuruFirsat": "Opportunity",
+  "kartTuruKriz": "Crisis",
+  "kartTuruTeklif": "Offer",
+  "kartTuruHayat": "Life",
+  "sonucBekliyor": "The outcome will be clear in {tur} months.",
+  "gecmisKararlar": "Your past decisions",
+  "kartKaldi": "{sayi} more cards",
+  "kararVermedenTurBitmez": "Answer the pending decision first.",
+
   "hataBaslik": "Something went wrong",
   "yukleniyor": "Loading…"
 }

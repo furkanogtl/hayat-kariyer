@@ -830,6 +830,66 @@ abstract class UygulamaMetinleri {
   /// **'{enAz}-{enCok} yaş'**
   String sartYas(int enAz, int enCok);
 
+  /// No description provided for @kararBekliyor.
+  ///
+  /// In tr, this message translates to:
+  /// **'{sayi} karar bekliyor'**
+  String kararBekliyor(int sayi);
+
+  /// No description provided for @kararlariGor.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kararı ver'**
+  String get kararlariGor;
+
+  /// No description provided for @kartTuruFirsat.
+  ///
+  /// In tr, this message translates to:
+  /// **'Fırsat'**
+  String get kartTuruFirsat;
+
+  /// No description provided for @kartTuruKriz.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kriz'**
+  String get kartTuruKriz;
+
+  /// No description provided for @kartTuruTeklif.
+  ///
+  /// In tr, this message translates to:
+  /// **'Teklif'**
+  String get kartTuruTeklif;
+
+  /// No description provided for @kartTuruHayat.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hayat'**
+  String get kartTuruHayat;
+
+  /// No description provided for @sonucBekliyor.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sonucu {tur} ay sonra belli olacak.'**
+  String sonucBekliyor(int tur);
+
+  /// No description provided for @gecmisKararlar.
+  ///
+  /// In tr, this message translates to:
+  /// **'Geçmiş kararların'**
+  String get gecmisKararlar;
+
+  /// No description provided for @kartKaldi.
+  ///
+  /// In tr, this message translates to:
+  /// **'{sayi} kart daha var'**
+  String kartKaldi(int sayi);
+
+  /// No description provided for @kararVermedenTurBitmez.
+  ///
+  /// In tr, this message translates to:
+  /// **'Önce bekleyen kararı ver.'**
+  String get kararVermedenTurBitmez;
+
   /// No description provided for @hataBaslik.
   ///
   /// In tr, this message translates to:
