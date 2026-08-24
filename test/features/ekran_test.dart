@@ -8,6 +8,8 @@ import 'package:hayat_kariyer/data/olay_yukleyici.dart';
 import 'package:hayat_kariyer/features/kabuk/uygulama.dart';
 import 'package:hayat_kariyer/features/olay/olay_karti_sayfasi.dart';
 import 'package:hayat_kariyer/features/ozet/tur_raporu_kagidi.dart';
+import 'package:hayat_kariyer/features/piyasa/fiyat_grafigi.dart';
+import 'package:hayat_kariyer/features/piyasa/varlik_detay_kagidi.dart';
 import 'package:hayat_kariyer/features/oyun/oyun_saglayicilar.dart';
 
 /// Ekranların uçtan uca dumanı: açılıştan turu bitirmeye kadar.
@@ -199,6 +201,72 @@ void main() {
       tester.widget<FilledButton>(find.byType(FilledButton).first).onPressed,
       isNotNull,
     );
+  });
+
+  testWidgets('piyasa ekranından emir verilebiliyor', (tester) async {
+    await ac(tester);
+    await oyunaBasla(tester);
+    final kap = ProviderScope.containerOf(
+      tester.element(find.byType(NavigationBar)),
+    );
+    // Oyuncu 18 yaşında beş parasız başlıyor; alım için nakit gerekiyor.
+    kap.read(oyunProvider.notifier).durumaGec(
+          kap.read(oyunProvider)!.durum.copyWith(
+                oyuncu: kap
+                    .read(oyunProvider)!
+                    .durum
+                    .oyuncu
+                    .copyWith(nakit: 5000000),
+              ),
+        );
+    await tester.tap(find.byType(NavigationDestination).at(1));
+    await tester.pumpAndSettle();
+
+    // İlk varlık satırına dokun: detay kâğıdı açılır.
+    await tester.tap(find.byType(InkWell).first);
+    await tester.pumpAndSettle();
+    expect(find.byKey(varlikDetayAnahtari), findsOneWidget);
+
+    // "Tümü" adet kutusunu doldurur, ardından "Al" emri sıraya alır.
+    await tester.tap(find.descendant(
+      of: find.byKey(varlikDetayAnahtari),
+      matching: find.byType(OutlinedButton),
+    ));
+    await tester.pumpAndSettle();
+    await tester.tap(find.descendant(
+      of: find.byKey(varlikDetayAnahtari),
+      matching: find.byType(FilledButton),
+    ));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(varlikDetayAnahtari), findsNothing);
+    expect(kap.read(taleplerProvider).emirler, hasLength(1));
+  });
+
+  testWidgets('grafik çiziliyor', (tester) async {
+    await ac(tester);
+    await oyunaBasla(tester);
+    await tester.tap(find.byType(NavigationDestination).at(1));
+    await tester.pumpAndSettle();
+    // Yeni oyunda seri tek noktalı: mini grafik çizilmez ama ekran patlamaz.
+    expect(tester.takeException(), isNull);
+
+    final kap = ProviderScope.containerOf(
+      tester.element(find.byType(NavigationBar)),
+    );
+    for (var i = 0; i < 4; i++) {
+      while (kap.read(oyunProvider)!.kararBekliyor) {
+        kap.read(oyunProvider.notifier)
+          ..secimYap(kap.read(oyunProvider)!.bekleyenKartlar.first, 0)
+          ..kartiKapat();
+      }
+      kap
+          .read(oyunProvider.notifier)
+          .turuBitir(TurGirdisi(zaman: kap.read(zamanProvider)));
+    }
+    await tester.pumpAndSettle();
+    expect(find.byType(MiniGrafik), findsWidgets);
+    expect(tester.takeException(), isNull);
   });
 
   testWidgets('bekleyen talep varken atlama kapalı', (tester) async {

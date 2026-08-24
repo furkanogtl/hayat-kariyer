@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/engine/borc_motoru.dart';
 import '../../core/engine/isletme_motoru.dart';
 import '../../core/engine/olay_motoru.dart';
+import '../../core/engine/portfoy_motoru.dart';
 import '../../core/engine/tur_processor.dart';
 import '../../core/models/egitim_seviyesi.dart';
 import '../../core/models/isletme_katalogu.dart';
@@ -224,16 +225,28 @@ class OyunNotifier extends Notifier<Oturum?> {
 /// `TurGirdisi` kapısından geçiyor.
 @immutable
 class TurTalepleri {
-  const TurTalepleri({this.iseGirTalebi});
+  const TurTalepleri({this.iseGirTalebi, this.emirler = const []});
 
   /// Girilmek istenen mesleğin kimliği.
   final String? iseGirTalebi;
 
-  bool get bosMu => iseGirTalebi == null;
+  /// Sıraya alınmış alım/satım emirleri.
+  ///
+  /// Motor emirleri piyasa hareket etmeden ÖNCE işliyor: oyuncu ekranda
+  /// gördüğü fiyattan alıyor. Kuyrukta beklemelerinin sebebi bu değil,
+  /// turun tek bir `TurGirdisi` ile işlenmesi.
+  final List<Emir> emirler;
 
-  TurTalepleri kopya({String? iseGirTalebi, bool isiTemizle = false}) =>
+  bool get bosMu => iseGirTalebi == null && emirler.isEmpty;
+
+  TurTalepleri kopya({
+    String? iseGirTalebi,
+    List<Emir>? emirler,
+    bool isiTemizle = false,
+  }) =>
       TurTalepleri(
         iseGirTalebi: isiTemizle ? null : (iseGirTalebi ?? this.iseGirTalebi),
+        emirler: emirler ?? this.emirler,
       );
 }
 
@@ -245,9 +258,21 @@ class TalepNotifier extends Notifier<TurTalepleri> {
   TurTalepleri build() => const TurTalepleri();
 
   void iseGir(String? meslekId) {
-    state = TurTalepleri(iseGirTalebi: meslekId);
+    state = state.kopya(iseGirTalebi: meslekId, isiTemizle: meslekId == null);
     if (meslekId != null) ref.read(zamanProvider.notifier).iseHazirlan();
   }
+
+  void emirEkle(Emir emir) =>
+      state = state.kopya(emirler: [...state.emirler, emir]);
+
+  void emirSil(int indeks) {
+    if (indeks < 0 || indeks >= state.emirler.length) return;
+    state = state.kopya(
+      emirler: [...state.emirler]..removeAt(indeks),
+    );
+  }
+
+  void emirleriTemizle() => state = state.kopya(emirler: const []);
 
   void temizle() => state = const TurTalepleri();
 }

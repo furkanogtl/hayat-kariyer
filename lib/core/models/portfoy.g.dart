@@ -9,11 +9,13 @@ part of 'portfoy.dart';
 _Pozisyon _$PozisyonFromJson(Map<String, dynamic> json) => _Pozisyon(
   adet: (json['adet'] as num).toDouble(),
   ortalamaMaliyet: (json['ortalamaMaliyet'] as num).toDouble(),
+  ortalamaEndeks: (json['ortalamaEndeks'] as num?)?.toDouble() ?? 1.0,
 );
 
 Map<String, dynamic> _$PozisyonToJson(_Pozisyon instance) => <String, dynamic>{
   'adet': instance.adet,
   'ortalamaMaliyet': instance.ortalamaMaliyet,
+  'ortalamaEndeks': instance.ortalamaEndeks,
 };
 
 _BekleyenSatis _$BekleyenSatisFromJson(Map<String, dynamic> json) =>

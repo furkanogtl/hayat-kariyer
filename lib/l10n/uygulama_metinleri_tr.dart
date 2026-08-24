@@ -446,6 +446,171 @@ class UygulamaMetinleriTr extends UygulamaMetinleri {
   String get kararVermedenTurBitmez => 'Önce bekleyen kararı ver.';
 
   @override
+  String get portfoy => 'Portföy';
+
+  @override
+  String get portfoyBos =>
+      'Henüz yatırımın yok. Nakit tutmak enflasyona karşı kaybettirir.';
+
+  @override
+  String get portfoyDegeri => 'Portföy değeri';
+
+  @override
+  String get reelKarZarar => 'Reel kâr/zarar';
+
+  @override
+  String get karZarar => 'Kâr/zarar';
+
+  @override
+  String get maliyet => 'Maliyet';
+
+  @override
+  String get satista => 'Satışta';
+
+  @override
+  String satisTamamlanir(int tur) {
+    return '$tur tur sonra';
+  }
+
+  @override
+  String get varliklar => 'Yatırım araçları';
+
+  @override
+  String get birimFiyat => 'Birim fiyat';
+
+  @override
+  String get yillikDegisim => '12 ay reel';
+
+  @override
+  String get veriYok => '—';
+
+  @override
+  String get al => 'Al';
+
+  @override
+  String get sat => 'Sat';
+
+  @override
+  String get adet => 'Adet';
+
+  @override
+  String get tumu => 'Tümü';
+
+  @override
+  String get toplamTutar => 'Toplam';
+
+  @override
+  String get komisyon => 'Komisyon';
+
+  @override
+  String get emirSiraya => 'Emir sıraya alındı';
+
+  @override
+  String get bekleyenEmirler => 'Bekleyen emirler';
+
+  @override
+  String emirAlim(String adet, String birim) {
+    return '$adet $birim al';
+  }
+
+  @override
+  String emirSatim(String adet, String birim) {
+    return '$adet $birim sat';
+  }
+
+  @override
+  String get emirNotu =>
+      'Emirler tur bitince, ekranda gördüğün fiyattan işlenir.';
+
+  @override
+  String satisGecikmesi(int tur) {
+    return 'Satış $tur tur sürer; fiyat riski sende kalır.';
+  }
+
+  @override
+  String get bolunemez => 'Tam sayı alınır.';
+
+  @override
+  String grafikBasligi(int tur) {
+    return 'Reel fiyat (son $tur ay)';
+  }
+
+  @override
+  String get birimGram => 'gram';
+
+  @override
+  String get birimLot => 'lot';
+
+  @override
+  String get birimAdet => 'adet';
+
+  @override
+  String get birimDolar => 'USD';
+
+  @override
+  String get birimDaire => 'daire';
+
+  @override
+  String get birimParsel => 'parsel';
+
+  @override
+  String get varlikMevduat => 'Mevduat';
+
+  @override
+  String get varlikAltin => 'Altın';
+
+  @override
+  String get varlikDoviz => 'Döviz';
+
+  @override
+  String get varlikGayrimenkul => 'Daire';
+
+  @override
+  String get varlikArsa => 'Arsa';
+
+  @override
+  String get varlikKripto => 'Kripto';
+
+  @override
+  String get varlikHisseBankacilik => 'Bankacılık';
+
+  @override
+  String get varlikHisseSanayi => 'Sanayi';
+
+  @override
+  String get varlikHisseTeknoloji => 'Teknoloji';
+
+  @override
+  String get varlikHisseGida => 'Gıda';
+
+  @override
+  String get varlikHisseInsaat => 'İnşaat';
+
+  @override
+  String get varlikHisseEnerji => 'Enerji';
+
+  @override
+  String get turMevduat => 'Mevduat';
+
+  @override
+  String get turAltin => 'Kıymetli maden';
+
+  @override
+  String get turHisse => 'Borsa';
+
+  @override
+  String get turDoviz => 'Döviz';
+
+  @override
+  String get turGayrimenkul => 'Gayrimenkul';
+
+  @override
+  String get turArsa => 'Arsa';
+
+  @override
+  String get turKripto => 'Kripto';
+
+  @override
   String get hataBaslik => 'Bir şeyler ters gitti';
 
   @override

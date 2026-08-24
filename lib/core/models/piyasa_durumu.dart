@@ -35,6 +35,17 @@ abstract class PiyasaDurumu with _$PiyasaDurumu {
 
     /// Varlık kimliği -> birim fiyat (ham TL).
     @Default(<String, double>{}) Map<String, double> fiyatlar,
+
+    /// Varlık kimliği -> son [fiyatGecmisiPenceresi] turun REEL fiyatı.
+    ///
+    /// Grafik için var, hesap için değil. Reel tutuluyor çünkü 40 yıllık
+    /// nominal seri hokey sopasına dönüyor ve oyuncunun sorduğu soru
+    /// "enflasyonu yendi mi" — reel seride bu doğrudan okunuyor.
+    ///
+    /// Pencere SINIRLI: sınırsız olsa 480 turluk oyunda kayıt dosyası 12
+    /// varlık × 480 sayıyla gereksiz şişerdi. Kayda yazılıyor çünkü UI'da
+    /// tutulsaydı kayıttan dönen oyuncunun grafiği boş gelirdi.
+    @Default(<String, List<double>>{}) Map<String, List<double>> gecmis,
   }) = _PiyasaDurumu;
 
   factory PiyasaDurumu.fromJson(Map<String, dynamic> json) =>
@@ -73,6 +84,36 @@ abstract class PiyasaDurumu with _$PiyasaDurumu {
   /// Varlığın ham TL birim fiyatı. Tanımsız varlık için 0.
   double fiyat(String varlikId) => fiyatlar[varlikId] ?? 0;
 
+  /// Bir varlığın reel fiyat serisi (eskiden yeniye). Tanımsızsa boş.
+  List<double> seri(String varlikId) => gecmis[varlikId] ?? const [];
+
+  /// Serinin başından sonuna reel değişim oranı (0.25 = %25 arttı).
+  /// Yeterli veri yoksa null.
+  double? reelDegisim(String varlikId, {int tur = 12}) {
+    final s = seri(varlikId);
+    if (s.length < 2) return null;
+    final baslangic = s[s.length - 1 - (tur.clamp(1, s.length - 1))];
+    if (baslangic <= 0) return null;
+    return s.last / baslangic - 1;
+  }
+
+  /// Bu turun reel fiyatlarını geçmişe ekler, pencereyi taşanı atar.
+  ///
+  /// Piyasa simülatörü her tur çağırır. Ayrı metot olması bilinçli:
+  /// geçmiş bir HESAP GİRDİSİ değil, kayıt altına alınan bir gözlem.
+  PiyasaDurumu gecmiseYaz() {
+    if (enflasyonEndeksi <= 0) return this;
+    final yeni = <String, List<double>>{};
+    for (final g in fiyatlar.entries) {
+      final eski = gecmis[g.key] ?? const <double>[];
+      final seri = [...eski, g.value / enflasyonEndeksi];
+      yeni[g.key] = seri.length > fiyatGecmisiPenceresi
+          ? seri.sublist(seri.length - fiyatGecmisiPenceresi)
+          : seri;
+    }
+    return copyWith(gecmis: yeni);
+  }
+
   /// Bir varlığın fiyatını çarpanla değiştirir.
   ///
   /// Olay kartlarının piyasaya müdahale kapısıdır: "arsanıza imar çıktı"
@@ -84,6 +125,9 @@ abstract class PiyasaDurumu with _$PiyasaDurumu {
     return copyWith(fiyatlar: {...fiyatlar, varlikId: mevcut * carpan});
   }
 }
+
+/// Reel fiyat serisinde tutulan tur sayısı (5 yıl).
+const int fiyatGecmisiPenceresi = 60;
 
 /// Sıfır atma eşiği: gösterim endeksi bunu aşınca para reformu yapılır.
 const double paraReformuEsigi = 1000;

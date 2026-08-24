@@ -191,6 +191,7 @@ class OzetEkrani extends ConsumerWidget {
     final girdi = TurGirdisi(
       zaman: ref.read(zamanProvider),
       iseGirTalebi: talepler.iseGirTalebi,
+      emirler: talepler.emirler,
     );
     if (adet == 1) {
       notifier.turuBitir(girdi);

@@ -5,6 +5,7 @@ import '../../l10n/uygulama_metinleri.dart';
 import '../../shared/etiketler.dart';
 import '../kariyer/kariyer_ekrani.dart';
 import '../ozet/ozet_ekrani.dart';
+import '../piyasa/piyasa_ekrani.dart';
 import '../oyun/oyun_saglayicilar.dart';
 
 /// Oyun kabuğu: üstte tarih/durum, altta sekmeler.
@@ -43,6 +44,7 @@ class _AnaKabukDurumu extends ConsumerState<AnaKabuk> {
       body: SafeArea(
         child: switch (_sekme) {
           0 => const OzetEkrani(),
+          1 => const PiyasaEkrani(),
           2 => const KariyerEkrani(),
           _ => Center(child: Text(m.sekmeYakinda)),
         },

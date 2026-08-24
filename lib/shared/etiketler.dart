@@ -5,6 +5,7 @@ import '../core/models/meslek_katalogu.dart';
 import '../core/models/olay.dart';
 import '../core/models/sehir.dart';
 import '../core/models/sektor.dart';
+import '../core/models/varlik.dart';
 import '../l10n/uygulama_metinleri.dart';
 
 /// Enum -> ekran metni köprüsü.
@@ -66,6 +67,50 @@ extension OlayTuruEtiketi on OlayTuru {
         OlayTuru.kriz => m.kartTuruKriz,
         OlayTuru.teklif => m.kartTuruTeklif,
         OlayTuru.hayat => m.kartTuruHayat,
+      };
+}
+
+/// Varlık kimliği -> ekran adı.
+///
+/// Varlıklar VERİ DEĞİL KOD (`piyasaVarliklari` sabiti), o yüzden adları
+/// ARB'de. Tanımsız kimlik gelirse kimliğin kendisi gösteriliyor: yeni
+/// varlık eklenip metni unutulursa ekran boş kalmasın.
+String varlikAdi(UygulamaMetinleri m, String varlikId) => switch (varlikId) {
+      'mevduat' => m.varlikMevduat,
+      'altin' => m.varlikAltin,
+      'doviz' => m.varlikDoviz,
+      'gayrimenkul' => m.varlikGayrimenkul,
+      'arsa' => m.varlikArsa,
+      'kripto' => m.varlikKripto,
+      'hisse_bankacilik' => m.varlikHisseBankacilik,
+      'hisse_sanayi' => m.varlikHisseSanayi,
+      'hisse_teknoloji' => m.varlikHisseTeknoloji,
+      'hisse_gida' => m.varlikHisseGida,
+      'hisse_insaat' => m.varlikHisseInsaat,
+      'hisse_enerji' => m.varlikHisseEnerji,
+      _ => varlikId,
+    };
+
+extension VarlikTuruEtiketi on VarlikTuru {
+  String ad(UygulamaMetinleri m) => switch (this) {
+        VarlikTuru.mevduat => m.turMevduat,
+        VarlikTuru.altin => m.turAltin,
+        VarlikTuru.hisse => m.turHisse,
+        VarlikTuru.doviz => m.turDoviz,
+        VarlikTuru.gayrimenkul => m.turGayrimenkul,
+        VarlikTuru.arsa => m.turArsa,
+        VarlikTuru.kripto => m.turKripto,
+      };
+
+  /// Alım satımda kullanılan birim. "1 adet daire" yerine "1 daire".
+  String birim(UygulamaMetinleri m) => switch (this) {
+        VarlikTuru.altin => m.birimGram,
+        VarlikTuru.hisse => m.birimLot,
+        VarlikTuru.doviz => m.birimDolar,
+        VarlikTuru.gayrimenkul => m.birimDaire,
+        VarlikTuru.arsa => m.birimParsel,
+        VarlikTuru.mevduat => m.birimAdet,
+        VarlikTuru.kripto => m.birimAdet,
       };
 }
 

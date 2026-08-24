@@ -890,6 +890,312 @@ abstract class UygulamaMetinleri {
   /// **'Önce bekleyen kararı ver.'**
   String get kararVermedenTurBitmez;
 
+  /// No description provided for @portfoy.
+  ///
+  /// In tr, this message translates to:
+  /// **'Portföy'**
+  String get portfoy;
+
+  /// No description provided for @portfoyBos.
+  ///
+  /// In tr, this message translates to:
+  /// **'Henüz yatırımın yok. Nakit tutmak enflasyona karşı kaybettirir.'**
+  String get portfoyBos;
+
+  /// No description provided for @portfoyDegeri.
+  ///
+  /// In tr, this message translates to:
+  /// **'Portföy değeri'**
+  String get portfoyDegeri;
+
+  /// No description provided for @reelKarZarar.
+  ///
+  /// In tr, this message translates to:
+  /// **'Reel kâr/zarar'**
+  String get reelKarZarar;
+
+  /// No description provided for @karZarar.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kâr/zarar'**
+  String get karZarar;
+
+  /// No description provided for @maliyet.
+  ///
+  /// In tr, this message translates to:
+  /// **'Maliyet'**
+  String get maliyet;
+
+  /// No description provided for @satista.
+  ///
+  /// In tr, this message translates to:
+  /// **'Satışta'**
+  String get satista;
+
+  /// No description provided for @satisTamamlanir.
+  ///
+  /// In tr, this message translates to:
+  /// **'{tur} tur sonra'**
+  String satisTamamlanir(int tur);
+
+  /// No description provided for @varliklar.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yatırım araçları'**
+  String get varliklar;
+
+  /// No description provided for @birimFiyat.
+  ///
+  /// In tr, this message translates to:
+  /// **'Birim fiyat'**
+  String get birimFiyat;
+
+  /// No description provided for @yillikDegisim.
+  ///
+  /// In tr, this message translates to:
+  /// **'12 ay reel'**
+  String get yillikDegisim;
+
+  /// No description provided for @veriYok.
+  ///
+  /// In tr, this message translates to:
+  /// **'—'**
+  String get veriYok;
+
+  /// No description provided for @al.
+  ///
+  /// In tr, this message translates to:
+  /// **'Al'**
+  String get al;
+
+  /// No description provided for @sat.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sat'**
+  String get sat;
+
+  /// No description provided for @adet.
+  ///
+  /// In tr, this message translates to:
+  /// **'Adet'**
+  String get adet;
+
+  /// No description provided for @tumu.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tümü'**
+  String get tumu;
+
+  /// No description provided for @toplamTutar.
+  ///
+  /// In tr, this message translates to:
+  /// **'Toplam'**
+  String get toplamTutar;
+
+  /// No description provided for @komisyon.
+  ///
+  /// In tr, this message translates to:
+  /// **'Komisyon'**
+  String get komisyon;
+
+  /// No description provided for @emirSiraya.
+  ///
+  /// In tr, this message translates to:
+  /// **'Emir sıraya alındı'**
+  String get emirSiraya;
+
+  /// No description provided for @bekleyenEmirler.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bekleyen emirler'**
+  String get bekleyenEmirler;
+
+  /// No description provided for @emirAlim.
+  ///
+  /// In tr, this message translates to:
+  /// **'{adet} {birim} al'**
+  String emirAlim(String adet, String birim);
+
+  /// No description provided for @emirSatim.
+  ///
+  /// In tr, this message translates to:
+  /// **'{adet} {birim} sat'**
+  String emirSatim(String adet, String birim);
+
+  /// No description provided for @emirNotu.
+  ///
+  /// In tr, this message translates to:
+  /// **'Emirler tur bitince, ekranda gördüğün fiyattan işlenir.'**
+  String get emirNotu;
+
+  /// No description provided for @satisGecikmesi.
+  ///
+  /// In tr, this message translates to:
+  /// **'Satış {tur} tur sürer; fiyat riski sende kalır.'**
+  String satisGecikmesi(int tur);
+
+  /// No description provided for @bolunemez.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tam sayı alınır.'**
+  String get bolunemez;
+
+  /// No description provided for @grafikBasligi.
+  ///
+  /// In tr, this message translates to:
+  /// **'Reel fiyat (son {tur} ay)'**
+  String grafikBasligi(int tur);
+
+  /// No description provided for @birimGram.
+  ///
+  /// In tr, this message translates to:
+  /// **'gram'**
+  String get birimGram;
+
+  /// No description provided for @birimLot.
+  ///
+  /// In tr, this message translates to:
+  /// **'lot'**
+  String get birimLot;
+
+  /// No description provided for @birimAdet.
+  ///
+  /// In tr, this message translates to:
+  /// **'adet'**
+  String get birimAdet;
+
+  /// No description provided for @birimDolar.
+  ///
+  /// In tr, this message translates to:
+  /// **'USD'**
+  String get birimDolar;
+
+  /// No description provided for @birimDaire.
+  ///
+  /// In tr, this message translates to:
+  /// **'daire'**
+  String get birimDaire;
+
+  /// No description provided for @birimParsel.
+  ///
+  /// In tr, this message translates to:
+  /// **'parsel'**
+  String get birimParsel;
+
+  /// No description provided for @varlikMevduat.
+  ///
+  /// In tr, this message translates to:
+  /// **'Mevduat'**
+  String get varlikMevduat;
+
+  /// No description provided for @varlikAltin.
+  ///
+  /// In tr, this message translates to:
+  /// **'Altın'**
+  String get varlikAltin;
+
+  /// No description provided for @varlikDoviz.
+  ///
+  /// In tr, this message translates to:
+  /// **'Döviz'**
+  String get varlikDoviz;
+
+  /// No description provided for @varlikGayrimenkul.
+  ///
+  /// In tr, this message translates to:
+  /// **'Daire'**
+  String get varlikGayrimenkul;
+
+  /// No description provided for @varlikArsa.
+  ///
+  /// In tr, this message translates to:
+  /// **'Arsa'**
+  String get varlikArsa;
+
+  /// No description provided for @varlikKripto.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kripto'**
+  String get varlikKripto;
+
+  /// No description provided for @varlikHisseBankacilik.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bankacılık'**
+  String get varlikHisseBankacilik;
+
+  /// No description provided for @varlikHisseSanayi.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sanayi'**
+  String get varlikHisseSanayi;
+
+  /// No description provided for @varlikHisseTeknoloji.
+  ///
+  /// In tr, this message translates to:
+  /// **'Teknoloji'**
+  String get varlikHisseTeknoloji;
+
+  /// No description provided for @varlikHisseGida.
+  ///
+  /// In tr, this message translates to:
+  /// **'Gıda'**
+  String get varlikHisseGida;
+
+  /// No description provided for @varlikHisseInsaat.
+  ///
+  /// In tr, this message translates to:
+  /// **'İnşaat'**
+  String get varlikHisseInsaat;
+
+  /// No description provided for @varlikHisseEnerji.
+  ///
+  /// In tr, this message translates to:
+  /// **'Enerji'**
+  String get varlikHisseEnerji;
+
+  /// No description provided for @turMevduat.
+  ///
+  /// In tr, this message translates to:
+  /// **'Mevduat'**
+  String get turMevduat;
+
+  /// No description provided for @turAltin.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kıymetli maden'**
+  String get turAltin;
+
+  /// No description provided for @turHisse.
+  ///
+  /// In tr, this message translates to:
+  /// **'Borsa'**
+  String get turHisse;
+
+  /// No description provided for @turDoviz.
+  ///
+  /// In tr, this message translates to:
+  /// **'Döviz'**
+  String get turDoviz;
+
+  /// No description provided for @turGayrimenkul.
+  ///
+  /// In tr, this message translates to:
+  /// **'Gayrimenkul'**
+  String get turGayrimenkul;
+
+  /// No description provided for @turArsa.
+  ///
+  /// In tr, this message translates to:
+  /// **'Arsa'**
+  String get turArsa;
+
+  /// No description provided for @turKripto.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kripto'**
+  String get turKripto;
+
   /// No description provided for @hataBaslik.
   ///
   /// In tr, this message translates to:

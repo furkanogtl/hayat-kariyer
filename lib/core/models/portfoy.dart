@@ -14,6 +14,19 @@ abstract class Pozisyon with _$Pozisyon {
     /// Birim başına ortalama alış maliyeti (ham TL, komisyon dahil).
     /// Kâr/zarar göstergesi buna bakar.
     required double ortalamaMaliyet,
+
+    /// Alım(lar) yapıldığındaki ortalama enflasyon endeksi, tutarla
+    /// ağırlıklı.
+    ///
+    /// Bu alan olmadan REEL kâr/zarar hesaplanamıyor: nominal maliyeti
+    /// bugüne indirgemek için o günün fiyat seviyesi gerekiyor. Yoksa 20
+    /// yıl tutulan mevduat ekranda "+%300 kâr" gösterirdi — oysa reel
+    /// olarak kaybettirmiş olur. Oyunun "nakit tutmak cezalandırılır"
+    /// kuralını ekranda görünmez kılan tam da bu yalandı.
+    ///
+    /// Varsayılan 1.0: alanı olmayan eski kayıtlar oyun başı seviyesinden
+    /// alınmış sayılır.
+    @Default(1.0) double ortalamaEndeks,
   }) = _Pozisyon;
 
   factory Pozisyon.fromJson(Map<String, dynamic> json) =>
@@ -23,8 +36,16 @@ abstract class Pozisyon with _$Pozisyon {
 
   double deger(double birimFiyat) => adet * birimFiyat;
 
-  /// Gerçekleşmemiş kâr/zarar.
+  /// Gerçekleşmemiş kâr/zarar (nominal).
   double karZarar(double birimFiyat) => deger(birimFiyat) - maliyet();
+
+  /// Maliyetin BUGÜNKÜ paraya çevrilmiş hali.
+  double reelMaliyet(double guncelEndeks) =>
+      ortalamaEndeks <= 0 ? maliyet() : maliyet() * guncelEndeks / ortalamaEndeks;
+
+  /// Enflasyondan arındırılmış kâr/zarar. Ekranda gösterilen oran budur.
+  double reelKarZarar(double birimFiyat, double guncelEndeks) =>
+      deger(birimFiyat) - reelMaliyet(guncelEndeks);
 }
 
 /// Henüz sonuçlanmamış satış emri.
@@ -104,6 +125,8 @@ abstract class Portfoy with _$Portfoy {
                 adet: g.value.adet,
                 ortalamaMaliyet:
                     g.value.ortalamaMaliyet < 0 ? 0 : g.value.ortalamaMaliyet,
+                ortalamaEndeks:
+                    g.value.ortalamaEndeks <= 0 ? 1.0 : g.value.ortalamaEndeks,
               ),
         },
         bekleyenSatislar: [

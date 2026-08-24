@@ -17,7 +17,18 @@ mixin _$Pozisyon {
 
  double get adet;/// Birim başına ortalama alış maliyeti (ham TL, komisyon dahil).
 /// Kâr/zarar göstergesi buna bakar.
- double get ortalamaMaliyet;
+ double get ortalamaMaliyet;/// Alım(lar) yapıldığındaki ortalama enflasyon endeksi, tutarla
+/// ağırlıklı.
+///
+/// Bu alan olmadan REEL kâr/zarar hesaplanamıyor: nominal maliyeti
+/// bugüne indirgemek için o günün fiyat seviyesi gerekiyor. Yoksa 20
+/// yıl tutulan mevduat ekranda "+%300 kâr" gösterirdi — oysa reel
+/// olarak kaybettirmiş olur. Oyunun "nakit tutmak cezalandırılır"
+/// kuralını ekranda görünmez kılan tam da bu yalandı.
+///
+/// Varsayılan 1.0: alanı olmayan eski kayıtlar oyun başı seviyesinden
+/// alınmış sayılır.
+ double get ortalamaEndeks;
 /// Create a copy of Pozisyon
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -30,16 +41,16 @@ $PozisyonCopyWith<Pozisyon> get copyWith => _$PozisyonCopyWithImpl<Pozisyon>(thi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Pozisyon&&(identical(other.adet, adet) || other.adet == adet)&&(identical(other.ortalamaMaliyet, ortalamaMaliyet) || other.ortalamaMaliyet == ortalamaMaliyet));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Pozisyon&&(identical(other.adet, adet) || other.adet == adet)&&(identical(other.ortalamaMaliyet, ortalamaMaliyet) || other.ortalamaMaliyet == ortalamaMaliyet)&&(identical(other.ortalamaEndeks, ortalamaEndeks) || other.ortalamaEndeks == ortalamaEndeks));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,adet,ortalamaMaliyet);
+int get hashCode => Object.hash(runtimeType,adet,ortalamaMaliyet,ortalamaEndeks);
 
 @override
 String toString() {
-  return 'Pozisyon(adet: $adet, ortalamaMaliyet: $ortalamaMaliyet)';
+  return 'Pozisyon(adet: $adet, ortalamaMaliyet: $ortalamaMaliyet, ortalamaEndeks: $ortalamaEndeks)';
 }
 
 
@@ -50,7 +61,7 @@ abstract mixin class $PozisyonCopyWith<$Res>  {
   factory $PozisyonCopyWith(Pozisyon value, $Res Function(Pozisyon) _then) = _$PozisyonCopyWithImpl;
 @useResult
 $Res call({
- double adet, double ortalamaMaliyet
+ double adet, double ortalamaMaliyet, double ortalamaEndeks
 });
 
 
@@ -67,10 +78,11 @@ class _$PozisyonCopyWithImpl<$Res>
 
 /// Create a copy of Pozisyon
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? adet = null,Object? ortalamaMaliyet = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? adet = null,Object? ortalamaMaliyet = null,Object? ortalamaEndeks = null,}) {
   return _then(_self.copyWith(
 adet: null == adet ? _self.adet : adet // ignore: cast_nullable_to_non_nullable
 as double,ortalamaMaliyet: null == ortalamaMaliyet ? _self.ortalamaMaliyet : ortalamaMaliyet // ignore: cast_nullable_to_non_nullable
+as double,ortalamaEndeks: null == ortalamaEndeks ? _self.ortalamaEndeks : ortalamaEndeks // ignore: cast_nullable_to_non_nullable
 as double,
   ));
 }
@@ -156,10 +168,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( double adet,  double ortalamaMaliyet)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( double adet,  double ortalamaMaliyet,  double ortalamaEndeks)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Pozisyon() when $default != null:
-return $default(_that.adet,_that.ortalamaMaliyet);case _:
+return $default(_that.adet,_that.ortalamaMaliyet,_that.ortalamaEndeks);case _:
   return orElse();
 
 }
@@ -177,10 +189,10 @@ return $default(_that.adet,_that.ortalamaMaliyet);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( double adet,  double ortalamaMaliyet)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( double adet,  double ortalamaMaliyet,  double ortalamaEndeks)  $default,) {final _that = this;
 switch (_that) {
 case _Pozisyon():
-return $default(_that.adet,_that.ortalamaMaliyet);case _:
+return $default(_that.adet,_that.ortalamaMaliyet,_that.ortalamaEndeks);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -197,10 +209,10 @@ return $default(_that.adet,_that.ortalamaMaliyet);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( double adet,  double ortalamaMaliyet)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( double adet,  double ortalamaMaliyet,  double ortalamaEndeks)?  $default,) {final _that = this;
 switch (_that) {
 case _Pozisyon() when $default != null:
-return $default(_that.adet,_that.ortalamaMaliyet);case _:
+return $default(_that.adet,_that.ortalamaMaliyet,_that.ortalamaEndeks);case _:
   return null;
 
 }
@@ -212,13 +224,25 @@ return $default(_that.adet,_that.ortalamaMaliyet);case _:
 @JsonSerializable()
 
 class _Pozisyon extends Pozisyon {
-  const _Pozisyon({required this.adet, required this.ortalamaMaliyet}): super._();
+  const _Pozisyon({required this.adet, required this.ortalamaMaliyet, this.ortalamaEndeks = 1.0}): super._();
   factory _Pozisyon.fromJson(Map<String, dynamic> json) => _$PozisyonFromJson(json);
 
 @override final  double adet;
 /// Birim başına ortalama alış maliyeti (ham TL, komisyon dahil).
 /// Kâr/zarar göstergesi buna bakar.
 @override final  double ortalamaMaliyet;
+/// Alım(lar) yapıldığındaki ortalama enflasyon endeksi, tutarla
+/// ağırlıklı.
+///
+/// Bu alan olmadan REEL kâr/zarar hesaplanamıyor: nominal maliyeti
+/// bugüne indirgemek için o günün fiyat seviyesi gerekiyor. Yoksa 20
+/// yıl tutulan mevduat ekranda "+%300 kâr" gösterirdi — oysa reel
+/// olarak kaybettirmiş olur. Oyunun "nakit tutmak cezalandırılır"
+/// kuralını ekranda görünmez kılan tam da bu yalandı.
+///
+/// Varsayılan 1.0: alanı olmayan eski kayıtlar oyun başı seviyesinden
+/// alınmış sayılır.
+@override@JsonKey() final  double ortalamaEndeks;
 
 /// Create a copy of Pozisyon
 /// with the given fields replaced by the non-null parameter values.
@@ -233,16 +257,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Pozisyon&&(identical(other.adet, adet) || other.adet == adet)&&(identical(other.ortalamaMaliyet, ortalamaMaliyet) || other.ortalamaMaliyet == ortalamaMaliyet));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Pozisyon&&(identical(other.adet, adet) || other.adet == adet)&&(identical(other.ortalamaMaliyet, ortalamaMaliyet) || other.ortalamaMaliyet == ortalamaMaliyet)&&(identical(other.ortalamaEndeks, ortalamaEndeks) || other.ortalamaEndeks == ortalamaEndeks));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,adet,ortalamaMaliyet);
+int get hashCode => Object.hash(runtimeType,adet,ortalamaMaliyet,ortalamaEndeks);
 
 @override
 String toString() {
-  return 'Pozisyon(adet: $adet, ortalamaMaliyet: $ortalamaMaliyet)';
+  return 'Pozisyon(adet: $adet, ortalamaMaliyet: $ortalamaMaliyet, ortalamaEndeks: $ortalamaEndeks)';
 }
 
 
@@ -253,7 +277,7 @@ abstract mixin class _$PozisyonCopyWith<$Res> implements $PozisyonCopyWith<$Res>
   factory _$PozisyonCopyWith(_Pozisyon value, $Res Function(_Pozisyon) _then) = __$PozisyonCopyWithImpl;
 @override @useResult
 $Res call({
- double adet, double ortalamaMaliyet
+ double adet, double ortalamaMaliyet, double ortalamaEndeks
 });
 
 
@@ -270,10 +294,11 @@ class __$PozisyonCopyWithImpl<$Res>
 
 /// Create a copy of Pozisyon
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? adet = null,Object? ortalamaMaliyet = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? adet = null,Object? ortalamaMaliyet = null,Object? ortalamaEndeks = null,}) {
   return _then(_Pozisyon(
 adet: null == adet ? _self.adet : adet // ignore: cast_nullable_to_non_nullable
 as double,ortalamaMaliyet: null == ortalamaMaliyet ? _self.ortalamaMaliyet : ortalamaMaliyet // ignore: cast_nullable_to_non_nullable
+as double,ortalamaEndeks: null == ortalamaEndeks ? _self.ortalamaEndeks : ortalamaEndeks // ignore: cast_nullable_to_non_nullable
 as double,
   ));
 }

@@ -41,7 +41,8 @@ class PiyasaSimulatoru {
   PiyasaDurumu baslangic({Rejim rejim = Rejim.buyume}) => PiyasaDurumu(
         rejim: rejim,
         fiyatlar: {for (final v in varliklar) v.id: v.baslangicFiyati},
-      );
+        // Grafiğin ilk turdan itibaren bir dayanağı olsun.
+      ).gecmiseYaz();
 
   /// Bir turu işler: rejim geçişi → enflasyon → varlık fiyatları → para reformu.
   PiyasaDurumu turIsle(PiyasaDurumu onceki, RastgeleAkis akis) {
@@ -67,12 +68,16 @@ class PiyasaSimulatoru {
     // Sıfır atma: motorun hesapları değişmez, yalnızca gösterim ölçeği kayar.
     // Fiyatlar ve nakit ham TL olarak tutulmaya devam eder.
     if (sonraki.paraReformuGerekli) {
-      return sonraki.copyWith(
-        paraReformuSayisi: sonraki.paraReformuSayisi + 1,
-        paraReformuYapildi: true,
-      );
+      return sonraki
+          .copyWith(
+            paraReformuSayisi: sonraki.paraReformuSayisi + 1,
+            paraReformuYapildi: true,
+          )
+          .gecmiseYaz();
     }
-    return sonraki;
+    // Geçmiş REEL tutuluyor; para reformu yalnız gösterim ölçeği olduğu
+    // için seriye dokunmuyor.
+    return sonraki.gecmiseYaz();
   }
 
   Rejim _sonrakiRejim(PiyasaDurumu onceki, RastgeleAkis akis) {

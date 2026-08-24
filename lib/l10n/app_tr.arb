@@ -215,6 +215,79 @@
   },
   "kararVermedenTurBitmez": "Önce bekleyen kararı ver.",
 
+  "portfoy": "Portföy",
+  "portfoyBos": "Henüz yatırımın yok. Nakit tutmak enflasyona karşı kaybettirir.",
+  "portfoyDegeri": "Portföy değeri",
+  "reelKarZarar": "Reel kâr/zarar",
+  "karZarar": "Kâr/zarar",
+  "maliyet": "Maliyet",
+  "satista": "Satışta",
+  "satisTamamlanir": "{tur} tur sonra",
+  "@satisTamamlanir": {
+    "placeholders": { "tur": { "type": "int" } }
+  },
+  "varliklar": "Yatırım araçları",
+  "birimFiyat": "Birim fiyat",
+  "yillikDegisim": "12 ay reel",
+  "veriYok": "—",
+  "al": "Al",
+  "sat": "Sat",
+  "adet": "Adet",
+  "tumu": "Tümü",
+  "toplamTutar": "Toplam",
+  "komisyon": "Komisyon",
+  "emirSiraya": "Emir sıraya alındı",
+  "bekleyenEmirler": "Bekleyen emirler",
+  "emirAlim": "{adet} {birim} al",
+  "@emirAlim": {
+    "placeholders": {
+      "adet": { "type": "String" },
+      "birim": { "type": "String" }
+    }
+  },
+  "emirSatim": "{adet} {birim} sat",
+  "@emirSatim": {
+    "placeholders": {
+      "adet": { "type": "String" },
+      "birim": { "type": "String" }
+    }
+  },
+  "emirNotu": "Emirler tur bitince, ekranda gördüğün fiyattan işlenir.",
+  "satisGecikmesi": "Satış {tur} tur sürer; fiyat riski sende kalır.",
+  "@satisGecikmesi": {
+    "placeholders": { "tur": { "type": "int" } }
+  },
+  "bolunemez": "Tam sayı alınır.",
+  "grafikBasligi": "Reel fiyat (son {tur} ay)",
+  "@grafikBasligi": {
+    "placeholders": { "tur": { "type": "int" } }
+  },
+  "birimGram": "gram",
+  "birimLot": "lot",
+  "birimAdet": "adet",
+  "birimDolar": "USD",
+  "birimDaire": "daire",
+  "birimParsel": "parsel",
+  "varlikMevduat": "Mevduat",
+  "varlikAltin": "Altın",
+  "varlikDoviz": "Döviz",
+  "varlikGayrimenkul": "Daire",
+  "varlikArsa": "Arsa",
+  "varlikKripto": "Kripto",
+  "varlikHisseBankacilik": "Bankacılık",
+  "varlikHisseSanayi": "Sanayi",
+  "varlikHisseTeknoloji": "Teknoloji",
+  "varlikHisseGida": "Gıda",
+  "varlikHisseInsaat": "İnşaat",
+  "varlikHisseEnerji": "Enerji",
+  "turMevduat": "Mevduat",
+  "turAltin": "Kıymetli maden",
+  "turHisse": "Borsa",
+  "turDoviz": "Döviz",
+  "turGayrimenkul": "Gayrimenkul",
+  "turArsa": "Arsa",
+  "turKripto": "Kripto",
+
   "hataBaslik": "Bir şeyler ters gitti",
   "yukleniyor": "Yükleniyor…"
 }

@@ -125,7 +125,13 @@ class PortfoyMotoru {
             continue;
           }
           kalanNakit -= toplam;
-          guncel = _pozisyonEkle(guncel, emir.varlikId, emir.adet, toplam);
+          guncel = _pozisyonEkle(
+            guncel,
+            emir.varlikId,
+            emir.adet,
+            toplam,
+            piyasa.enflasyonEndeksi,
+          );
           sonuclar.add(
             EmirSonucu.basarili(
               emir: emir,
@@ -251,14 +257,27 @@ class PortfoyMotoru {
     String varlikId,
     double adet,
     int odenen,
+    double endeks,
   ) {
     final mevcut = portfoy.pozisyonlar[varlikId];
+    final eskiMaliyet = mevcut?.maliyet() ?? 0;
     final yeniAdet = (mevcut?.adet ?? 0) + adet;
-    final yeniMaliyet = ((mevcut?.maliyet() ?? 0) + odenen) / yeniAdet;
+    final yeniMaliyet = (eskiMaliyet + odenen) / yeniAdet;
+    // Endeks TUTARLA ağırlıklı: 1000 TL'lik eski alım ile 100.000 TL'lik
+    // yeni alım ortalamaya eşit katkı yapmamalı.
+    final toplamMaliyet = eskiMaliyet + odenen;
+    final yeniEndeks = toplamMaliyet <= 0
+        ? endeks
+        : (eskiMaliyet * (mevcut?.ortalamaEndeks ?? endeks) + odenen * endeks) /
+            toplamMaliyet;
     return portfoy.copyWith(
       pozisyonlar: {
         ...portfoy.pozisyonlar,
-        varlikId: Pozisyon(adet: yeniAdet, ortalamaMaliyet: yeniMaliyet),
+        varlikId: Pozisyon(
+          adet: yeniAdet,
+          ortalamaMaliyet: yeniMaliyet,
+          ortalamaEndeks: yeniEndeks,
+        ),
       },
     );
   }

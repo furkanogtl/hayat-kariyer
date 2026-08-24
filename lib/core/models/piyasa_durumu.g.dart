@@ -19,6 +19,14 @@ _PiyasaDurumu _$PiyasaDurumuFromJson(Map<String, dynamic> json) =>
             (k, e) => MapEntry(k, (e as num).toDouble()),
           ) ??
           const <String, double>{},
+      gecmis:
+          (json['gecmis'] as Map<String, dynamic>?)?.map(
+            (k, e) => MapEntry(
+              k,
+              (e as List<dynamic>).map((e) => (e as num).toDouble()).toList(),
+            ),
+          ) ??
+          const <String, List<double>>{},
     );
 
 Map<String, dynamic> _$PiyasaDurumuToJson(_PiyasaDurumu instance) =>
@@ -30,6 +38,7 @@ Map<String, dynamic> _$PiyasaDurumuToJson(_PiyasaDurumu instance) =>
       'paraReformuSayisi': instance.paraReformuSayisi,
       'paraReformuYapildi': instance.paraReformuYapildi,
       'fiyatlar': instance.fiyatlar,
+      'gecmis': instance.gecmis,
     };
 
 const _$RejimEnumMap = {
