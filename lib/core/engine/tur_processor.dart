@@ -56,6 +56,9 @@ class TurRaporu {
     required this.kiraGeliri,
     required this.portfoyDegeri,
     required this.netDeger,
+    this.kurulanIsletmeId,
+    this.satisaCikanIsletmeId,
+    this.isletmeHatasi,
     this.emirSonuclari = const [],
     this.tamamlananSatislar = const [],
     this.acilanOlaylar = const [],
@@ -142,6 +145,16 @@ class TurRaporu {
   final List<String> takibeDusenKrediler;
   final List<IsletmeRaporu> isletmeRaporlari;
 
+  /// Bu turda kurulan işletmenin kimliği.
+  final String? kurulanIsletmeId;
+
+  /// Bu turda satışa çıkarılan işletmenin kimliği.
+  final String? satisaCikanIsletmeId;
+
+  /// İşletme komutu reddedildiyse sebebi. Sessizce düşen komut oyuncuya
+  /// "düğme çalışmıyor" gibi görünürdü.
+  final IsletmeHatasi? isletmeHatasi;
+
   /// Bu turda devri tamamlanan işletmeler: id → eline geçen tutar.
   final Map<String, int> devredilenIsletmeler;
 
@@ -165,9 +178,8 @@ class TurSonucu {
 
 /// Oyuncunun bir turda verdiği kararlar.
 ///
-/// Şimdilik yalnızca zaman dağıtımı; olay kararları ve alım-satım emirleri
-/// eklendikçe buraya girecek. Girdinin tek bir nesnede toplanması, "3 ay
-/// atla" gibi toplu ilerlemeyi ve testte senaryo kurmayı kolaylaştırıyor.
+/// Bütün komutlar tek nesnede toplanıyor: "3 ay atla" gibi toplu ilerlemeyi
+/// ve testte senaryo kurmayı bu mümkün kılıyor.
 class TurGirdisi {
   const TurGirdisi({
     required this.zaman,
@@ -175,6 +187,7 @@ class TurGirdisi {
     this.krediTalebi,
     this.bedelliOde = false,
     this.iseGirTalebi,
+    this.isletmeKomutu,
   });
 
   TurGirdisi.varsayilan()
@@ -182,7 +195,8 @@ class TurGirdisi {
         emirler = const [],
         krediTalebi = null,
         bedelliOde = false,
-        iseGirTalebi = null;
+        iseGirTalebi = null,
+        isletmeKomutu = null;
 
   final ZamanDagilimi zaman;
 
@@ -199,6 +213,38 @@ class TurGirdisi {
   /// Girilmek istenen meslek kimliği. Kamu mesleklerinde atama kuyruğuna
   /// alır, diğerlerinde doğrudan işe başlatır.
   final String? iseGirTalebi;
+
+  /// İşletme açma / satışa çıkarma / CEO komutu. Turda EN FAZLA BİR tane:
+  /// işletme kimliği turdan türetildiği için ikisi aynı turda çakışırdı,
+  /// ayrıca bu kararlar tek tek verilmeli.
+  final IsletmeKomutu? isletmeKomutu;
+}
+
+/// İşletme komutları.
+sealed class IsletmeKomutu {
+  const IsletmeKomutu();
+}
+
+/// Yeni işletme kur.
+class IsletmeAc extends IsletmeKomutu {
+  const IsletmeAc(this.tanimId);
+
+  final String tanimId;
+}
+
+/// Satışa çıkar. Devir turlar sürer.
+class IsletmeSat extends IsletmeKomutu {
+  const IsletmeSat(this.isletmeId);
+
+  final String isletmeId;
+}
+
+/// CEO ata ya da görevden al.
+class CeoAyarla extends IsletmeKomutu {
+  const CeoAyarla(this.isletmeId, {required this.ceoVar});
+
+  final String isletmeId;
+  final bool ceoVar;
 }
 
 /// Oyuncunun kredi talebi.
@@ -336,7 +382,60 @@ class TurProcessor {
       }
     }
 
-    // 0c. Emirler — oyuncunun gördüğü fiyatlarla, piyasa oynamadan önce.
+    // 0c. İşletme komutu — emirlerden ÖNCE. Kuruluş bedeli nakitten
+    //     düşüyor; oyuncu aynı turda hem işletme açıp hem o parayla
+    //     yatırım yapamasın.
+    var guncelIsletmeler = durum.isletmeler;
+    var guncelIlgi = durum.ilgi;
+    IsletmeHatasi? isletmeHatasi;
+    String? kurulanIsletmeId;
+    String? satisaCikanIsletmeId;
+    final isletmeMotoruYerel = isletme;
+    final komut = girdi.isletmeKomutu;
+    if (komut != null && isletmeMotoruYerel != null) {
+      switch (komut) {
+        case IsletmeAc(:final tanimId):
+          final sonuc = isletmeMotoruYerel.kur(
+            tanimId: tanimId,
+            oyuncu: oyuncuBaslangic,
+            piyasa: durum.piyasa,
+            tur: sonrakiTur,
+            mevcutlar: guncelIsletmeler,
+          );
+          isletmeHatasi = sonuc.hata;
+          final yeni = sonuc.isletme;
+          if (yeni != null) {
+            guncelIsletmeler = [...guncelIsletmeler, yeni];
+            oyuncuBaslangic = oyuncuBaslangic.nakitDegistir(-sonuc.bedel);
+            kurulanIsletmeId = yeni.id;
+          }
+
+        case IsletmeSat(:final isletmeId):
+          guncelIsletmeler = [
+            for (final i in guncelIsletmeler)
+              if (i.id == isletmeId)
+                isletmeMotoruYerel.satisaCikar(i) ?? i
+              else
+                i,
+          ];
+          satisaCikanIsletmeId = isletmeId;
+
+        case CeoAyarla(:final isletmeId, :final ceoVar):
+          guncelIsletmeler = [
+            for (final i in guncelIsletmeler)
+              if (i.id == isletmeId)
+                isletmeMotoruYerel.ceoAyarla(i, ceoVar: ceoVar) ?? i
+              else
+                i,
+          ];
+      }
+      // İlgi dağılımı işletme listesi değiştikçe geçerliliğini yitirebilir:
+      // satılan işletmenin puanı boşa gider, yeni işletme sıfır puanla
+      // başlar. `duzelt` fazlalığı en çok puan alandan kırpıyor.
+      guncelIlgi = guncelIlgi.duzelt();
+    }
+
+    // 0d. Emirler — oyuncunun gördüğü fiyatlarla, piyasa oynamadan önce.
     final emirSonucu = portfoy.emirleriIsle(
       durum.portfoy,
       oyuncuBaslangic.nakit,
@@ -400,11 +499,11 @@ class TurProcessor {
     // 6. İşletmeler — güncel endeksle. Kariyer maaşı geçen ocağın
     // endeksini kullanır ama işletme cirosu bu ayın fiyatlarıyla oluşur.
     final isletmeMotoru = isletme;
-    final isletmeSonucu = isletmeMotoru == null || durum.isletmeler.isEmpty
+    final isletmeSonucu = isletmeMotoru == null || guncelIsletmeler.isEmpty
         ? null
         : isletmeMotoru.turIsle(
-            isletmeler: durum.isletmeler,
-            ilgi: durum.ilgi,
+            isletmeler: guncelIsletmeler,
+            ilgi: guncelIlgi,
             piyasa: yeniPiyasa,
             tur: sonrakiTur,
             akis: kaynak.akis('isletme', tur: sonrakiTur),
@@ -488,13 +587,20 @@ class TurProcessor {
     if (isletmeSonucu != null) {
       // Devredilen işletmenin ilgi puanı da serbest kalmalı; yoksa oyuncu
       // sattığı işletmeye puan ayırmaya devam eder.
-      var ilgi = durum.ilgi;
+      var ilgi = guncelIlgi;
       for (final id in isletmeSonucu.tamamlananSatislar.keys) {
         ilgi = ilgi.kaldir(id);
       }
       yeniDurum = yeniDurum.copyWith(
         isletmeler: isletmeSonucu.isletmeler,
         ilgi: ilgi,
+      );
+    } else {
+      // Motor çalışmadıysa (ilk işletme bu turda kuruldu ve listede
+      // başka yoktu) komutun sonucu yine de duruma girmeli.
+      yeniDurum = yeniDurum.copyWith(
+        isletmeler: guncelIsletmeler,
+        ilgi: guncelIlgi,
       );
     }
 
@@ -539,6 +645,9 @@ class TurProcessor {
         istenCikarildi: kariyerSonucu.istenCikarildi,
         mezunOldu: kariyerSonucu.mezunOldu,
         askerlikBitti: kariyerSonucu.askerlikBitti,
+        kurulanIsletmeId: kurulanIsletmeId,
+        satisaCikanIsletmeId: satisaCikanIsletmeId,
+        isletmeHatasi: isletmeHatasi,
       ),
     );
   }
@@ -626,6 +735,11 @@ class TurProcessor {
       r.terfiEtti ||
       r.mezunOldu ||
       r.askerlikBitti ||
+      // Kurulan ya da satışa çıkarılan işletme oyuncunun dönüm noktası;
+      // farkında olmadan üstünden geçilmesin.
+      r.kurulanIsletmeId != null ||
+      r.satisaCikanIsletmeId != null ||
+      r.isletmeHatasi != null ||
       r.paraReformuYapildi;
 
   /// Aylık yaşam gideri: şehir çarpanı × güncel fiyat seviyesi.

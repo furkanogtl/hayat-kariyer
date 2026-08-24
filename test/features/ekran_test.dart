@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hayat_kariyer/core/engine/tur_processor.dart';
+import 'package:hayat_kariyer/core/models/sektor.dart';
 import 'package:hayat_kariyer/data/isletme_yukleyici.dart';
 import 'package:hayat_kariyer/data/meslek_yukleyici.dart';
 import 'package:hayat_kariyer/data/olay_yukleyici.dart';
@@ -267,6 +268,41 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(MiniGrafik), findsWidgets);
     expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('işletme sekmesinden işletme açılabiliyor', (tester) async {
+    await ac(tester);
+    await oyunaBasla(tester);
+    final kap = ProviderScope.containerOf(
+      tester.element(find.byType(NavigationBar)),
+    );
+    // Kuruluş bedeli için sermaye ve giriş şartları gerekiyor.
+    final durum = kap.read(oyunProvider)!.durum;
+    kap.read(oyunProvider.notifier).durumaGec(
+          durum.copyWith(
+            oyuncu: durum.oyuncu.copyWith(
+              nakit: 20000000,
+              itibar: 70,
+              baslangicYasi: 30,
+              yetkinlikler: {for (final s in Sektor.values) s: 80},
+            ),
+          ),
+        );
+    await tester.tap(find.byType(NavigationDestination).at(3));
+    await tester.pumpAndSettle();
+
+    // İlk açılabilir işletmenin "İşletme aç" düğmesi.
+    await tester.tap(find.byType(FilledButton).first);
+    await tester.pumpAndSettle();
+    expect(kap.read(taleplerProvider).isletmeKomutu, isA<IsletmeAc>());
+
+    // Özete dön: bekleyen komut atlamayı kapatmalı.
+    await tester.tap(find.byType(NavigationDestination).at(0));
+    await tester.pumpAndSettle();
+    final atlamalar = tester
+        .widgetList<OutlinedButton>(find.byType(OutlinedButton))
+        .where((d) => d.onPressed == null);
+    expect(atlamalar, hasLength(2));
   });
 
   testWidgets('bekleyen talep varken atlama kapalı', (tester) async {

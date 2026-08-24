@@ -92,9 +92,6 @@ class UygulamaMetinleriEn extends UygulamaMetinleri {
   String get sekmeIsletme => 'Business';
 
   @override
-  String get sekmeYakinda => 'This screen is not built yet.';
-
-  @override
   String get nakit => 'Cash';
 
   @override
@@ -609,6 +606,117 @@ class UygulamaMetinleriEn extends UygulamaMetinleri {
 
   @override
   String get turKripto => 'Crypto';
+
+  @override
+  String get isletmelerim => 'My businesses';
+
+  @override
+  String get isletmeYok =>
+      'You own no business yet. A business beats the market but demands attention.';
+
+  @override
+  String get isletmeAc => 'Open a business';
+
+  @override
+  String get acilabilirIsletmeler => 'Businesses you can open';
+
+  @override
+  String get acilabilirYok =>
+      'Nothing you can open right now. Competence, reputation and capital are required.';
+
+  @override
+  String get kurulusBedeli => 'Setup cost';
+
+  @override
+  String get ilgiPuani => 'Attention points';
+
+  @override
+  String get ilgiDagilimi => 'Attention split';
+
+  @override
+  String ilgiKalan(int puan) {
+    return '$puan points unused';
+  }
+
+  @override
+  String get ilgiYeterli => 'Full attention';
+
+  @override
+  String get ilgiKismi => 'Half attention: decline begins';
+
+  @override
+  String get ilgiYok => 'Neglected: the business is collapsing';
+
+  @override
+  String get aylikKar => 'Monthly profit';
+
+  @override
+  String get yillikKar => 'Annual profit';
+
+  @override
+  String get isletmeDegeri => 'Sale value';
+
+  @override
+  String get ceo => 'General manager';
+
+  @override
+  String get ceoAta => 'Hire a general manager';
+
+  @override
+  String get ceoKaldir => 'Dismiss the general manager';
+
+  @override
+  String get ceoAcikla =>
+      'Lowers the attention load; costs a salary, lower profit and embezzlement risk.';
+
+  @override
+  String get ceoMaasi => 'Monthly salary';
+
+  @override
+  String get isletmeSat => 'List for sale';
+
+  @override
+  String isletmeSatista(int tur) {
+    return 'For sale · $tur turns left';
+  }
+
+  @override
+  String isletmeSatUyari(int tur) {
+    return 'The transfer takes $tur turns. A loss-making business sells for scrap value.';
+  }
+
+  @override
+  String get isletmeKrizUyarisi => 'Being neglected: expect a crisis card.';
+
+  @override
+  String get isletmeHataSartlar =>
+      'Competence, reputation or age requirement not met.';
+
+  @override
+  String get isletmeHataNakit => 'Not enough cash for the setup cost.';
+
+  @override
+  String get isletmeHataTanimsiz => 'This business is not recognised.';
+
+  @override
+  String get isletmeKomutBekliyor =>
+      'A business decision is pending this turn.';
+
+  @override
+  String get sart => 'Requirement';
+
+  @override
+  String sartYetkinlikSektor(String sektor, int deger) {
+    return '$sektor competence $deger';
+  }
+
+  @override
+  String sartItibar(int deger) {
+    return 'Reputation $deger';
+  }
+
+  @override
+  String get vazgecKomut => 'Undo the decision';
 
   @override
   String get hataBaslik => 'Something went wrong';

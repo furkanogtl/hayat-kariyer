@@ -1,6 +1,7 @@
 import '../models/ilgi_dagilimi.dart';
 import '../models/isletme.dart';
 import '../models/isletme_katalogu.dart';
+import '../models/oyuncu.dart';
 import '../models/piyasa_durumu.dart';
 import '../rng/rastgele_akis.dart';
 
@@ -48,6 +49,14 @@ class IsletmeAyarlari {
 
   /// Kuruluşta ödenen sermayenin üstüne gelen devir/noter masrafı.
   final double kurulusMasrafi = 0.04;
+}
+
+/// İşletme komutunun reddedilme sebebi. Ekran bunu metne çeviriyor;
+/// sessizce düşen komut oyuncuya "düğme çalışmıyor" gibi görünürdü.
+enum IsletmeHatasi {
+  tanimsizIsletme,
+  sartlarTutmuyor,
+  yetersizNakit,
 }
 
 /// Tek bir işletmenin tur raporu. UI "kafe bu ay ne yaptı" ekranını bundan
@@ -152,6 +161,62 @@ class IsletmeMotoru {
       (tanim.sermaye * ayarlar.enkazOrani).round(),
     );
     return karliDeger > enkaz ? karliDeger : enkaz;
+  }
+
+  /// İşletme kurma sonucu. Hata varsa [isletme] null.
+  ///
+  /// Motor NAKİT DÜŞMEZ, yalnız bedeli bildirir: nakit mahsuplaşması
+  /// `TurProcessor`'ın işi, orada tek yerde yapılıyor.
+  ({Isletme? isletme, int bedel, IsletmeHatasi? hata}) kur({
+    required String tanimId,
+    required Oyuncu oyuncu,
+    required PiyasaDurumu piyasa,
+    required int tur,
+    required Iterable<Isletme> mevcutlar,
+  }) {
+    final tanim = katalog.bul(tanimId);
+    if (tanim == null) {
+      return (isletme: null, bedel: 0, hata: IsletmeHatasi.tanimsizIsletme);
+    }
+    if (!tanim.girisSarti.karsilaniyorMu(oyuncu)) {
+      return (isletme: null, bedel: 0, hata: IsletmeHatasi.sartlarTutmuyor);
+    }
+    final bedel = kurulusBedeli(tanim, piyasa);
+    if (oyuncu.nakit < bedel) {
+      return (isletme: null, bedel: bedel, hata: IsletmeHatasi.yetersizNakit);
+    }
+    return (
+      // Kimlik TURDAN türetiliyor: rastgele kimlik kaydı tekrar
+      // üretilemez hale getirirdi. Turda tek işletme komutu işlendiği
+      // için çakışma olmaz.
+      isletme: Isletme(
+        id: '${tanim.id}_$tur',
+        tanimId: tanim.id,
+        kurulusTuru: tur,
+        statlar: {...tanim.baslangicStatlari},
+        guncelDeger: piyasa.endeksle(tanim.sermaye),
+      ),
+      bedel: bedel,
+      hata: null,
+    );
+  }
+
+  /// İşletmeyi satışa çıkarır. Devir turlar sürer; bedeli devir
+  /// tamamlandığı turdaki değerlemeden ödenir, bugünkünden değil.
+  Isletme? satisaCikar(Isletme isletme) {
+    if (isletme.satista) return null;
+    final tanim = katalog.bul(isletme.tanimId);
+    if (tanim == null) return null;
+    return isletme.copyWith(satisKalanTur: tanim.satisSuresiTur);
+  }
+
+  /// CEO atar ya da görevden alır.
+  ///
+  /// Satıştaki işletmeye CEO atanmaz: devri beklerken yönetim değiştirmek
+  /// yalnız maaş gideri yaratırdı.
+  Isletme? ceoAyarla(Isletme isletme, {required bool ceoVar}) {
+    if (isletme.satista || isletme.ceoVar == ceoVar) return null;
+    return isletme.copyWith(ceoVar: ceoVar);
   }
 
   IsletmeTurSonucu turIsle({

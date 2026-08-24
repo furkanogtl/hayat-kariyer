@@ -207,6 +207,18 @@ class OyunNotifier extends Notifier<Oturum?> {
     );
   }
 
+  /// İşletmeye ayrılan ilgi puanını değiştirir.
+  ///
+  /// Bu bir TALEP DEĞİL, doğrudan durum değişikliği: ilgi dağılımı kayda
+  /// yazılan kalıcı bir ayar, zaman dağılımı gibi tura özel taslak değil.
+  /// Motor her tur `durum.ilgi`yi okuyor.
+  void ilgiAyarla(String isletmeId, int puan) {
+    final oturum = state;
+    if (oturum == null) return;
+    final yeni = oturum.durum.ilgi.ayarla(isletmeId, puan).duzelt();
+    state = oturum.kopya(durum: oturum.durum.copyWith(ilgi: yeni));
+  }
+
   /// Rapor kartı kapatıldığında çağrılır.
   void raporlariTemizle() {
     final oturum = state;
@@ -225,7 +237,11 @@ class OyunNotifier extends Notifier<Oturum?> {
 /// `TurGirdisi` kapısından geçiyor.
 @immutable
 class TurTalepleri {
-  const TurTalepleri({this.iseGirTalebi, this.emirler = const []});
+  const TurTalepleri({
+    this.iseGirTalebi,
+    this.emirler = const [],
+    this.isletmeKomutu,
+  });
 
   /// Girilmek istenen mesleğin kimliği.
   final String? iseGirTalebi;
@@ -237,16 +253,25 @@ class TurTalepleri {
   /// turun tek bir `TurGirdisi` ile işlenmesi.
   final List<Emir> emirler;
 
-  bool get bosMu => iseGirTalebi == null && emirler.isEmpty;
+  /// Turda EN FAZLA BİR işletme komutu: kimlik turdan türetildiği için
+  /// iki kuruluş aynı turda çakışırdı.
+  final IsletmeKomutu? isletmeKomutu;
+
+  bool get bosMu =>
+      iseGirTalebi == null && emirler.isEmpty && isletmeKomutu == null;
 
   TurTalepleri kopya({
     String? iseGirTalebi,
     List<Emir>? emirler,
+    IsletmeKomutu? isletmeKomutu,
     bool isiTemizle = false,
+    bool isletmeyiTemizle = false,
   }) =>
       TurTalepleri(
         iseGirTalebi: isiTemizle ? null : (iseGirTalebi ?? this.iseGirTalebi),
         emirler: emirler ?? this.emirler,
+        isletmeKomutu:
+            isletmeyiTemizle ? null : (isletmeKomutu ?? this.isletmeKomutu),
       );
 }
 
@@ -273,6 +298,11 @@ class TalepNotifier extends Notifier<TurTalepleri> {
   }
 
   void emirleriTemizle() => state = state.kopya(emirler: const []);
+
+  void isletmeKomutu(IsletmeKomutu? komut) => state = state.kopya(
+        isletmeKomutu: komut,
+        isletmeyiTemizle: komut == null,
+      );
 
   void temizle() => state = const TurTalepleri();
 }

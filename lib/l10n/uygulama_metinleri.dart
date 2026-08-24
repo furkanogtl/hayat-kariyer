@@ -260,12 +260,6 @@ abstract class UygulamaMetinleri {
   /// **'İşletme'**
   String get sekmeIsletme;
 
-  /// No description provided for @sekmeYakinda.
-  ///
-  /// In tr, this message translates to:
-  /// **'Bu ekran henüz yazılmadı.'**
-  String get sekmeYakinda;
-
   /// No description provided for @nakit.
   ///
   /// In tr, this message translates to:
@@ -1195,6 +1189,198 @@ abstract class UygulamaMetinleri {
   /// In tr, this message translates to:
   /// **'Kripto'**
   String get turKripto;
+
+  /// No description provided for @isletmelerim.
+  ///
+  /// In tr, this message translates to:
+  /// **'İşletmelerim'**
+  String get isletmelerim;
+
+  /// No description provided for @isletmeYok.
+  ///
+  /// In tr, this message translates to:
+  /// **'Henüz işletmen yok. İşletme borsayı yener ama ilgi ister.'**
+  String get isletmeYok;
+
+  /// No description provided for @isletmeAc.
+  ///
+  /// In tr, this message translates to:
+  /// **'İşletme aç'**
+  String get isletmeAc;
+
+  /// No description provided for @acilabilirIsletmeler.
+  ///
+  /// In tr, this message translates to:
+  /// **'Açabileceğin işletmeler'**
+  String get acilabilirIsletmeler;
+
+  /// No description provided for @acilabilirYok.
+  ///
+  /// In tr, this message translates to:
+  /// **'Şu an açabileceğin işletme yok. Yetkinlik, itibar ve sermaye gerekiyor.'**
+  String get acilabilirYok;
+
+  /// No description provided for @kurulusBedeli.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kuruluş bedeli'**
+  String get kurulusBedeli;
+
+  /// No description provided for @ilgiPuani.
+  ///
+  /// In tr, this message translates to:
+  /// **'İlgi puanı'**
+  String get ilgiPuani;
+
+  /// No description provided for @ilgiDagilimi.
+  ///
+  /// In tr, this message translates to:
+  /// **'İlgi dağılımı'**
+  String get ilgiDagilimi;
+
+  /// No description provided for @ilgiKalan.
+  ///
+  /// In tr, this message translates to:
+  /// **'{puan} puan boşta'**
+  String ilgiKalan(int puan);
+
+  /// No description provided for @ilgiYeterli.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tam ilgi'**
+  String get ilgiYeterli;
+
+  /// No description provided for @ilgiKismi.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yarım ilgi: gerileme başlıyor'**
+  String get ilgiKismi;
+
+  /// No description provided for @ilgiYok.
+  ///
+  /// In tr, this message translates to:
+  /// **'İhmal: işletme çöküyor'**
+  String get ilgiYok;
+
+  /// No description provided for @aylikKar.
+  ///
+  /// In tr, this message translates to:
+  /// **'Aylık kâr'**
+  String get aylikKar;
+
+  /// No description provided for @yillikKar.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yıllık kâr'**
+  String get yillikKar;
+
+  /// No description provided for @isletmeDegeri.
+  ///
+  /// In tr, this message translates to:
+  /// **'Devir değeri'**
+  String get isletmeDegeri;
+
+  /// No description provided for @ceo.
+  ///
+  /// In tr, this message translates to:
+  /// **'Genel müdür'**
+  String get ceo;
+
+  /// No description provided for @ceoAta.
+  ///
+  /// In tr, this message translates to:
+  /// **'Genel müdür ata'**
+  String get ceoAta;
+
+  /// No description provided for @ceoKaldir.
+  ///
+  /// In tr, this message translates to:
+  /// **'Genel müdürü görevden al'**
+  String get ceoKaldir;
+
+  /// No description provided for @ceoAcikla.
+  ///
+  /// In tr, this message translates to:
+  /// **'İlgi yükünü düşürür; bedeli maaş, daha düşük kâr ve zimmet riski.'**
+  String get ceoAcikla;
+
+  /// No description provided for @ceoMaasi.
+  ///
+  /// In tr, this message translates to:
+  /// **'Aylık maaş'**
+  String get ceoMaasi;
+
+  /// No description provided for @isletmeSat.
+  ///
+  /// In tr, this message translates to:
+  /// **'Satışa çıkar'**
+  String get isletmeSat;
+
+  /// No description provided for @isletmeSatista.
+  ///
+  /// In tr, this message translates to:
+  /// **'Satışta · {tur} tur kaldı'**
+  String isletmeSatista(int tur);
+
+  /// No description provided for @isletmeSatUyari.
+  ///
+  /// In tr, this message translates to:
+  /// **'Devir {tur} tur sürer. Zarar eden işletme enkaz bedeline gider.'**
+  String isletmeSatUyari(int tur);
+
+  /// No description provided for @isletmeKrizUyarisi.
+  ///
+  /// In tr, this message translates to:
+  /// **'İhmal ediliyor: kriz kartı beklemelisin.'**
+  String get isletmeKrizUyarisi;
+
+  /// No description provided for @isletmeHataSartlar.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yetkinlik, itibar ya da yaş şartı tutmuyor.'**
+  String get isletmeHataSartlar;
+
+  /// No description provided for @isletmeHataNakit.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kuruluş bedeli için nakit yetmiyor.'**
+  String get isletmeHataNakit;
+
+  /// No description provided for @isletmeHataTanimsiz.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu işletme tanınmıyor.'**
+  String get isletmeHataTanimsiz;
+
+  /// No description provided for @isletmeKomutBekliyor.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu tur bir işletme kararı bekliyor.'**
+  String get isletmeKomutBekliyor;
+
+  /// No description provided for @sart.
+  ///
+  /// In tr, this message translates to:
+  /// **'Şart'**
+  String get sart;
+
+  /// No description provided for @sartYetkinlikSektor.
+  ///
+  /// In tr, this message translates to:
+  /// **'{sektor} yetkinliği {deger}'**
+  String sartYetkinlikSektor(String sektor, int deger);
+
+  /// No description provided for @sartItibar.
+  ///
+  /// In tr, this message translates to:
+  /// **'İtibar {deger}'**
+  String sartItibar(int deger);
+
+  /// No description provided for @vazgecKomut.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kararı geri al'**
+  String get vazgecKomut;
 
   /// No description provided for @hataBaslik.
   ///

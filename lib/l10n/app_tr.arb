@@ -33,7 +33,6 @@
   "sekmePiyasa": "Piyasa",
   "sekmeKariyer": "Kariyer",
   "sekmeIsletme": "İşletme",
-  "sekmeYakinda": "Bu ekran henüz yazılmadı.",
 
   "nakit": "Nakit",
   "netDeger": "Net Değer",
@@ -287,6 +286,57 @@
   "turGayrimenkul": "Gayrimenkul",
   "turArsa": "Arsa",
   "turKripto": "Kripto",
+
+  "isletmelerim": "İşletmelerim",
+  "isletmeYok": "Henüz işletmen yok. İşletme borsayı yener ama ilgi ister.",
+  "isletmeAc": "İşletme aç",
+  "acilabilirIsletmeler": "Açabileceğin işletmeler",
+  "acilabilirYok": "Şu an açabileceğin işletme yok. Yetkinlik, itibar ve sermaye gerekiyor.",
+  "kurulusBedeli": "Kuruluş bedeli",
+  "ilgiPuani": "İlgi puanı",
+  "ilgiDagilimi": "İlgi dağılımı",
+  "ilgiKalan": "{puan} puan boşta",
+  "@ilgiKalan": {
+    "placeholders": { "puan": { "type": "int" } }
+  },
+  "ilgiYeterli": "Tam ilgi",
+  "ilgiKismi": "Yarım ilgi: gerileme başlıyor",
+  "ilgiYok": "İhmal: işletme çöküyor",
+  "aylikKar": "Aylık kâr",
+  "yillikKar": "Yıllık kâr",
+  "isletmeDegeri": "Devir değeri",
+  "ceo": "Genel müdür",
+  "ceoAta": "Genel müdür ata",
+  "ceoKaldir": "Genel müdürü görevden al",
+  "ceoAcikla": "İlgi yükünü düşürür; bedeli maaş, daha düşük kâr ve zimmet riski.",
+  "ceoMaasi": "Aylık maaş",
+  "isletmeSat": "Satışa çıkar",
+  "isletmeSatista": "Satışta · {tur} tur kaldı",
+  "@isletmeSatista": {
+    "placeholders": { "tur": { "type": "int" } }
+  },
+  "isletmeSatUyari": "Devir {tur} tur sürer. Zarar eden işletme enkaz bedeline gider.",
+  "@isletmeSatUyari": {
+    "placeholders": { "tur": { "type": "int" } }
+  },
+  "isletmeKrizUyarisi": "İhmal ediliyor: kriz kartı beklemelisin.",
+  "isletmeHataSartlar": "Yetkinlik, itibar ya da yaş şartı tutmuyor.",
+  "isletmeHataNakit": "Kuruluş bedeli için nakit yetmiyor.",
+  "isletmeHataTanimsiz": "Bu işletme tanınmıyor.",
+  "isletmeKomutBekliyor": "Bu tur bir işletme kararı bekliyor.",
+  "sart": "Şart",
+  "sartYetkinlikSektor": "{sektor} yetkinliği {deger}",
+  "@sartYetkinlikSektor": {
+    "placeholders": {
+      "sektor": { "type": "String" },
+      "deger": { "type": "int" }
+    }
+  },
+  "sartItibar": "İtibar {deger}",
+  "@sartItibar": {
+    "placeholders": { "deger": { "type": "int" } }
+  },
+  "vazgecKomut": "Kararı geri al",
 
   "hataBaslik": "Bir şeyler ters gitti",
   "yukleniyor": "Yükleniyor…"

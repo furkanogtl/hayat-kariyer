@@ -92,9 +92,6 @@ class UygulamaMetinleriTr extends UygulamaMetinleri {
   String get sekmeIsletme => 'İşletme';
 
   @override
-  String get sekmeYakinda => 'Bu ekran henüz yazılmadı.';
-
-  @override
   String get nakit => 'Nakit';
 
   @override
@@ -609,6 +606,116 @@ class UygulamaMetinleriTr extends UygulamaMetinleri {
 
   @override
   String get turKripto => 'Kripto';
+
+  @override
+  String get isletmelerim => 'İşletmelerim';
+
+  @override
+  String get isletmeYok =>
+      'Henüz işletmen yok. İşletme borsayı yener ama ilgi ister.';
+
+  @override
+  String get isletmeAc => 'İşletme aç';
+
+  @override
+  String get acilabilirIsletmeler => 'Açabileceğin işletmeler';
+
+  @override
+  String get acilabilirYok =>
+      'Şu an açabileceğin işletme yok. Yetkinlik, itibar ve sermaye gerekiyor.';
+
+  @override
+  String get kurulusBedeli => 'Kuruluş bedeli';
+
+  @override
+  String get ilgiPuani => 'İlgi puanı';
+
+  @override
+  String get ilgiDagilimi => 'İlgi dağılımı';
+
+  @override
+  String ilgiKalan(int puan) {
+    return '$puan puan boşta';
+  }
+
+  @override
+  String get ilgiYeterli => 'Tam ilgi';
+
+  @override
+  String get ilgiKismi => 'Yarım ilgi: gerileme başlıyor';
+
+  @override
+  String get ilgiYok => 'İhmal: işletme çöküyor';
+
+  @override
+  String get aylikKar => 'Aylık kâr';
+
+  @override
+  String get yillikKar => 'Yıllık kâr';
+
+  @override
+  String get isletmeDegeri => 'Devir değeri';
+
+  @override
+  String get ceo => 'Genel müdür';
+
+  @override
+  String get ceoAta => 'Genel müdür ata';
+
+  @override
+  String get ceoKaldir => 'Genel müdürü görevden al';
+
+  @override
+  String get ceoAcikla =>
+      'İlgi yükünü düşürür; bedeli maaş, daha düşük kâr ve zimmet riski.';
+
+  @override
+  String get ceoMaasi => 'Aylık maaş';
+
+  @override
+  String get isletmeSat => 'Satışa çıkar';
+
+  @override
+  String isletmeSatista(int tur) {
+    return 'Satışta · $tur tur kaldı';
+  }
+
+  @override
+  String isletmeSatUyari(int tur) {
+    return 'Devir $tur tur sürer. Zarar eden işletme enkaz bedeline gider.';
+  }
+
+  @override
+  String get isletmeKrizUyarisi => 'İhmal ediliyor: kriz kartı beklemelisin.';
+
+  @override
+  String get isletmeHataSartlar =>
+      'Yetkinlik, itibar ya da yaş şartı tutmuyor.';
+
+  @override
+  String get isletmeHataNakit => 'Kuruluş bedeli için nakit yetmiyor.';
+
+  @override
+  String get isletmeHataTanimsiz => 'Bu işletme tanınmıyor.';
+
+  @override
+  String get isletmeKomutBekliyor => 'Bu tur bir işletme kararı bekliyor.';
+
+  @override
+  String get sart => 'Şart';
+
+  @override
+  String sartYetkinlikSektor(String sektor, int deger) {
+    return '$sektor yetkinliği $deger';
+  }
+
+  @override
+  String sartItibar(int deger) {
+    return 'İtibar $deger';
+  }
+
+  @override
+  String get vazgecKomut => 'Kararı geri al';
 
   @override
   String get hataBaslik => 'Bir şeyler ters gitti';
