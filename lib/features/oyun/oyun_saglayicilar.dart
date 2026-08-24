@@ -241,6 +241,7 @@ class TurTalepleri {
     this.iseGirTalebi,
     this.emirler = const [],
     this.isletmeKomutu,
+    this.krediTalebi,
   });
 
   /// Girilmek istenen mesleğin kimliği.
@@ -257,21 +258,32 @@ class TurTalepleri {
   /// iki kuruluş aynı turda çakışırdı.
   final IsletmeKomutu? isletmeKomutu;
 
+  /// Bu turda çekilmek istenen kredi. Motor krediyi emirlerden ÖNCE
+  /// işliyor: oyuncu çektiği parayla aynı turda yatırım yapabiliyor.
+  final KrediTalebi? krediTalebi;
+
   bool get bosMu =>
-      iseGirTalebi == null && emirler.isEmpty && isletmeKomutu == null;
+      iseGirTalebi == null &&
+      emirler.isEmpty &&
+      isletmeKomutu == null &&
+      krediTalebi == null;
 
   TurTalepleri kopya({
     String? iseGirTalebi,
     List<Emir>? emirler,
     IsletmeKomutu? isletmeKomutu,
+    KrediTalebi? krediTalebi,
     bool isiTemizle = false,
     bool isletmeyiTemizle = false,
+    bool krediyiTemizle = false,
   }) =>
       TurTalepleri(
         iseGirTalebi: isiTemizle ? null : (iseGirTalebi ?? this.iseGirTalebi),
         emirler: emirler ?? this.emirler,
         isletmeKomutu:
             isletmeyiTemizle ? null : (isletmeKomutu ?? this.isletmeKomutu),
+        krediTalebi:
+            krediyiTemizle ? null : (krediTalebi ?? this.krediTalebi),
       );
 }
 
@@ -302,6 +314,11 @@ class TalepNotifier extends Notifier<TurTalepleri> {
   void isletmeKomutu(IsletmeKomutu? komut) => state = state.kopya(
         isletmeKomutu: komut,
         isletmeyiTemizle: komut == null,
+      );
+
+  void krediTalebi(KrediTalebi? talep) => state = state.kopya(
+        krediTalebi: talep,
+        krediyiTemizle: talep == null,
       );
 
   void temizle() => state = const TurTalepleri();

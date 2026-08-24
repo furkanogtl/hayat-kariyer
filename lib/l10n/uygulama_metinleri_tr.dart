@@ -86,6 +86,9 @@ class UygulamaMetinleriTr extends UygulamaMetinleri {
   String get sekmePiyasa => 'Piyasa';
 
   @override
+  String get sekmeBanka => 'Banka';
+
+  @override
   String get sekmeKariyer => 'Kariyer';
 
   @override
@@ -716,6 +719,100 @@ class UygulamaMetinleriTr extends UygulamaMetinleri {
 
   @override
   String get vazgecKomut => 'Kararı geri al';
+
+  @override
+  String get borclarim => 'Borçlarım';
+
+  @override
+  String get borcYok => 'Borcun yok.';
+
+  @override
+  String get krediTeklifleri => 'Kredi teklifleri';
+
+  @override
+  String get krediYok =>
+      'Şu an sana kredi verilmiyor. Düzenli gelir ve yeterli kredi notu gerekiyor.';
+
+  @override
+  String get borcTuruIhtiyac => 'İhtiyaç kredisi';
+
+  @override
+  String get borcTuruTasit => 'Taşıt kredisi';
+
+  @override
+  String get borcTuruKonut => 'Konut kredisi';
+
+  @override
+  String get borcTuruKartBorcu => 'Kredi kartı borcu';
+
+  @override
+  String get aylikFaiz => 'Aylık faiz';
+
+  @override
+  String get vade => 'Vade';
+
+  @override
+  String vadeAy(int ay) {
+    return '$ay ay';
+  }
+
+  @override
+  String get enYuksekTutar => 'En yüksek tutar';
+
+  @override
+  String get kalanAnapara => 'Kalan anapara';
+
+  @override
+  String kalanTaksit(int sayi) {
+    return '$sayi taksit kaldı';
+  }
+
+  @override
+  String get aylikTaksit => 'Aylık taksit';
+
+  @override
+  String get toplamOdeme => 'Toplam geri ödeme';
+
+  @override
+  String get krediCek => 'Krediyi çek';
+
+  @override
+  String get krediTutari => 'Kredi tutarı';
+
+  @override
+  String krediBekliyor(String tur, String tutar) {
+    return '$tur · $tutar sıraya alındı';
+  }
+
+  @override
+  String get gecikmede => 'Gecikmede';
+
+  @override
+  String get takipte => 'İcra takibinde';
+
+  @override
+  String krediNotuOlcegi(int deger, int tavan) {
+    return '$deger / $tavan';
+  }
+
+  @override
+  String get krediUyari =>
+      'Taksit sabit kalır, enflasyon onu eritir. Ama gelirin keserse borç kalır.';
+
+  @override
+  String get krediHataNot => 'Kredi notun yetersiz.';
+
+  @override
+  String get krediHataLimit => 'İstenen tutar limiti aşıyor.';
+
+  @override
+  String get krediHataTaksit => 'Taksit gelirinin yarısını aşıyor.';
+
+  @override
+  String get krediHataTutar => 'Geçersiz tutar.';
+
+  @override
+  String get krediHataGecikme => 'Geciken borcun varken yeni kredi verilmez.';
 
   @override
   String get hataBaslik => 'Bir şeyler ters gitti';

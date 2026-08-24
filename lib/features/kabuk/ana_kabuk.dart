@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../l10n/uygulama_metinleri.dart';
 import '../../shared/etiketler.dart';
+import '../banka/banka_ekrani.dart';
 import '../isletme/isletme_ekrani.dart';
 import '../kariyer/kariyer_ekrani.dart';
 import '../ozet/ozet_ekrani.dart';
@@ -46,7 +47,8 @@ class _AnaKabukDurumu extends ConsumerState<AnaKabuk> {
         child: switch (_sekme) {
           0 => const OzetEkrani(),
           1 => const PiyasaEkrani(),
-          2 => const KariyerEkrani(),
+          2 => const BankaEkrani(),
+          3 => const KariyerEkrani(),
           _ => const IsletmeEkrani(),
         },
       ),
@@ -62,6 +64,11 @@ class _AnaKabukDurumu extends ConsumerState<AnaKabuk> {
           NavigationDestination(
             icon: const Icon(Icons.show_chart),
             label: m.sekmePiyasa,
+          ),
+          NavigationDestination(
+            icon: const Icon(Icons.account_balance_outlined),
+            selectedIcon: const Icon(Icons.account_balance),
+            label: m.sekmeBanka,
           ),
           NavigationDestination(
             icon: const Icon(Icons.work_outline),

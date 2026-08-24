@@ -351,12 +351,7 @@ class TurProcessor {
         oyuncu: durum.oyuncu,
         borclar: durum.borclar,
         piyasa: durum.piyasa,
-        aylikGelir: kariyer.bordroMaasi(
-          durum.oyuncu,
-          katalog,
-          durum.piyasa,
-          durum.maasEndeksi,
-        ),
+        aylikGelir: bordroGeliri(durum),
         tur: talep.tur,
         anapara: talep.anapara,
         simdikiTur: durum.tur,
@@ -695,6 +690,30 @@ class TurProcessor {
       RastgeleKaynak(durum.anaTohum).akis('olay_deste', tur: durum.tur + 1),
     );
   }
+
+  /// Bankanın oyuncuya bugün sunduğu krediler.
+  ///
+  /// UI'ın ayrıca hesap yapmaması için burada: ekran başka bir gelirle
+  /// teklif üretseydi oyuncu gördüğü tutarı isteyip reddedilirdi.
+  /// `krediCek` ile AYNI gelir tabanını (bordro) kullanıyor.
+  List<KrediTeklifi> krediTeklifleri(OyunDurumu durum) {
+    final motor = borc;
+    if (motor == null) return const [];
+    return motor.teklifler(
+      oyuncu: durum.oyuncu,
+      borclar: durum.borclar,
+      piyasa: durum.piyasa,
+      aylikGelir: bordroGeliri(durum),
+    );
+  }
+
+  /// Bankanın baktığı maaş belgesi tutarı.
+  int bordroGeliri(OyunDurumu durum) => kariyer.bordroMaasi(
+        durum.oyuncu,
+        katalog,
+        durum.piyasa,
+        durum.maasEndeksi,
+      );
 
   /// Oyuncunun kart seçimini uygular.
   ///

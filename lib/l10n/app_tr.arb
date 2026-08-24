@@ -31,6 +31,7 @@
 
   "sekmeOzet": "Özet",
   "sekmePiyasa": "Piyasa",
+  "sekmeBanka": "Banka",
   "sekmeKariyer": "Kariyer",
   "sekmeIsletme": "İşletme",
 
@@ -337,6 +338,53 @@
     "placeholders": { "deger": { "type": "int" } }
   },
   "vazgecKomut": "Kararı geri al",
+
+  "borclarim": "Borçlarım",
+  "borcYok": "Borcun yok.",
+  "krediTeklifleri": "Kredi teklifleri",
+  "krediYok": "Şu an sana kredi verilmiyor. Düzenli gelir ve yeterli kredi notu gerekiyor.",
+  "borcTuruIhtiyac": "İhtiyaç kredisi",
+  "borcTuruTasit": "Taşıt kredisi",
+  "borcTuruKonut": "Konut kredisi",
+  "borcTuruKartBorcu": "Kredi kartı borcu",
+  "aylikFaiz": "Aylık faiz",
+  "vade": "Vade",
+  "vadeAy": "{ay} ay",
+  "@vadeAy": {
+    "placeholders": { "ay": { "type": "int" } }
+  },
+  "enYuksekTutar": "En yüksek tutar",
+  "kalanAnapara": "Kalan anapara",
+  "kalanTaksit": "{sayi} taksit kaldı",
+  "@kalanTaksit": {
+    "placeholders": { "sayi": { "type": "int" } }
+  },
+  "aylikTaksit": "Aylık taksit",
+  "toplamOdeme": "Toplam geri ödeme",
+  "krediCek": "Krediyi çek",
+  "krediTutari": "Kredi tutarı",
+  "krediBekliyor": "{tur} · {tutar} sıraya alındı",
+  "@krediBekliyor": {
+    "placeholders": {
+      "tur": { "type": "String" },
+      "tutar": { "type": "String" }
+    }
+  },
+  "gecikmede": "Gecikmede",
+  "takipte": "İcra takibinde",
+  "krediNotuOlcegi": "{deger} / {tavan}",
+  "@krediNotuOlcegi": {
+    "placeholders": {
+      "deger": { "type": "int" },
+      "tavan": { "type": "int" }
+    }
+  },
+  "krediUyari": "Taksit sabit kalır, enflasyon onu eritir. Ama gelirin keserse borç kalır.",
+  "krediHataNot": "Kredi notun yetersiz.",
+  "krediHataLimit": "İstenen tutar limiti aşıyor.",
+  "krediHataTaksit": "Taksit gelirinin yarısını aşıyor.",
+  "krediHataTutar": "Geçersiz tutar.",
+  "krediHataGecikme": "Geciken borcun varken yeni kredi verilmez.",
 
   "hataBaslik": "Bir şeyler ters gitti",
   "yukleniyor": "Yükleniyor…"

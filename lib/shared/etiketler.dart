@@ -1,4 +1,5 @@
 import '../core/engine/rejim.dart';
+import '../core/models/borc.dart';
 import '../core/models/egitim_seviyesi.dart';
 import '../core/models/kariyer_durumu.dart';
 import '../core/models/meslek_katalogu.dart';
@@ -111,6 +112,15 @@ extension VarlikTuruEtiketi on VarlikTuru {
         VarlikTuru.arsa => m.birimParsel,
         VarlikTuru.mevduat => m.birimAdet,
         VarlikTuru.kripto => m.birimAdet,
+      };
+}
+
+extension BorcTuruEtiketi on BorcTuru {
+  String ad(UygulamaMetinleri m) => switch (this) {
+        BorcTuru.ihtiyac => m.borcTuruIhtiyac,
+        BorcTuru.tasit => m.borcTuruTasit,
+        BorcTuru.konut => m.borcTuruKonut,
+        BorcTuru.kartBorcu => m.borcTuruKartBorcu,
       };
 }
 

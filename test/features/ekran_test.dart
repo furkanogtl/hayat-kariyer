@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hayat_kariyer/core/engine/tur_processor.dart';
+import 'package:hayat_kariyer/core/models/kariyer_durumu.dart';
 import 'package:hayat_kariyer/core/models/sektor.dart';
+import 'package:hayat_kariyer/features/banka/kredi_kagidi.dart';
 import 'package:hayat_kariyer/data/isletme_yukleyici.dart';
 import 'package:hayat_kariyer/data/meslek_yukleyici.dart';
 import 'package:hayat_kariyer/data/olay_yukleyici.dart';
@@ -121,7 +123,7 @@ void main() {
   testWidgets('kariyer ekranından işe girilir', (tester) async {
     await ac(tester);
     await oyunaBasla(tester);
-    await tester.tap(find.byType(NavigationDestination).at(2));
+    await tester.tap(find.byType(NavigationDestination).at(3));
     await tester.pumpAndSettle();
 
     // İlk açık pozisyonun "Bu işe gir" düğmesi.
@@ -288,7 +290,7 @@ void main() {
             ),
           ),
         );
-    await tester.tap(find.byType(NavigationDestination).at(3));
+    await tester.tap(find.byType(NavigationDestination).at(4));
     await tester.pumpAndSettle();
 
     // İlk açılabilir işletmenin "İşletme aç" düğmesi.
@@ -305,10 +307,47 @@ void main() {
     expect(atlamalar, hasLength(2));
   });
 
+  testWidgets('banka ekranından kredi çekilebiliyor', (tester) async {
+    await ac(tester);
+    await oyunaBasla(tester);
+    final kap = ProviderScope.containerOf(
+      tester.element(find.byType(NavigationBar)),
+    );
+    // Stajyerin bordrosu düşük; teklif çıkması için çalışan bir kariyer.
+    final durum = kap.read(oyunProvider)!.durum;
+    kap.read(oyunProvider.notifier).durumaGec(
+          durum.copyWith(
+            oyuncu: durum.oyuncu.copyWith(
+              baslangicYasi: 30,
+              kariyer: const KariyerDurumu.calisan(
+                meslekId: 'yazilim_gelistirici',
+                kademeIndeksi: 2,
+              ),
+            ),
+          ),
+        );
+    await tester.tap(find.byType(NavigationDestination).at(2));
+    await tester.pumpAndSettle();
+
+    // İlk teklif kartına dokun: kredi kâğıdı açılır.
+    await tester.tap(find.byType(InkWell).first);
+    await tester.pumpAndSettle();
+    expect(find.byKey(krediKagidiAnahtari), findsOneWidget);
+
+    await tester.tap(find.descendant(
+      of: find.byKey(krediKagidiAnahtari),
+      matching: find.byType(FilledButton),
+    ));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(krediKagidiAnahtari), findsNothing);
+    expect(kap.read(taleplerProvider).krediTalebi, isNotNull);
+  });
+
   testWidgets('bekleyen talep varken atlama kapalı', (tester) async {
     await ac(tester);
     await oyunaBasla(tester);
-    await tester.tap(find.byType(NavigationDestination).at(2));
+    await tester.tap(find.byType(NavigationDestination).at(3));
     await tester.pumpAndSettle();
     await tester.tap(find.byType(TextButton).first);
     await tester.pumpAndSettle();

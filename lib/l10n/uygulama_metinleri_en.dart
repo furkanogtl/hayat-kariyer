@@ -86,6 +86,9 @@ class UygulamaMetinleriEn extends UygulamaMetinleri {
   String get sekmePiyasa => 'Market';
 
   @override
+  String get sekmeBanka => 'Bank';
+
+  @override
   String get sekmeKariyer => 'Career';
 
   @override
@@ -717,6 +720,100 @@ class UygulamaMetinleriEn extends UygulamaMetinleri {
 
   @override
   String get vazgecKomut => 'Undo the decision';
+
+  @override
+  String get borclarim => 'My debts';
+
+  @override
+  String get borcYok => 'You have no debt.';
+
+  @override
+  String get krediTeklifleri => 'Loan offers';
+
+  @override
+  String get krediYok =>
+      'No loan is available to you now. Steady income and a good credit score are required.';
+
+  @override
+  String get borcTuruIhtiyac => 'Personal loan';
+
+  @override
+  String get borcTuruTasit => 'Car loan';
+
+  @override
+  String get borcTuruKonut => 'Mortgage';
+
+  @override
+  String get borcTuruKartBorcu => 'Credit card debt';
+
+  @override
+  String get aylikFaiz => 'Monthly rate';
+
+  @override
+  String get vade => 'Term';
+
+  @override
+  String vadeAy(int ay) {
+    return '$ay months';
+  }
+
+  @override
+  String get enYuksekTutar => 'Maximum amount';
+
+  @override
+  String get kalanAnapara => 'Remaining principal';
+
+  @override
+  String kalanTaksit(int sayi) {
+    return '$sayi instalments left';
+  }
+
+  @override
+  String get aylikTaksit => 'Monthly instalment';
+
+  @override
+  String get toplamOdeme => 'Total repayment';
+
+  @override
+  String get krediCek => 'Take the loan';
+
+  @override
+  String get krediTutari => 'Loan amount';
+
+  @override
+  String krediBekliyor(String tur, String tutar) {
+    return '$tur · $tutar queued';
+  }
+
+  @override
+  String get gecikmede => 'Overdue';
+
+  @override
+  String get takipte => 'In collection';
+
+  @override
+  String krediNotuOlcegi(int deger, int tavan) {
+    return '$deger / $tavan';
+  }
+
+  @override
+  String get krediUyari =>
+      'The instalment stays fixed while inflation erodes it. But if your income stops, the debt remains.';
+
+  @override
+  String get krediHataNot => 'Your credit score is too low.';
+
+  @override
+  String get krediHataLimit => 'The requested amount exceeds your limit.';
+
+  @override
+  String get krediHataTaksit => 'The instalment would exceed half your income.';
+
+  @override
+  String get krediHataTutar => 'Invalid amount.';
+
+  @override
+  String get krediHataGecikme => 'No new loan while you have an overdue debt.';
 
   @override
   String get hataBaslik => 'Something went wrong';

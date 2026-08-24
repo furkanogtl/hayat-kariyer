@@ -248,6 +248,12 @@ abstract class UygulamaMetinleri {
   /// **'Piyasa'**
   String get sekmePiyasa;
 
+  /// No description provided for @sekmeBanka.
+  ///
+  /// In tr, this message translates to:
+  /// **'Banka'**
+  String get sekmeBanka;
+
   /// No description provided for @sekmeKariyer.
   ///
   /// In tr, this message translates to:
@@ -1381,6 +1387,174 @@ abstract class UygulamaMetinleri {
   /// In tr, this message translates to:
   /// **'Kararı geri al'**
   String get vazgecKomut;
+
+  /// No description provided for @borclarim.
+  ///
+  /// In tr, this message translates to:
+  /// **'Borçlarım'**
+  String get borclarim;
+
+  /// No description provided for @borcYok.
+  ///
+  /// In tr, this message translates to:
+  /// **'Borcun yok.'**
+  String get borcYok;
+
+  /// No description provided for @krediTeklifleri.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kredi teklifleri'**
+  String get krediTeklifleri;
+
+  /// No description provided for @krediYok.
+  ///
+  /// In tr, this message translates to:
+  /// **'Şu an sana kredi verilmiyor. Düzenli gelir ve yeterli kredi notu gerekiyor.'**
+  String get krediYok;
+
+  /// No description provided for @borcTuruIhtiyac.
+  ///
+  /// In tr, this message translates to:
+  /// **'İhtiyaç kredisi'**
+  String get borcTuruIhtiyac;
+
+  /// No description provided for @borcTuruTasit.
+  ///
+  /// In tr, this message translates to:
+  /// **'Taşıt kredisi'**
+  String get borcTuruTasit;
+
+  /// No description provided for @borcTuruKonut.
+  ///
+  /// In tr, this message translates to:
+  /// **'Konut kredisi'**
+  String get borcTuruKonut;
+
+  /// No description provided for @borcTuruKartBorcu.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kredi kartı borcu'**
+  String get borcTuruKartBorcu;
+
+  /// No description provided for @aylikFaiz.
+  ///
+  /// In tr, this message translates to:
+  /// **'Aylık faiz'**
+  String get aylikFaiz;
+
+  /// No description provided for @vade.
+  ///
+  /// In tr, this message translates to:
+  /// **'Vade'**
+  String get vade;
+
+  /// No description provided for @vadeAy.
+  ///
+  /// In tr, this message translates to:
+  /// **'{ay} ay'**
+  String vadeAy(int ay);
+
+  /// No description provided for @enYuksekTutar.
+  ///
+  /// In tr, this message translates to:
+  /// **'En yüksek tutar'**
+  String get enYuksekTutar;
+
+  /// No description provided for @kalanAnapara.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kalan anapara'**
+  String get kalanAnapara;
+
+  /// No description provided for @kalanTaksit.
+  ///
+  /// In tr, this message translates to:
+  /// **'{sayi} taksit kaldı'**
+  String kalanTaksit(int sayi);
+
+  /// No description provided for @aylikTaksit.
+  ///
+  /// In tr, this message translates to:
+  /// **'Aylık taksit'**
+  String get aylikTaksit;
+
+  /// No description provided for @toplamOdeme.
+  ///
+  /// In tr, this message translates to:
+  /// **'Toplam geri ödeme'**
+  String get toplamOdeme;
+
+  /// No description provided for @krediCek.
+  ///
+  /// In tr, this message translates to:
+  /// **'Krediyi çek'**
+  String get krediCek;
+
+  /// No description provided for @krediTutari.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kredi tutarı'**
+  String get krediTutari;
+
+  /// No description provided for @krediBekliyor.
+  ///
+  /// In tr, this message translates to:
+  /// **'{tur} · {tutar} sıraya alındı'**
+  String krediBekliyor(String tur, String tutar);
+
+  /// No description provided for @gecikmede.
+  ///
+  /// In tr, this message translates to:
+  /// **'Gecikmede'**
+  String get gecikmede;
+
+  /// No description provided for @takipte.
+  ///
+  /// In tr, this message translates to:
+  /// **'İcra takibinde'**
+  String get takipte;
+
+  /// No description provided for @krediNotuOlcegi.
+  ///
+  /// In tr, this message translates to:
+  /// **'{deger} / {tavan}'**
+  String krediNotuOlcegi(int deger, int tavan);
+
+  /// No description provided for @krediUyari.
+  ///
+  /// In tr, this message translates to:
+  /// **'Taksit sabit kalır, enflasyon onu eritir. Ama gelirin keserse borç kalır.'**
+  String get krediUyari;
+
+  /// No description provided for @krediHataNot.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kredi notun yetersiz.'**
+  String get krediHataNot;
+
+  /// No description provided for @krediHataLimit.
+  ///
+  /// In tr, this message translates to:
+  /// **'İstenen tutar limiti aşıyor.'**
+  String get krediHataLimit;
+
+  /// No description provided for @krediHataTaksit.
+  ///
+  /// In tr, this message translates to:
+  /// **'Taksit gelirinin yarısını aşıyor.'**
+  String get krediHataTaksit;
+
+  /// No description provided for @krediHataTutar.
+  ///
+  /// In tr, this message translates to:
+  /// **'Geçersiz tutar.'**
+  String get krediHataTutar;
+
+  /// No description provided for @krediHataGecikme.
+  ///
+  /// In tr, this message translates to:
+  /// **'Geciken borcun varken yeni kredi verilmez.'**
+  String get krediHataGecikme;
 
   /// No description provided for @hataBaslik.
   ///
