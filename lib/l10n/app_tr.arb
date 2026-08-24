@@ -1,0 +1,200 @@
+{
+  "@@locale": "tr",
+
+  "uygulamaAdi": "Hayat & Kariyer",
+  "yasalUyari": "Bu bir oyundur, yatırım tavsiyesi değildir.",
+
+  "yeniOyun": "Yeni Oyun",
+  "oyunaBasla": "Hayata Başla",
+  "adinNe": "Adın",
+  "adVarsayilan": "Oyuncu",
+  "cinsiyet": "Cinsiyet",
+  "cinsiyetErkek": "Erkek",
+  "cinsiyetKadin": "Kadın",
+  "sehir": "Şehir",
+  "sehirIstanbul": "İstanbul",
+  "sehirIzmir": "İzmir",
+  "sehirGaziantep": "Gaziantep",
+  "sehirTrabzon": "Trabzon",
+  "sehirKonya": "Konya",
+  "giderCarpani": "Yaşam gideri ×{carpan}",
+  "@giderCarpani": {
+    "placeholders": { "carpan": { "type": "String" } }
+  },
+  "egitim": "Eğitim",
+  "egitimIlkogretim": "İlköğretim",
+  "egitimLise": "Lise",
+  "egitimOnlisans": "Ön lisans",
+  "egitimLisans": "Lisans",
+  "egitimYuksekLisans": "Yüksek lisans",
+  "egitimDoktora": "Doktora",
+
+  "sekmeOzet": "Özet",
+  "sekmePiyasa": "Piyasa",
+  "sekmeKariyer": "Kariyer",
+  "sekmeIsletme": "İşletme",
+  "sekmeYakinda": "Bu ekran henüz yazılmadı.",
+
+  "nakit": "Nakit",
+  "netDeger": "Net Değer",
+  "reelNetDeger": "Reel net değer",
+  "enerji": "Enerji",
+  "mutluluk": "Mutluluk",
+  "itibar": "İtibar",
+  "krediNotu": "Kredi notu",
+  "yetkinlik": "Yetkinlik",
+  "borc": "Borç",
+  "taksitYuku": "Aylık taksit",
+
+  "yasBilgisi": "{yas} yaşında",
+  "@yasBilgisi": {
+    "placeholders": { "yas": { "type": "int" } }
+  },
+  "turBilgisi": "{ay} {yil}. yıl",
+  "@turBilgisi": {
+    "placeholders": {
+      "ay": { "type": "String" },
+      "yil": { "type": "int" }
+    }
+  },
+
+  "ayOcak": "Ocak",
+  "aySubat": "Şubat",
+  "ayMart": "Mart",
+  "ayNisan": "Nisan",
+  "ayMayis": "Mayıs",
+  "ayHaziran": "Haziran",
+  "ayTemmuz": "Temmuz",
+  "ayAgustos": "Ağustos",
+  "ayEylul": "Eylül",
+  "ayEkim": "Ekim",
+  "ayKasim": "Kasım",
+  "ayAralik": "Aralık",
+
+  "rejimBuyume": "Büyüme",
+  "rejimDurgunluk": "Durgunluk",
+  "rejimKriz": "Kriz",
+  "rejimEnflasyon": "Enflasyon",
+  "ekonomi": "Ekonomi",
+  "rejim": "Dönem",
+  "yillikEnflasyon": "Yıllık enflasyon",
+  "alimGucuKaybi": "Maaşın {oran} geride",
+  "@alimGucuKaybi": {
+    "placeholders": { "oran": { "type": "String" } }
+  },
+
+  "durumOgrenci": "Öğrenci",
+  "durumIssiz": "İşsiz",
+  "durumAtamaBekliyor": "Atama bekliyor",
+  "durumAskerlik": "Askerlik",
+  "durumBedelli": "Bedelli askerlik",
+  "durumEmekli": "Emekli",
+  "kalanTur": "{tur} tur kaldı",
+  "@kalanTur": {
+    "placeholders": { "tur": { "type": "int" } }
+  },
+
+  "zamanDagilimi": "Bu ay ne yapacaksın?",
+  "zamanCalisma": "Çalış",
+  "zamanEgitim": "Eğitim",
+  "zamanNetwork": "Network",
+  "zamanDinlenme": "Dinlen",
+  "kalanPuan": "{puan} puan boşta",
+  "@kalanPuan": {
+    "placeholders": { "puan": { "type": "int" } }
+  },
+  "dagilimDengeli": "Dengeli",
+  "dagilimTamMesai": "Tam mesai",
+
+  "turuBitir": "Turu Bitir",
+  "ucAyAtla": "3 ay atla",
+  "birYilAtla": "1 yıl atla",
+  "turRaporu": "{ay} raporu",
+  "@turRaporu": {
+    "placeholders": { "ay": { "type": "String" } }
+  },
+  "atlananTur": "{sayi} ay geçildi",
+  "@atlananTur": {
+    "placeholders": { "sayi": { "type": "int" } }
+  },
+  "raporGelir": "Gelir",
+  "raporYasamGideri": "Yaşam gideri",
+  "raporTaksit": "Kredi taksiti",
+  "raporFaiz": "Eksi bakiye faizi",
+  "raporKira": "Kira ve temettü",
+  "raporIsletme": "İşletme kârı",
+  "raporNakitDegisimi": "Aylık bakiye",
+  "kapat": "Kapat",
+  "devam": "Devam",
+
+  "olayTerfi": "Terfi ettin: {kademe}",
+  "@olayTerfi": {
+    "placeholders": { "kademe": { "type": "String" } }
+  },
+  "olayIstenCikarildi": "İşten çıkarıldın.",
+  "olayMezunOldu": "Mezun oldun.",
+  "olayAskerlikBitti": "Terhis oldun.",
+  "olayCelpGeldi": "Askerlik tebligatın geldi.",
+  "olayAskereAlindi": "Askere alındın.",
+  "olayAtamasiCikti": "Ataman çıktı.",
+  "olayMaasZammi": "Maaşlara zam yapıldı.",
+  "olayParaReformu": "Paradan üç sıfır atıldı.",
+  "olayRejimDegisti": "Ekonomi {rejim} dönemine girdi.",
+  "@olayRejimDegisti": {
+    "placeholders": { "rejim": { "type": "String" } }
+  },
+  "olayIsletmeKrizi": "{isletme} ilgi bekliyor.",
+  "@olayIsletmeKrizi": {
+    "placeholders": { "isletme": { "type": "String" } }
+  },
+
+  "acikPozisyonlar": "Girebileceğin işler",
+  "uygunIsYok": "Şu an girebileceğin bir iş yok. Eğitim ve yetkinlik kapıları açıldıkça burası dolar.",
+  "basvur": "Bu işe gir",
+  "vazgec": "Vazgeç",
+  "basvuruYapildi": "{meslek} işine başladın sayılır: turu bitirince göreve başlıyorsun.",
+  "@basvuruYapildi": {
+    "placeholders": { "meslek": { "type": "String" } }
+  },
+  "baslangicMaasi": "Başlangıç {tutar}",
+  "@baslangicMaasi": {
+    "placeholders": { "tutar": { "type": "String" } }
+  },
+  "kademeSayisi": "{sayi} kademe",
+  "@kademeSayisi": {
+    "placeholders": { "sayi": { "type": "int" } }
+  },
+  "kariyerMerdiveni": "Kariyer merdiveni",
+  "yetkinlikler": "Yetkinlikler",
+  "sektorSaglik": "Sağlık",
+  "sektorTeknoloji": "Teknoloji",
+  "sektorHukukKamu": "Hukuk ve kamu",
+  "sektorFinans": "Finans",
+  "sektorTicaret": "Ticaret",
+  "sektorEsnaf": "Esnaf",
+  "sektorMedya": "Medya",
+  "sektorLojistik": "Lojistik",
+  "sektorTarim": "Tarım",
+  "sektorTurizm": "Turizm",
+  "sartEgitim": "En az {seviye}",
+  "@sartEgitim": {
+    "placeholders": { "seviye": { "type": "String" } }
+  },
+  "sartYetkinlik": "{sektor} yetkinliği {deger}",
+  "@sartYetkinlik": {
+    "placeholders": {
+      "sektor": { "type": "String" },
+      "deger": { "type": "int" }
+    }
+  },
+  "sartYas": "{enAz}-{enCok} yaş",
+  "@sartYas": {
+    "placeholders": {
+      "enAz": { "type": "int" },
+      "enCok": { "type": "int" }
+    }
+  },
+
+  "hataBaslik": "Bir şeyler ters gitti",
+  "yukleniyor": "Yükleniyor…"
+}

@@ -49,3 +49,6 @@ android/build/
 
 # Proje anayasasi ve calisma notlari - git disinda tutuluyor
 CLAUDE.md
+
+# Kotlin derleyici onbellegi (Gradle uretir)
+android/.kotlin/
