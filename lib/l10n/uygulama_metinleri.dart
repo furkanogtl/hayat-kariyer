@@ -1556,6 +1556,114 @@ abstract class UygulamaMetinleri {
   /// **'Geciken borcun varken yeni kredi verilmez.'**
   String get krediHataGecikme;
 
+  /// No description provided for @oyunSonu.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hayatın özeti'**
+  String get oyunSonu;
+
+  /// No description provided for @oyunSonuAltBaslik.
+  ///
+  /// In tr, this message translates to:
+  /// **'{yas} yaşındasın. İşte geriye kalan.'**
+  String oyunSonuAltBaslik(int yas);
+
+  /// No description provided for @skorNetDeger.
+  ///
+  /// In tr, this message translates to:
+  /// **'Reel net değer'**
+  String get skorNetDeger;
+
+  /// No description provided for @skorZirve.
+  ///
+  /// In tr, this message translates to:
+  /// **'En yüksek nokta'**
+  String get skorZirve;
+
+  /// No description provided for @skorKariyer.
+  ///
+  /// In tr, this message translates to:
+  /// **'Son görev'**
+  String get skorKariyer;
+
+  /// No description provided for @skorIsletme.
+  ///
+  /// In tr, this message translates to:
+  /// **'İşletme'**
+  String get skorIsletme;
+
+  /// No description provided for @skorIsletmeSayisi.
+  ///
+  /// In tr, this message translates to:
+  /// **'{sayi} işletme'**
+  String skorIsletmeSayisi(int sayi);
+
+  /// No description provided for @skorIflas.
+  ///
+  /// In tr, this message translates to:
+  /// **'Haciz'**
+  String get skorIflas;
+
+  /// No description provided for @skorIflasSayisi.
+  ///
+  /// In tr, this message translates to:
+  /// **'{sayi} kez'**
+  String skorIflasSayisi(int sayi);
+
+  /// No description provided for @skorTohum.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tohum'**
+  String get skorTohum;
+
+  /// No description provided for @yeniOyunaBasla.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yeni hayat'**
+  String get yeniOyunaBasla;
+
+  /// No description provided for @unvanSerefliIflas.
+  ///
+  /// In tr, this message translates to:
+  /// **'Dipten Dönen'**
+  String get unvanSerefliIflas;
+
+  /// No description provided for @unvanZorGecen.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ucu Ucuna'**
+  String get unvanZorGecen;
+
+  /// No description provided for @unvanOrta.
+  ///
+  /// In tr, this message translates to:
+  /// **'Orta Halli'**
+  String get unvanOrta;
+
+  /// No description provided for @unvanRahat.
+  ///
+  /// In tr, this message translates to:
+  /// **'Rahat Emekli'**
+  String get unvanRahat;
+
+  /// No description provided for @unvanZengin.
+  ///
+  /// In tr, this message translates to:
+  /// **'Servet Sahibi'**
+  String get unvanZengin;
+
+  /// No description provided for @unvanImparator.
+  ///
+  /// In tr, this message translates to:
+  /// **'İmparator'**
+  String get unvanImparator;
+
+  /// No description provided for @unvanAcikla.
+  ///
+  /// In tr, this message translates to:
+  /// **'40 yılın sonunda ulaştığın yer.'**
+  String get unvanAcikla;
+
   /// No description provided for @hataBaslik.
   ///
   /// In tr, this message translates to:

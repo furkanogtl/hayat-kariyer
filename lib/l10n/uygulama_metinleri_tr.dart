@@ -815,6 +815,66 @@ class UygulamaMetinleriTr extends UygulamaMetinleri {
   String get krediHataGecikme => 'Geciken borcun varken yeni kredi verilmez.';
 
   @override
+  String get oyunSonu => 'Hayatın özeti';
+
+  @override
+  String oyunSonuAltBaslik(int yas) {
+    return '$yas yaşındasın. İşte geriye kalan.';
+  }
+
+  @override
+  String get skorNetDeger => 'Reel net değer';
+
+  @override
+  String get skorZirve => 'En yüksek nokta';
+
+  @override
+  String get skorKariyer => 'Son görev';
+
+  @override
+  String get skorIsletme => 'İşletme';
+
+  @override
+  String skorIsletmeSayisi(int sayi) {
+    return '$sayi işletme';
+  }
+
+  @override
+  String get skorIflas => 'Haciz';
+
+  @override
+  String skorIflasSayisi(int sayi) {
+    return '$sayi kez';
+  }
+
+  @override
+  String get skorTohum => 'Tohum';
+
+  @override
+  String get yeniOyunaBasla => 'Yeni hayat';
+
+  @override
+  String get unvanSerefliIflas => 'Dipten Dönen';
+
+  @override
+  String get unvanZorGecen => 'Ucu Ucuna';
+
+  @override
+  String get unvanOrta => 'Orta Halli';
+
+  @override
+  String get unvanRahat => 'Rahat Emekli';
+
+  @override
+  String get unvanZengin => 'Servet Sahibi';
+
+  @override
+  String get unvanImparator => 'İmparator';
+
+  @override
+  String get unvanAcikla => '40 yılın sonunda ulaştığın yer.';
+
+  @override
   String get hataBaslik => 'Bir şeyler ters gitti';
 
   @override

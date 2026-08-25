@@ -35,6 +35,15 @@ class DipAyarlari {
   /// `BorcAyarlari.takipEsigi` (3) takibi başlatıyor; bu onun iki katı.
   final int iflasEsigi = 6;
 
+  /// Eksi bakiye aylık yaşam giderinin bu katını aşarsa da haciz gelir.
+  ///
+  /// Kredisi olmayan oyuncu için de bir dip gerekiyor: eksi bakiye faizi
+  /// (%4/ay) hiçbir borç nesnesine bağlı olmadan sonsuza kadar
+  /// bileşikleniyordu. Ölçüldü: 37 işsiz yılda -139,8M reel — okunabilir
+  /// bir kayıp değil, tanımsız bir durum. Bu eşik onu kapatıyor:
+  /// bir yıllık gideri aşan açık icraya düşer.
+  final int nakitIflasiAy = 12;
+
   /// Hacizde varlıklar bu iskontoyla elden çıkar. İcra satışı piyasa
   /// fiyatından olmaz.
   final double hacizIskontosu = 0.20;
@@ -86,9 +95,24 @@ class DipMotoru {
 
   /// Haciz zamanı geldi mi.
   ///
-  /// Tek bir borcun eşiği aşması yeter: icra tek alacaklıyla başlar.
-  bool iflasGerekiyorMu(Iterable<Borc> borclar) =>
-      borclar.any((b) => b.gecikmeTuru >= ayarlar.iflasEsigi);
+  /// İki yol var:
+  ///   - Bir borç eşiği aştı (icra tek alacaklıyla başlar), ya da
+  ///   - Eksi bakiye bir yıllık yaşam giderini geçti.
+  ///
+  /// İkincisi olmadan kredisiz oyuncunun dibi yoktu: hiçbir borç nesnesi
+  /// olmadığı için haciz hiç tetiklenmiyor, eksi bakiye sonsuza kadar
+  /// büyüyordu.
+  bool iflasGerekiyorMu(
+    Iterable<Borc> borclar, {
+    int nakit = 0,
+    int aylikGider = 0,
+  }) =>
+      borclar.any((b) => b.gecikmeTuru >= ayarlar.iflasEsigi) ||
+      nakitIflasiGerekiyorMu(nakit, aylikGider);
+
+  /// Eksi bakiye tek başına haczi tetikliyor mu.
+  bool nakitIflasiGerekiyorMu(int nakit, int aylikGider) =>
+      aylikGider > 0 && nakit < -(aylikGider * ayarlar.nakitIflasiAy);
 
   /// Haczi uygular: portföy elden çıkar, kalan borç silinir.
   ///

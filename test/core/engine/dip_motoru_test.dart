@@ -89,18 +89,12 @@ void main() {
     });
 
     test('gider tabanı düşüşü YAVAŞLATIYOR ama durdurmuyor', () {
-      // Yumuşak dip: oyuncu yine batar, sadece daha yavaş. Sert dip
-      // (haciz) ayrı mekanik.
-      var durum = baslat(nakit: -1000000).copyWith(
-        oyuncu: baslat().oyuncu.copyWith(
-              nakit: -1000000,
-              kariyer: const KariyerDurumu.issiz(),
-            ),
-      );
-      for (var t = 0; t < 24; t++) {
-        durum = isle(durum).durum;
-      }
-      expect(durum.oyuncu.nakit, lessThan(-1000000));
+      // Yumuşak dip tek başına yeterli değil: oyuncu yine batıyor,
+      // sadece daha yavaş. Durduran şey sert dip (haciz).
+      final tam = const DipMotoru().yasamGideri(100000, 5000000);
+      final kisitli = const DipMotoru().yasamGideri(100000, -1);
+      expect(kisitli, lessThan(tam));
+      expect(kisitli, greaterThan(0));
     });
   });
 
@@ -178,6 +172,31 @@ void main() {
         durum = isle(durum).durum;
       }
       expect(durum.krediYasakli, isFalse);
+    });
+
+    test('borcu olmayan oyuncu için de dip var', () {
+      // Eksi bakiye faizi hiçbir borç nesnesine bağlı değil; bu eşik
+      // olmadan kredisiz oyuncu sonsuza kadar eksiye gidiyordu.
+      // Ölçüldü: 37 işsiz yılda -139,8M reel.
+      expect(dip.nakitIflasiGerekiyorMu(-100000, 30000), isFalse);
+      expect(dip.nakitIflasiGerekiyorMu(-400000, 30000), isTrue);
+      // Gider bilinmiyorsa tetiklenmiyor.
+      expect(dip.nakitIflasiGerekiyorMu(-99999999, 0), isFalse);
+    });
+
+    test('gelirsiz oyuncunun bakiyesi sınırsız eksiye gitmiyor', () {
+      var durum = baslat(nakit: 0).copyWith(
+        oyuncu: baslat().oyuncu.copyWith(
+              kariyer: const KariyerDurumu.issiz(),
+            ),
+      );
+      for (var t = 0; t < 120; t++) {
+        durum = isle(durum).durum;
+      }
+      expect(durum.iflasSayisi, greaterThan(0));
+      // Haciz hesabı sıfırladığı için bakiye bir yıllık giderin birkaç
+      // katından öteye gidemiyor.
+      expect(durum.oyuncu.nakit, greaterThan(-30000000));
     });
 
     test('haciz tur atlamayı kesiyor', () {

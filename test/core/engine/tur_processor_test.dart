@@ -205,7 +205,12 @@ void main() {
         d = tek(d).durum;
       }
       expect(d.oyuncu.krediNotu, Oyuncu.krediNotuTaban);
-      expect(d.oyuncu.nakit, lessThan(-200000));
+      // Nakit ARTIK SINIRSIZ EKSİYE GİTMİYOR: eksi bakiye bir yıllık
+      // gideri aşınca haciz geliyor, hesap sıfırlanıyor ve sayaç yeniden
+      // başlıyor. Dip sisteminden önce burada -200.000'in çok altına
+      // inen bir bakiye vardı.
+      expect(d.iflasSayisi, greaterThan(0));
+      expect(d.oyunBitti || d.oyuncu.nakit > -50000000, isTrue);
     });
   });
 

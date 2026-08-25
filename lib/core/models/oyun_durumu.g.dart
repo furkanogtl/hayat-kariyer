@@ -40,6 +40,7 @@ _OyunDurumu _$OyunDurumuFromJson(Map<String, dynamic> json) => _OyunDurumu(
   krediYasagiTuru: (json['krediYasagiTuru'] as num?)?.toInt() ?? 0,
   iflasSayisi: (json['iflasSayisi'] as num?)?.toInt() ?? 0,
   oyunBitti: json['oyunBitti'] as bool? ?? false,
+  zirveNetDeger: (json['zirveNetDeger'] as num?)?.toInt() ?? 0,
   kayitSurumu: (json['kayitSurumu'] as num?)?.toInt() ?? 1,
 );
 
@@ -58,5 +59,6 @@ Map<String, dynamic> _$OyunDurumuToJson(_OyunDurumu instance) =>
       'krediYasagiTuru': instance.krediYasagiTuru,
       'iflasSayisi': instance.iflasSayisi,
       'oyunBitti': instance.oyunBitti,
+      'zirveNetDeger': instance.zirveNetDeger,
       'kayitSurumu': instance.kayitSurumu,
     };

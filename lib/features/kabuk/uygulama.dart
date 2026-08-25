@@ -6,6 +6,7 @@ import '../../l10n/uygulama_metinleri.dart';
 import '../../shared/tema.dart';
 import '../baslangic/yeni_oyun_ekrani.dart';
 import '../oyun/oyun_saglayicilar.dart';
+import '../skor/skor_ekrani.dart';
 import 'ana_kabuk.dart';
 
 class HayatKariyerUygulamasi extends StatelessWidget {
@@ -74,8 +75,11 @@ class _Giris extends ConsumerWidget {
           ),
           data: (_) {
             final oturum = ref.watch(oyunProvider);
-            return oturum == null
-                ? const YeniOyunEkrani()
+            if (oturum == null) return const YeniOyunEkrani();
+            // Oyun bitince kabuk yerine skor ekranı; sekmelere dönüş yok,
+            // hayat bitti.
+            return oturum.durum.oyunBitti
+                ? const SkorEkrani()
                 : const AnaKabuk();
           },
         );

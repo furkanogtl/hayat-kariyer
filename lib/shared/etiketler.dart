@@ -1,4 +1,5 @@
 import '../core/engine/rejim.dart';
+import '../core/engine/skor.dart';
 import '../core/models/borc.dart';
 import '../core/models/egitim_seviyesi.dart';
 import '../core/models/kariyer_durumu.dart';
@@ -121,6 +122,17 @@ extension BorcTuruEtiketi on BorcTuru {
         BorcTuru.tasit => m.borcTuruTasit,
         BorcTuru.konut => m.borcTuruKonut,
         BorcTuru.kartBorcu => m.borcTuruKartBorcu,
+      };
+}
+
+extension UnvanEtiketi on OyunSonuUnvani {
+  String ad(UygulamaMetinleri m) => switch (this) {
+        OyunSonuUnvani.ucuUcuna => m.unvanZorGecen,
+        OyunSonuUnvani.dipteDonen => m.unvanSerefliIflas,
+        OyunSonuUnvani.orta => m.unvanOrta,
+        OyunSonuUnvani.rahat => m.unvanRahat,
+        OyunSonuUnvani.zengin => m.unvanZengin,
+        OyunSonuUnvani.imparator => m.unvanImparator,
       };
 }
 

@@ -613,7 +613,11 @@ class TurProcessor {
     var hacizGeliri = 0;
     var silinenBorc = 0;
     var krediYasagi = durum.krediYasagiTuru > 0 ? durum.krediYasagiTuru - 1 : 0;
-    if (dip.iflasGerekiyorMu(iflasBorclari)) {
+    if (dip.iflasGerekiyorMu(
+      iflasBorclari,
+      nakit: oyuncu.nakit,
+      aylikGider: tamGider,
+    )) {
       final sonuc = dip.hacizUygula(
         portfoy: iflasPortfoy,
         borclar: iflasBorclari,
@@ -642,6 +646,11 @@ class TurProcessor {
       oyunBitti: dip.oyunBitti(oyuncu.yas),
     );
     yeniDurum = yeniDurum.copyWith(borclar: iflasBorclari);
+    // Zirve borçlar yazıldıktan SONRA ölçülüyor; net değer borcu içeriyor.
+    final reel = yeniDurum.reelNetDeger;
+    if (reel > yeniDurum.zirveNetDeger) {
+      yeniDurum = yeniDurum.copyWith(zirveNetDeger: reel);
+    }
     if (isletmeSonucu != null) {
       // Devredilen işletmenin ilgi puanı da serbest kalmalı; yoksa oyuncu
       // sattığı işletmeye puan ayırmaya devam eder.

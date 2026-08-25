@@ -61,6 +61,13 @@ abstract class OyunDurumu with _$OyunDurumu {
     /// Oyun sona erdi mi (yaş sınırı). Skor ekranı buna bakıyor.
     @Default(false) bool oyunBitti,
 
+    /// Oyun boyunca görülen en yüksek REEL net değer.
+    ///
+    /// Skor ekranı bunu gösteriyor: "bir ara 200M'ye ulaşmıştın" bilgisi,
+    /// yalnız son rakamı görmekten çok daha anlamlı. Reel tutuluyor ki
+    /// farklı turlardaki tepeler karşılaştırılabilsin.
+    @Default(0) int zirveNetDeger,
+
     /// Kayıt biçimi sürümü. İleride şema değişirse göç buradan yönetilir.
     @Default(1) int kayitSurumu,
   }) = _OyunDurumu;

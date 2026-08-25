@@ -816,6 +816,66 @@ class UygulamaMetinleriEn extends UygulamaMetinleri {
   String get krediHataGecikme => 'No new loan while you have an overdue debt.';
 
   @override
+  String get oyunSonu => 'Your life in summary';
+
+  @override
+  String oyunSonuAltBaslik(int yas) {
+    return 'You are $yas. Here is what remains.';
+  }
+
+  @override
+  String get skorNetDeger => 'Real net worth';
+
+  @override
+  String get skorZirve => 'Peak';
+
+  @override
+  String get skorKariyer => 'Last position';
+
+  @override
+  String get skorIsletme => 'Business';
+
+  @override
+  String skorIsletmeSayisi(int sayi) {
+    return '$sayi businesses';
+  }
+
+  @override
+  String get skorIflas => 'Foreclosure';
+
+  @override
+  String skorIflasSayisi(int sayi) {
+    return '$sayi times';
+  }
+
+  @override
+  String get skorTohum => 'Seed';
+
+  @override
+  String get yeniOyunaBasla => 'New life';
+
+  @override
+  String get unvanSerefliIflas => 'Back From The Bottom';
+
+  @override
+  String get unvanZorGecen => 'Just Scraping By';
+
+  @override
+  String get unvanOrta => 'Comfortable';
+
+  @override
+  String get unvanRahat => 'Well Retired';
+
+  @override
+  String get unvanZengin => 'Wealthy';
+
+  @override
+  String get unvanImparator => 'Empire Builder';
+
+  @override
+  String get unvanAcikla => 'Where forty years got you.';
+
+  @override
   String get hataBaslik => 'Something went wrong';
 
   @override

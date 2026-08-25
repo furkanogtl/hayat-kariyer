@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:hayat_kariyer/core/engine/portfoy_motoru.dart';
 import 'package:hayat_kariyer/core/engine/tur_processor.dart';
 import 'package:hayat_kariyer/core/models/egitim_seviyesi.dart';
+import 'package:hayat_kariyer/core/models/kariyer_durumu.dart';
 import 'package:hayat_kariyer/core/models/portfoy.dart';
 import 'package:hayat_kariyer/core/models/sehir.dart';
 import 'package:hayat_kariyer/features/oyun/oyun_saglayicilar.dart';
@@ -14,6 +15,8 @@ import 'package:hayat_kariyer/features/oyun/oyun_saglayicilar.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
+  // Kademe 2: stajyer maaşı yaşam giderini karşılamıyor ve uzun
+  // senaryolarda oyuncu eksiye düşüp hacizlik oluyor.
   Future<ProviderContainer> kur({int nakit = 5000000}) async {
     final kap = ProviderContainer();
     addTearDown(kap.dispose);
@@ -28,7 +31,14 @@ void main() {
     final oturum = kap.read(oyunProvider)!;
     kap.read(oyunProvider.notifier).durumaGec(
           oturum.durum.copyWith(
-            oyuncu: oturum.durum.oyuncu.copyWith(nakit: nakit),
+            oyuncu: oturum.durum.oyuncu.copyWith(
+              nakit: nakit,
+              baslangicYasi: 25,
+              kariyer: const KariyerDurumu.calisan(
+                meslekId: 'yazilim_gelistirici',
+                kademeIndeksi: 2,
+              ),
+            ),
           ),
         );
     return kap;
@@ -94,12 +104,14 @@ void main() {
     // İkisi de aynı `TurGirdisi` kapısından geçiyor; biri diğerini
     // düşürmemeli.
     final kap = await kur();
+    // Kamu mesleği atama kuyruğuna girer ve o turda Calisan olmaz;
+    // sınanan şey işe girişin emirle birlikte gitmesi.
     final meslek = kap
         .read(kataloglarProvider)
         .requireValue
         .meslekler
         .girilebilirler(kap.read(oyunProvider)!.durum.oyuncu)
-        .first;
+        .firstWhere((m) => !m.atamaGerektirir);
     kap.read(taleplerProvider.notifier)
       ..iseGir(meslek.id)
       ..emirEkle(const Alim('altin', 10));

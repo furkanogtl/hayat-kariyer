@@ -12,6 +12,7 @@ import 'package:hayat_kariyer/features/kabuk/uygulama.dart';
 import 'package:hayat_kariyer/features/olay/olay_karti_sayfasi.dart';
 import 'package:hayat_kariyer/features/ozet/tur_raporu_kagidi.dart';
 import 'package:hayat_kariyer/features/piyasa/fiyat_grafigi.dart';
+import 'package:hayat_kariyer/features/skor/skor_ekrani.dart';
 import 'package:hayat_kariyer/features/piyasa/varlik_detay_kagidi.dart';
 import 'package:hayat_kariyer/features/oyun/oyun_saglayicilar.dart';
 
@@ -342,6 +343,32 @@ void main() {
 
     expect(find.byKey(krediKagidiAnahtari), findsNothing);
     expect(kap.read(taleplerProvider).krediTalebi, isNotNull);
+  });
+
+  testWidgets('oyun bitince skor ekranı geliyor', (tester) async {
+    await ac(tester);
+    await oyunaBasla(tester);
+    final kap = ProviderScope.containerOf(
+      tester.element(find.byType(NavigationBar)),
+    );
+    // Yaş sınırına gelmiş bir duruma geç: kabuk yerine skor açılmalı.
+    final durum = kap.read(oyunProvider)!.durum;
+    kap.read(oyunProvider.notifier).durumaGec(
+          durum.copyWith(
+            oyunBitti: true,
+            zirveNetDeger: 50000000,
+            oyuncu: durum.oyuncu.copyWith(baslangicYasi: 65),
+          ),
+        );
+    await tester.pumpAndSettle();
+
+    expect(find.byType(SkorEkrani), findsOneWidget);
+    expect(find.byType(NavigationBar), findsNothing);
+
+    // "Yeni hayat" başlangıç ekranına döndürür.
+    await tester.tap(find.byType(FilledButton));
+    await tester.pumpAndSettle();
+    expect(find.byType(TextField), findsOneWidget);
   });
 
   testWidgets('bekleyen talep varken atlama kapalı', (tester) async {

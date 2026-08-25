@@ -260,6 +260,25 @@
   "krediHataTutar": "Invalid amount.",
   "krediHataGecikme": "No new loan while you have an overdue debt.",
 
+  "oyunSonu": "Your life in summary",
+  "oyunSonuAltBaslik": "You are {yas}. Here is what remains.",
+  "skorNetDeger": "Real net worth",
+  "skorZirve": "Peak",
+  "skorKariyer": "Last position",
+  "skorIsletme": "Business",
+  "skorIsletmeSayisi": "{sayi} businesses",
+  "skorIflas": "Foreclosure",
+  "skorIflasSayisi": "{sayi} times",
+  "skorTohum": "Seed",
+  "yeniOyunaBasla": "New life",
+  "unvanSerefliIflas": "Back From The Bottom",
+  "unvanZorGecen": "Just Scraping By",
+  "unvanOrta": "Comfortable",
+  "unvanRahat": "Well Retired",
+  "unvanZengin": "Wealthy",
+  "unvanImparator": "Empire Builder",
+  "unvanAcikla": "Where forty years got you.",
+
   "hataBaslik": "Something went wrong",
   "yukleniyor": "Loading…"
 }

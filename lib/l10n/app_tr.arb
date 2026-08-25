@@ -386,6 +386,34 @@
   "krediHataTutar": "Geçersiz tutar.",
   "krediHataGecikme": "Geciken borcun varken yeni kredi verilmez.",
 
+  "oyunSonu": "Hayatın özeti",
+  "oyunSonuAltBaslik": "{yas} yaşındasın. İşte geriye kalan.",
+  "@oyunSonuAltBaslik": {
+    "placeholders": { "yas": { "type": "int" } }
+  },
+  "skorNetDeger": "Reel net değer",
+  "skorZirve": "En yüksek nokta",
+  "skorKariyer": "Son görev",
+  "skorIsletme": "İşletme",
+  "skorIsletmeSayisi": "{sayi} işletme",
+  "@skorIsletmeSayisi": {
+    "placeholders": { "sayi": { "type": "int" } }
+  },
+  "skorIflas": "Haciz",
+  "skorIflasSayisi": "{sayi} kez",
+  "@skorIflasSayisi": {
+    "placeholders": { "sayi": { "type": "int" } }
+  },
+  "skorTohum": "Tohum",
+  "yeniOyunaBasla": "Yeni hayat",
+  "unvanSerefliIflas": "Dipten Dönen",
+  "unvanZorGecen": "Ucu Ucuna",
+  "unvanOrta": "Orta Halli",
+  "unvanRahat": "Rahat Emekli",
+  "unvanZengin": "Servet Sahibi",
+  "unvanImparator": "İmparator",
+  "unvanAcikla": "40 yılın sonunda ulaştığın yer.",
+
   "hataBaslik": "Bir şeyler ters gitti",
   "yukleniyor": "Yükleniyor…"
 }
