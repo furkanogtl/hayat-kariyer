@@ -15,6 +15,12 @@ class UygulamaMetinleriTr extends UygulamaMetinleri {
   String get yasalUyari => 'Bu bir oyundur, yatırım tavsiyesi değildir.';
 
   @override
+  String get devamEt => 'Kaldığın yerden devam et';
+
+  @override
+  String get kayitVar => 'Yarım kalmış bir hayatın var.';
+
+  @override
   String get yeniOyun => 'Yeni Oyun';
 
   @override

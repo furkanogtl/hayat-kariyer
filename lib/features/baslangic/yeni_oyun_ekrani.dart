@@ -55,7 +55,11 @@ class _YeniOyunEkraniDurumu extends ConsumerState<YeniOyunEkrani> {
                 color: tema.colorScheme.onSurfaceVariant,
               ),
             ),
-            const SizedBox(height: 32),
+            const SizedBox(height: 24),
+            // Yarım kalmış oyun varsa önce o sunuluyor: mobilde oyuncu
+            // uygulamayı kapatıp döndüğünde kaldığı yerden devam etmeli.
+            const _DevamKarti(),
+            const SizedBox(height: 8),
             TextField(
               controller: _adDenetleyici,
               textCapitalization: TextCapitalization.words,
@@ -116,6 +120,51 @@ class _YeniOyunEkraniDurumu extends ConsumerState<YeniOyunEkrani> {
               child: Text(m.oyunaBasla),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Diskte kayıt varsa gösterilen devam kartı.
+class _DevamKarti extends ConsumerWidget {
+  const _DevamKarti();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final m = UygulamaMetinleri.of(context);
+    final tema = Theme.of(context);
+    final varMi = ref.watch(kayitVarMiProvider).value ?? false;
+    if (!varMi) return const SizedBox.shrink();
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: Card(
+        color: tema.colorScheme.primaryContainer,
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                m.kayitVar,
+                style: tema.textTheme.bodyMedium?.copyWith(
+                  color: tema.colorScheme.onPrimaryContainer,
+                ),
+              ),
+              const SizedBox(height: 10),
+              FilledButton(
+                onPressed: () async {
+                  final yuklendi = await ref
+                      .read(oyunProvider.notifier)
+                      .kayittanYukle();
+                  // Bozuk kayıt: kart kaybolsun, oyuncu yeni oyuna geçsin.
+                  if (!yuklendi) ref.invalidate(kayitVarMiProvider);
+                },
+                child: Text(m.devamEt),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -15,6 +15,12 @@ class UygulamaMetinleriEn extends UygulamaMetinleri {
   String get yasalUyari => 'This is a game, not investment advice.';
 
   @override
+  String get devamEt => 'Continue where you left off';
+
+  @override
+  String get kayitVar => 'You have a life in progress.';
+
+  @override
   String get yeniOyun => 'New Game';
 
   @override

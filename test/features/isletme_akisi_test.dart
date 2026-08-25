@@ -1,4 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hayat_kariyer/core/engine/tur_processor.dart';
 import 'package:hayat_kariyer/core/models/egitim_seviyesi.dart';
@@ -6,6 +8,7 @@ import 'package:hayat_kariyer/core/models/ilgi_dagilimi.dart';
 import 'package:hayat_kariyer/core/models/kariyer_durumu.dart';
 import 'package:hayat_kariyer/core/models/sehir.dart';
 import 'package:hayat_kariyer/core/models/sektor.dart';
+import 'package:hayat_kariyer/data/kayit_deposu.dart';
 import 'package:hayat_kariyer/features/oyun/oyun_saglayicilar.dart';
 
 /// İşletme komutlarının arayüz katmanındaki sözleşmesi.
@@ -13,7 +16,17 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   Future<ProviderContainer> kur({int nakit = 20000000}) async {
-    final kap = ProviderContainer();
+    final dizin = Directory.systemTemp.createTempSync('hk_test_');
+    addTearDown(() {
+      if (dizin.existsSync()) dizin.deleteSync(recursive: true);
+    });
+    // Otomatik kayıt platform eklentisine gitmesin: testler diske değil
+    // geçici dizine yazsın.
+    final kap = ProviderContainer(
+      overrides: [
+        kayitDeposuProvider.overrideWithValue(KayitDeposu(dizin: dizin)),
+      ],
+    );
     addTearDown(kap.dispose);
     await kap.read(kataloglarProvider.future);
     final n = kap.read(oyunProvider.notifier)

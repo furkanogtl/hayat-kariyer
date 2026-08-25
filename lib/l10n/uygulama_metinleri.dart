@@ -110,6 +110,18 @@ abstract class UygulamaMetinleri {
   /// **'Bu bir oyundur, yatırım tavsiyesi değildir.'**
   String get yasalUyari;
 
+  /// No description provided for @devamEt.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kaldığın yerden devam et'**
+  String get devamEt;
+
+  /// No description provided for @kayitVar.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yarım kalmış bir hayatın var.'**
+  String get kayitVar;
+
   /// No description provided for @yeniOyun.
   ///
   /// In tr, this message translates to:

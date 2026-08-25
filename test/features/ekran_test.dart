@@ -5,7 +5,10 @@ import 'package:hayat_kariyer/core/engine/tur_processor.dart';
 import 'package:hayat_kariyer/core/models/kariyer_durumu.dart';
 import 'package:hayat_kariyer/core/models/sektor.dart';
 import 'package:hayat_kariyer/features/banka/kredi_kagidi.dart';
+import 'dart:io';
+
 import 'package:hayat_kariyer/data/isletme_yukleyici.dart';
+import 'package:hayat_kariyer/data/kayit_deposu.dart';
 import 'package:hayat_kariyer/data/meslek_yukleyici.dart';
 import 'package:hayat_kariyer/data/olay_yukleyici.dart';
 import 'package:hayat_kariyer/features/kabuk/uygulama.dart';
@@ -38,7 +41,7 @@ void main() {
   /// Asset okuması widget testinin sahte zaman düzleminde çözülmüyor;
   /// katalog gerçek async ile bir kez yüklenip sağlayıcıya veriliyor.
   /// Testin konusu zaten yükleme değil, ekranlar.
-  Future<void> ac(WidgetTester tester) async {
+  Future<void> ac(WidgetTester tester, {bool kayitVar = false}) async {
     // Varsayılan 800x600 tuvalde liste dışında kalan widget'lar hiç
     // KURULMUYOR ve `find` onları bulamıyor. Duman testinin ekranın
     // tamamını görmesi için tuval büyütülüyor.
@@ -46,10 +49,21 @@ void main() {
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
 
+    final dizin = Directory.systemTemp.createTempSync('hk_ekran_');
+    addTearDown(() {
+      if (dizin.existsSync()) dizin.deleteSync(recursive: true);
+    });
+
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
           kataloglarProvider.overrideWith((ref) async => kataloglar),
+          // Otomatik kayıt geçici dizine gitsin; platform eklentisi yok.
+          kayitDeposuProvider.overrideWithValue(KayitDeposu(dizin: dizin)),
+          // "Kayıt var mı" diski okuyor; widget testinin sahte zaman
+          // düzleminde gerçek İ/O çözülmediği için değer doğrudan
+          // veriliyor. Yüklemenin KENDİSİ sağlayıcı testinde sınanıyor.
+          kayitVarMiProvider.overrideWith((ref) async => kayitVar),
         ],
         child: const HayatKariyerUygulamasi(),
       ),
@@ -368,6 +382,19 @@ void main() {
     // "Yeni hayat" başlangıç ekranına döndürür.
     await tester.tap(find.byType(FilledButton));
     await tester.pumpAndSettle();
+    expect(find.byType(TextField), findsOneWidget);
+  });
+
+  testWidgets('kayıt yokken devam kartı görünmüyor', (tester) async {
+    await ac(tester);
+    // Yalnız "Hayata Başla".
+    expect(find.byType(FilledButton), findsOneWidget);
+  });
+
+  testWidgets('kayıt varken devam kartı geliyor', (tester) async {
+    await ac(tester, kayitVar: true);
+    // Devam kartı + "Hayata Başla".
+    expect(find.byType(FilledButton), findsNWidgets(2));
     expect(find.byType(TextField), findsOneWidget);
   });
 

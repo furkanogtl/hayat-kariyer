@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -17,6 +19,7 @@ import '../../core/models/oyuncu.dart';
 import '../../core/models/sehir.dart';
 import '../../core/models/zaman_dagilimi.dart';
 import '../../data/isletme_yukleyici.dart';
+import '../../data/kayit_deposu.dart';
 import '../../data/meslek_yukleyici.dart';
 import '../../data/olay_yukleyici.dart';
 
@@ -64,6 +67,14 @@ final turProcessorProvider = Provider<TurProcessor>((ref) {
   );
 });
 
+/// Kayıt dosyası deposu. Testte geçici dizinle override ediliyor.
+final kayitDeposuProvider = Provider<KayitDeposu>((ref) => KayitDeposu());
+
+/// Diskte sürdürülebilir bir kayıt var mı. Açılış ekranı buna bakıyor.
+final kayitVarMiProvider = FutureProvider<bool>(
+  (ref) => ref.watch(kayitDeposuProvider).kayitVarMi(),
+);
+
 /// Bir oyun oturumu: kayda yazılan durum + ekranın ihtiyaç duyduğu geçici
 /// veriler.
 ///
@@ -108,6 +119,19 @@ class OyunNotifier extends Notifier<Oturum?> {
 
   TurProcessor get _motor => ref.read(turProcessorProvider);
 
+  KayitDeposu get _depo => ref.read(kayitDeposuProvider);
+
+  /// Otomatik kayıt: her durum değişiminden sonra diske yazılıyor.
+  ///
+  /// Mobil oyunda "kaydet" düğmesi olmaz; uygulama her an arka plana
+  /// atılabilir. Yazma atomik ve sıraya alınmış olduğu için ateşle-unut
+  /// çağrı güvenli.
+  void _kaydet() {
+    final oturum = state;
+    if (oturum == null) return;
+    unawaited(_depo.yaz(oturum.durum));
+  }
+
   void yeniOyun({
     required String ad,
     required Cinsiyet cinsiyet,
@@ -129,6 +153,7 @@ class OyunNotifier extends Notifier<Oturum?> {
       ),
     );
     ref.read(zamanProvider.notifier).varsayilanaDon(calisiyor: false);
+    _kaydet();
   }
 
   /// Kayıttan yükleme ve testler için doğrudan durum verir.
@@ -140,6 +165,14 @@ class OyunNotifier extends Notifier<Oturum?> {
         );
   }
 
+  /// Diskteki kaydı yükler. Kayıt yoksa ya da bozuksa false döner.
+  Future<bool> kayittanYukle() async {
+    final durum = await _depo.yukle();
+    if (durum == null) return false;
+    durumaGec(durum);
+    return true;
+  }
+
   void turuBitir(TurGirdisi girdi) {
     final oturum = state;
     if (oturum == null) return;
@@ -147,6 +180,7 @@ class OyunNotifier extends Notifier<Oturum?> {
     final sonuc = _motor.turuBitir(oturum.durum, girdi);
     state = _oturumKur(sonuc.durum, raporlar: [sonuc.rapor]);
     _zamaniTazele(oncekiTur, sonuc.durum);
+    _kaydet();
   }
 
   /// "3 ay atla" / "1 yıl atla". Motor gerektiğinde erken keser; kaç tur
@@ -158,6 +192,7 @@ class OyunNotifier extends Notifier<Oturum?> {
     final sonuc = _motor.turlariAtla(oturum.durum, girdi, adet);
     state = _oturumKur(sonuc.durum, raporlar: sonuc.raporlar);
     _zamaniTazele(oncekiTur, sonuc.durum);
+    _kaydet();
   }
 
   /// Kariyer TÜRÜ değiştiyse zaman taslağını varsayılana çeker.
@@ -195,6 +230,9 @@ class OyunNotifier extends Notifier<Oturum?> {
     if (oturum == null) return null;
     final sonuc = _motor.secimUygula(oturum.durum, kart, secenekIndeksi);
     state = oturum.kopya(durum: sonuc.durum);
+    // Kart seçimi turu bitirmiyor ama durumu değiştiriyor; kaydedilmezse
+    // uygulama kapanınca oyuncu kararını ikinci kez verirdi.
+    _kaydet();
     return sonuc;
   }
 
@@ -217,6 +255,7 @@ class OyunNotifier extends Notifier<Oturum?> {
     if (oturum == null) return;
     final yeni = oturum.durum.ilgi.ayarla(isletmeId, puan).duzelt();
     state = oturum.kopya(durum: oturum.durum.copyWith(ilgi: yeni));
+    _kaydet();
   }
 
   /// Rapor kartı kapatıldığında çağrılır.
@@ -226,7 +265,12 @@ class OyunNotifier extends Notifier<Oturum?> {
     state = oturum.kopya(sonRaporlar: const []);
   }
 
-  void oyunuBitir() => state = null;
+  /// Oyunu kapatır ve kaydı siler: yeni hayat baştan başlar.
+  void oyunuBitir() {
+    state = null;
+    unawaited(_depo.sil());
+    ref.invalidate(kayitVarMiProvider);
+  }
 }
 
 /// Oyuncunun bu tur için biriktirdiği komutlar.

@@ -1,4 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hayat_kariyer/core/engine/portfoy_motoru.dart';
 import 'package:hayat_kariyer/core/engine/tur_processor.dart';
@@ -6,6 +8,7 @@ import 'package:hayat_kariyer/core/models/egitim_seviyesi.dart';
 import 'package:hayat_kariyer/core/models/kariyer_durumu.dart';
 import 'package:hayat_kariyer/core/models/portfoy.dart';
 import 'package:hayat_kariyer/core/models/sehir.dart';
+import 'package:hayat_kariyer/data/kayit_deposu.dart';
 import 'package:hayat_kariyer/features/oyun/oyun_saglayicilar.dart';
 
 /// Emir kuyruğunun motora bağlanışı.
@@ -18,7 +21,17 @@ void main() {
   // Kademe 2: stajyer maaşı yaşam giderini karşılamıyor ve uzun
   // senaryolarda oyuncu eksiye düşüp hacizlik oluyor.
   Future<ProviderContainer> kur({int nakit = 5000000}) async {
-    final kap = ProviderContainer();
+    final dizin = Directory.systemTemp.createTempSync('hk_test_');
+    addTearDown(() {
+      if (dizin.existsSync()) dizin.deleteSync(recursive: true);
+    });
+    // Otomatik kayıt platform eklentisine gitmesin: testler diske değil
+    // geçici dizine yazsın.
+    final kap = ProviderContainer(
+      overrides: [
+        kayitDeposuProvider.overrideWithValue(KayitDeposu(dizin: dizin)),
+      ],
+    );
     addTearDown(kap.dispose);
     await kap.read(kataloglarProvider.future);
     kap.read(oyunProvider.notifier).yeniOyun(
