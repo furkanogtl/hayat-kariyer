@@ -9,6 +9,7 @@ import '../models/sehir.dart';
 import '../models/zaman_dagilimi.dart';
 import '../rng/rastgele_kaynak.dart';
 import 'borc_motoru.dart';
+import 'dip_motoru.dart';
 import 'isletme_motoru.dart';
 import 'kariyer_motoru.dart';
 import 'olay_motoru.dart';
@@ -59,6 +60,11 @@ class TurRaporu {
     this.kurulanIsletmeId,
     this.satisaCikanIsletmeId,
     this.isletmeHatasi,
+    this.kisitliYasam = false,
+    this.iflasEtti = false,
+    this.hacizGeliri = 0,
+    this.silinenBorc = 0,
+    this.oyunBitti = false,
     this.emirSonuclari = const [],
     this.tamamlananSatislar = const [],
     this.acilanOlaylar = const [],
@@ -154,6 +160,21 @@ class TurRaporu {
   /// İşletme komutu reddedildiyse sebebi. Sessizce düşen komut oyuncuya
   /// "düğme çalışmıyor" gibi görünürdü.
   final IsletmeHatasi? isletmeHatasi;
+
+  /// Bu turda kemer sıkıldı mı (nakit eksideydi).
+  final bool kisitliYasam;
+
+  /// Bu turda haciz geldi mi.
+  final bool iflasEtti;
+
+  /// Hacizde varlıkların icra satışından gelen tutar.
+  final int hacizGeliri;
+
+  /// Haciz yetmediği için silinen borç.
+  final int silinenBorc;
+
+  /// Oyun bu turda sona erdi mi (yaş sınırı).
+  final bool oyunBitti;
 
   /// Bu turda devri tamamlanan işletmeler: id → eline geçen tutar.
   final Map<String, int> devredilenIsletmeler;
@@ -288,6 +309,7 @@ class TurProcessor {
     this.isletme,
     this.borc = const BorcMotoru(),
     this.kariyer = const KariyerMotoru(),
+    this.dip = const DipMotoru(),
     this.ayarlar = const TurAyarlari(),
   })  : piyasa = piyasa ?? PiyasaSimulatoru(),
         portfoy = portfoy ?? PortfoyMotoru() {
@@ -319,6 +341,10 @@ class TurProcessor {
   /// Borç motoru her zaman var: borcu olmayan oyuncuda hiçbir şey yapmaz.
   final BorcMotoru? borc;
   final KariyerMotoru kariyer;
+
+  /// Kısıtlı yaşam, haciz ve oyun sonu. Bu olmadan oyunun kaybetme hâli
+  /// tanımsızdı: net değer sınırsız eksiye gidiyordu.
+  final DipMotoru dip;
   final TurAyarlari ayarlar;
 
   /// Yeni oyun başlangıç durumu.
@@ -346,7 +372,9 @@ class TurProcessor {
     var krediSonucu = const KrediSonucu(hata: null);
     final talep = girdi.krediTalebi;
     final borcMotoru = borc;
-    if (talep != null && borcMotoru != null) {
+    if (talep != null && durum.krediYasakli) {
+      krediSonucu = const KrediSonucu(hata: KrediHatasi.krediYasagi);
+    } else if (talep != null && borcMotoru != null) {
       krediSonucu = borcMotoru.krediCek(
         oyuncu: durum.oyuncu,
         borclar: durum.borclar,
@@ -532,7 +560,11 @@ class TurProcessor {
     final odenenTaksit = borcSonucu?.odenenTaksit ?? 0;
 
     // 8. Yaşam gideri — güncel enflasyonla, maaş endeksiyle DEĞİL.
-    final yasamGideri = _yasamGideri(durum.oyuncu.sehir, yeniPiyasa);
+    //    Parası bitmişse kemer sıkıyor: gider düşer ama mutluluk erir.
+    //    Bedava kurtuluş değil, yavaşlatılmış bir düşüş.
+    final tamGider = _yasamGideri(durum.oyuncu.sehir, yeniPiyasa);
+    final kisitli = dip.kisitliYasamda(araDurum.oyuncu.nakit);
+    final yasamGideri = dip.yasamGideri(tamGider, araDurum.oyuncu.nakit);
 
     // 9. Mahsuplaşma
     var oyuncu = araDurum.oyuncu;
@@ -567,18 +599,49 @@ class TurProcessor {
           ? -ayarlar.borcluKrediNotuDususu
           : ayarlar.duzenliKrediNotuArtisi,
     );
+    if (kisitli) {
+      oyuncu = oyuncu.mutlulukDegistir(-dip.ayarlar.kisitliMutlulukKaybi);
+    }
+
+    // 9b. Haciz — mahsuplaşmadan SONRA, çünkü bu turun taksit gecikmesi
+    //     de sayılmalı. Portföy elden çıkar, kalan borç silinir, kredi
+    //     kapanır. Bir bitiş değil bir dip: işletmeler kalıyor ve oyuncu
+    //     buradan toparlanabiliyor.
+    var iflasBorclari = borcSonucu?.borclar ?? guncelBorclar;
+    var iflasPortfoy = guncelPortfoy;
+    var iflasEtti = false;
+    var hacizGeliri = 0;
+    var silinenBorc = 0;
+    var krediYasagi = durum.krediYasagiTuru > 0 ? durum.krediYasagiTuru - 1 : 0;
+    if (dip.iflasGerekiyorMu(iflasBorclari)) {
+      final sonuc = dip.hacizUygula(
+        portfoy: iflasPortfoy,
+        borclar: iflasBorclari,
+        piyasa: yeniPiyasa,
+        nakit: oyuncu.nakit,
+      );
+      iflasEtti = true;
+      hacizGeliri = sonuc.hacizGeliri;
+      silinenBorc = sonuc.silinenBorc;
+      iflasPortfoy = sonuc.portfoy;
+      iflasBorclari = const [];
+      // Haciz hesabı sıfırlar: varlıklar gitti, borç silindi.
+      oyuncu = dip.oyuncuyuGuncelle(oyuncu).copyWith(nakit: 0);
+      krediYasagi = dip.ayarlar.krediYasagiTuru;
+    }
 
     // 10. Tur ilerlet
     oyuncu = oyuncu.turIlerlet();
 
     var yeniDurum = araDurum.copyWith(
       oyuncu: oyuncu,
-      portfoy: guncelPortfoy,
+      portfoy: iflasPortfoy,
       maasEndeksi: maasEndeksi,
+      krediYasagiTuru: krediYasagi,
+      iflasSayisi: durum.iflasSayisi + (iflasEtti ? 1 : 0),
+      oyunBitti: dip.oyunBitti(oyuncu.yas),
     );
-    yeniDurum = yeniDurum.copyWith(
-      borclar: borcSonucu?.borclar ?? guncelBorclar,
-    );
+    yeniDurum = yeniDurum.copyWith(borclar: iflasBorclari);
     if (isletmeSonucu != null) {
       // Devredilen işletmenin ilgi puanı da serbest kalmalı; yoksa oyuncu
       // sattığı işletmeye puan ayırmaya devam eder.
@@ -643,6 +706,11 @@ class TurProcessor {
         kurulanIsletmeId: kurulanIsletmeId,
         satisaCikanIsletmeId: satisaCikanIsletmeId,
         isletmeHatasi: isletmeHatasi,
+        kisitliYasam: kisitli,
+        iflasEtti: iflasEtti,
+        hacizGeliri: hacizGeliri,
+        silinenBorc: silinenBorc,
+        oyunBitti: yeniDurum.oyunBitti,
       ),
     );
   }
@@ -699,6 +767,9 @@ class TurProcessor {
   List<KrediTeklifi> krediTeklifleri(OyunDurumu durum) {
     final motor = borc;
     if (motor == null) return const [];
+    // Haciz sonrası kredi kapalı: ekran teklif göstermemeli, yoksa
+    // oyuncu isteyip reddedilir.
+    if (durum.krediYasakli) return const [];
     return motor.teklifler(
       oyuncu: durum.oyuncu,
       borclar: durum.borclar,
@@ -759,6 +830,9 @@ class TurProcessor {
       r.kurulanIsletmeId != null ||
       r.satisaCikanIsletmeId != null ||
       r.isletmeHatasi != null ||
+      // Haciz ve oyun sonu farkında olmadan geçilecek şeyler değil.
+      r.iflasEtti ||
+      r.oyunBitti ||
       r.paraReformuYapildi;
 
   /// Aylık yaşam gideri: şehir çarpanı × güncel fiyat seviyesi.

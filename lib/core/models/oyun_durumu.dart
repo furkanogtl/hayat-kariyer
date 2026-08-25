@@ -51,6 +51,16 @@ abstract class OyunDurumu with _$OyunDurumu {
     /// baskısı: yıl ortasında alım gücü erir, ocakta düzelir.
     @Default(1.0) double maasEndeksi,
 
+    /// Haciz sonrası kaç tur daha kredi kapalı. Her tur bir azalır.
+    @Default(0) int krediYasagiTuru,
+
+    /// Oyun boyunca kaç kez haciz geldiği. Skor ekranı bunu gösteriyor;
+    /// dipten dönmek de bir başarıdır.
+    @Default(0) int iflasSayisi,
+
+    /// Oyun sona erdi mi (yaş sınırı). Skor ekranı buna bakıyor.
+    @Default(false) bool oyunBitti,
+
     /// Kayıt biçimi sürümü. İleride şema değişirse göç buradan yönetilir.
     @Default(1) int kayitSurumu,
   }) = _OyunDurumu;
@@ -77,6 +87,9 @@ abstract class OyunDurumu with _$OyunDurumu {
 
   /// Portföyün güncel piyasa değeri (ham TL).
   int get portfoyDegeri => portfoy.piyasaDegeri(piyasa.fiyatlar).round();
+
+  /// Haciz yüzünden kredi kapalı mı.
+  bool get krediYasakli => krediYasagiTuru > 0;
 
   /// Kalan toplam borç (ham TL).
   int get toplamBorc => borclar.fold(0, (t, b) => t + b.kalanAnapara);
@@ -110,5 +123,7 @@ abstract class OyunDurumu with _$OyunDurumu {
             if (b.kalanTur >= 0) b else b.copyWith(kalanTur: 0),
         ],
         maasEndeksi: maasEndeksi <= 0 ? 1.0 : maasEndeksi,
+        krediYasagiTuru: krediYasagiTuru < 0 ? 0 : krediYasagiTuru,
+        iflasSayisi: iflasSayisi < 0 ? 0 : iflasSayisi,
       );
 }

@@ -99,6 +99,9 @@ enum KrediHatasi {
   taksitGeliriAsiyor,
   gecersizTutar,
   gecikmedeKrediVerilmez,
+
+  /// Haciz sonrası kredi yasağı sürüyor.
+  krediYasagi,
 }
 
 /// Kredi verir, taksit tahsil eder, gecikmeyi işler.
