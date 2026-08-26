@@ -24,9 +24,20 @@ class KariyerAyarlari {
   /// İtibar artışına network puanı başına katkı.
   final double networkKatkisi = 1.0;
 
-  /// Network'e hiç puan ayrılmayan turda itibar bu kadar aşınır. İtibar
-  /// korunması gereken bir kaynaktır; bir kez kazanılıp bitmez.
-  final double itibarAsinmasi = 0.6;
+  /// İtibar her tur mevcut değerinin bu oranı kadar aşınır.
+  ///
+  /// Önce sabit bir aşınmaydı (0,6) ve YALNIZ network'e puan ayrılmayan
+  /// turda işliyordu. Ölçüldü: o kurguda tek network puanı hem büyümeyi
+  /// hem aşınma bağışıklığını satın alıyor, ikinci puan tamamen boşa
+  /// gidiyordu — network 1 ile network 3 aynı fırsat payını veriyor
+  /// (%36,4 ve %36,3) ama ikincisi 3,7M net değer kaybediyordu. Kol bir
+  /// merdiven değil ikili bir anahtardı.
+  ///
+  /// Orantılı aşınma denge noktasını ayrılan network puanına bağlar.
+  /// Ölçülen platolar (kartsız, 400 tur): 1 puan → 30, 2 → 47, 3 → 58,
+  /// 5 → 71, 8 → 86. Anayasadaki "itibar korunması gereken bir kaynaktır,
+  /// bir kez kazanılıp bitmez" cümlesinin sayısal karşılığı budur.
+  final double itibarAsinmaOrani = 0.02;
 
   /// Yetkinlik ve itibar tavana yaklaştıkça artış yavaşlar.
   final double azalanVerimTabani = 110;
@@ -654,13 +665,16 @@ class KariyerMotoru {
       guncel = guncel.yetkinlikDegistir(hedefSektor, _yuvarla(artis, akis));
     }
 
-    // İtibar: network puanı artırır, hiç ayrılmazsa aşınır.
-    final itibarDegisimi = z.network == 0
-        ? -ayarlar.itibarAsinmasi
-        : z.network *
+    // İtibar: network puanı artırır, mevcut itibar HER TUR aşınır.
+    //
+    // Aşınma network puanına bakmıyor: yüksek itibarı korumak sürekli bir
+    // maliyet olmalı. Denge noktası ayrılan puanla belirlenir; bu olmadan
+    // birinci puandan sonrası boşa gidiyordu.
+    final itibarDegisimi = z.network *
             ayarlar.networkKatkisi *
             (meslek?.networkArtisi ?? 1.0) *
-            _azalanVerim(oyuncu.itibar.toDouble());
+            _azalanVerim(oyuncu.itibar.toDouble()) -
+        oyuncu.itibar * ayarlar.itibarAsinmaOrani;
     guncel = guncel.itibarDegistir(_yuvarla(itibarDegisimi, akis));
 
     // Enerji

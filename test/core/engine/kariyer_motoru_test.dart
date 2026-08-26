@@ -354,6 +354,72 @@ void main() {
       expect(dusus, greaterThan(15), reason: 'network ihmal edilince aşınmalı');
     });
 
+    test('itibar platosu ayrılan network puanıyla belirleniyor', () {
+      // Aşınma önce SABİTTİ (0,6) ve yalnız `network == 0` turunda
+      // işliyordu. O kurguda tek puan hem büyümeyi hem aşınma
+      // bağışıklığını satın alıyor, ikinci puan boşa gidiyordu; ölçüldü:
+      // network 1 ile network 3 aynı fırsat payını veriyor (%36,4 ve
+      // %36,3) ama ikincisi 3,7M net değer kaybediyordu. İtibar bir
+      // merdiven değil ikili bir anahtardı.
+      //
+      // Orantılı aşınmayla her puan AYRI bir platoya oturmalı.
+      int plato(int network) {
+        var o = calisan(
+          'yazilim_gelistirici',
+          sektor: Sektor.teknoloji,
+        );
+        final kalan = 10 - network;
+        final z = ZamanDagilimi(
+          calisma: kalan >= 4 ? 4 : kalan,
+          network: network,
+          dinlenme: kalan >= 4 ? kalan - 4 : 0,
+        );
+        // 250 tur: platoya oturmak için fazlasıyla yeterli (ölçümde 100.
+        // turda sabitleniyor).
+        for (var t = 1; t <= 250; t++) {
+          o = motor
+              .turIsle(
+                oyuncu: o,
+                katalog: katalog,
+                piyasa: piyasa,
+                zaman: z,
+                maasEndeksi: 1.0,
+                akis: akis(99, t),
+              )
+              .oyuncu;
+        }
+        return o.itibar;
+      }
+
+      final p0 = plato(0);
+      final p1 = plato(1);
+      final p3 = plato(3);
+      final p5 = plato(5);
+
+      expect(p0, lessThan(5), reason: 'network ayırmayan itibarını koruyamaz');
+      expect(p1, greaterThan(p0));
+      expect(p3, greaterThan(p1 + 10),
+          reason: 'ikinci ve üçüncü puan boşa gitmemeli: $p1 -> $p3');
+      expect(p5, greaterThan(p3),
+          reason: 'plato artmaya devam etmeli: $p3 -> $p5');
+    });
+
+    test('yüksek itibar bakım ister, kendiliğinden durmaz', () {
+      // "İtibar korunması gereken bir kaynaktır, bir kez kazanılıp
+      // bitmez" — tavana yakın itibar, tek network puanıyla tutulamaz.
+      final tepede = calisan('yazilim_gelistirici', sektor: Sektor.teknoloji)
+          .itibarDegistir(95);
+      final sonuc = motor.turIsle(
+        oyuncu: tepede,
+        katalog: katalog,
+        piyasa: piyasa,
+        zaman: const ZamanDagilimi(calisma: 5, network: 1, dinlenme: 4),
+        maasEndeksi: 1.0,
+        akis: akis(3, 1),
+      );
+      expect(sonuc.oyuncu.itibar, lessThan(tepede.itibar));
+    });
+
     test('avukatın itibar kazanımı yazılımcıdan yüksek', () {
       int kazanc(String meslekId, Sektor s) {
         var toplam = 0;
