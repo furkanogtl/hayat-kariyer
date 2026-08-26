@@ -1,5 +1,5 @@
 name: hayat_kariyer
-description: "A new Flutter project."
+description: "Türkiye temalı, tur tabanlı hayat ve kariyer simülasyonu."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -56,6 +56,7 @@ dev_dependencies:
   build_runner: ^2.15.1
   freezed: ^3.2.5
   json_serializable: ^6.14.1
+  flutter_launcher_icons: ^0.14.4
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -100,3 +101,17 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+# Uygulama simgesi. Kaynak PNG'ler test/_ikon_uret_test.dart ile üretildi
+# (dart:ui ile çizim; ayrı bir görüntü kütüphanesi gerekmiyor).
+# Simgeleri yeniden üretmek için: dart run flutter_launcher_icons
+#
+# assets/icon/ UYGULAMAYA PAKETLENMEZ: bunlar derleme zamanı kaynakları,
+# bu yüzden yukarıdaki `assets:` listesinde yok.
+flutter_launcher_icons:
+  image_path: "assets/icon/ikon.png"
+  android: true
+  ios: true
+  remove_alpha_ios: true
+  adaptive_icon_background: "#10362D"
+  adaptive_icon_foreground: "assets/icon/ikon_on.png"

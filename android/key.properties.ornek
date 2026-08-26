@@ -1,0 +1,12 @@
+# Bu dosyayi "key.properties" adiyla kopyalayip kendi anahtarinla doldur.
+# key.properties .gitignore'dadir; ASLA commit edilmez.
+#
+# Anahtar uretmek icin (bir kez):
+#   keytool -genkey -v -keystore C:/Users/Furkan/hayat-kariyer-upload.jks \
+#     -storetype JKS -keyalg RSA -keysize 2048 -validity 10000 -alias upload
+#
+# storeFile yolu android/ klasorune GORE degil, mutlak yol olarak yazilabilir.
+storeFile=C:/Users/Furkan/hayat-kariyer-upload.jks
+storePassword=
+keyAlias=upload
+keyPassword=
