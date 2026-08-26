@@ -196,5 +196,289 @@
         "etkiler": {}
       }
     ]
+  },
+{
+    "id": "yerel_roportaj_01",
+    "baslik": "Sektör bülteni röportaj istiyor",
+    "metin": "Adını duymuşlar. Bir öğleden sonranı alacak, karşılığı belirsiz.",
+    "tur": "firsat",
+    "agirlik": 9,
+    "bekleme": 28,
+    "kosullar": { "enAzItibar": 25 },
+    "secenekler": [
+      {
+        "etiket": "Kabul et",
+        "etkiler": { "enerji": -6, "itibar": 4, "mutluluk": 3 }
+      },
+      {
+        "etiket": "Vaktim yok",
+        "etkiler": { "itibar": -1 }
+      }
+    ]
+  },
+  {
+    "id": "mentorluk_talebi_01",
+    "baslik": "Genç meslektaş yol soruyor",
+    "metin": "Düzenli görüşmek istiyor. Şimdilik karşılığında bir şey vermiyor.",
+    "tur": "firsat",
+    "agirlik": 9,
+    "bekleme": 30,
+    "kosullar": { "enAzItibar": 30 },
+    "secenekler": [
+      {
+        "etiket": "Zaman ayır",
+        "etkiler": { "enerji": -8, "itibar": 2 },
+        "gecikmeTuru": 10,
+        "sonuclar": [
+          {
+            "sans": 0.5,
+            "metin": "İyi bir yere geldi ve seni her ortamda anlatıyor.",
+            "etkiler": { "itibar": 6, "mutluluk": 6 }
+          },
+          {
+            "sans": 0.5,
+            "metin": "Yolları ayrıldı, bir daha aramadı.",
+            "etkiler": { "mutluluk": -3 }
+          }
+        ]
+      },
+      {
+        "etiket": "Kibarca reddet",
+        "etkiler": { "itibar": -2 }
+      }
+    ]
+  },
+  {
+    "id": "sektor_konferansi_01",
+    "baslik": "Konferansta konuşmacı daveti",
+    "metin": "Sunum hazırlamak mesai dışı iş. Salonda tanınmış isimler olacak.",
+    "tur": "firsat",
+    "agirlik": 8,
+    "bekleme": 30,
+    "kosullar": { "enAzItibar": 35 },
+    "secenekler": [
+      {
+        "etiket": "Konuşmacı ol",
+        "etkiler": { "enerji": -13, "itibar": 6, "mutluluk": 4 }
+      },
+      {
+        "etiket": "Katılımcı olarak git",
+        "etkiler": { "nakit": -9000, "itibar": 3, "enerji": -4 }
+      },
+      {
+        "etiket": "Gitme",
+        "etkiler": { "itibar": -2 }
+      }
+    ]
+  },
+  {
+    "id": "karsi_teklif_01",
+    "baslik": "Başka firmadan teklif geldi",
+    "metin": "Kartını açarsan mevcut işverenin karşılık verebilir. Ya da vermez.",
+    "tur": "teklif",
+    "agirlik": 8,
+    "bekleme": 36,
+    "kosullar": { "enAzItibar": 45, "durumlar": ["calisan"] },
+    "secenekler": [
+      {
+        "etiket": "Teklifi göster, zam iste",
+        "sonuclar": [
+          {
+            "sans": 0.55,
+            "metin": "Zammı aldın. Ama 'gitmeye hazırdın' notu bir yere düştü.",
+            "etkiler": { "nakit": 95000, "itibar": -2 }
+          },
+          {
+            "sans": 0.45,
+            "metin": "Yolun açık olsun dediler. Geri adım atmak zorunda kaldın.",
+            "etkiler": { "mutluluk": -9, "itibar": -4 }
+          }
+        ]
+      },
+      {
+        "etiket": "Sessiz kal",
+        "etkiler": { "mutluluk": -3 }
+      }
+    ]
+  },
+  {
+    "id": "kurumsal_danismanlik_01",
+    "baslik": "Danışmanlık teklifi",
+    "metin": "Mesai dışı, ayda birkaç gün. Asıl işinden çalacak.",
+    "tur": "firsat",
+    "agirlik": 9,
+    "bekleme": 24,
+    "kosullar": { "enAzItibar": 50, "durumlar": ["calisan"] },
+    "secenekler": [
+      {
+        "etiket": "Kabul et",
+        "etkiler": { "nakit": 150000, "enerji": -15, "itibar": 4 }
+      },
+      {
+        "etiket": "Reddet",
+        "etkiler": { "enerji": 3 }
+      }
+    ]
+  },
+  {
+    "id": "arsa_ortakligi_01",
+    "baslik": "Arsaya ortaklık çağrısı",
+    "metin": "Tanıdığın müteahhit şehir dışında bir parsele ortak arıyor. İmar söylentisi var.",
+    "tur": "teklif",
+    "agirlik": 7,
+    "bekleme": 48,
+    "kosullar": { "enAzItibar": 55, "enAzNakit": 300000 },
+    "secenekler": [
+      {
+        "etiket": "Ortak ol",
+        "etkiler": { "nakit": -250000 },
+        "gecikmeTuru": 10,
+        "sonuclar": [
+          {
+            "sans": 0.3,
+            "metin": "İmar çıktı. Payın katlanarak döndü.",
+            "etkiler": { "nakit": 950000, "itibar": 5 }
+          },
+          {
+            "sans": 0.4,
+            "metin": "Arsa duruyor, imar yok. Paran orada bekliyor.",
+            "etkiler": { "nakit": 265000 }
+          },
+          {
+            "sans": 0.3,
+            "metin": "Müteahhide ulaşamıyorsun. Kâğıt üstünde bir şey de yok.",
+            "etkiler": { "mutluluk": -16, "itibar": -5 }
+          }
+        ]
+      },
+      {
+        "etiket": "Uzak dur",
+        "etkiler": { "mutluluk": -2 }
+      }
+    ]
+  },
+  {
+    "id": "melek_yatirim_01",
+    "baslik": "Tohum yatırımı isteniyor",
+    "metin": "Eski bir çalışanın şirket kurmuş. Ürün henüz ortada yok, ekip iyi.",
+    "tur": "teklif",
+    "agirlik": 6,
+    "bekleme": 60,
+    "kosullar": { "enAzItibar": 60, "enAzNakit": 550000 },
+    "secenekler": [
+      {
+        "etiket": "Yatır",
+        "etkiler": { "nakit": -400000, "itibar": 4 },
+        "gecikmeTuru": 12,
+        "sonuclar": [
+          {
+            "sans": 0.2,
+            "metin": "Şirket satıldı. Payın beklediğinin çok üstünde döndü.",
+            "etkiler": { "nakit": 2500000, "itibar": 8 }
+          },
+          {
+            "sans": 0.35,
+            "metin": "Ayakta kaldı, küçük ama düzenli bir pay geliyor.",
+            "etkiler": { "nakit": 540000 }
+          },
+          {
+            "sans": 0.45,
+            "metin": "Kapandı. Ekip dağıldı, yatırımın gitti.",
+            "etkiler": { "mutluluk": -13 }
+          }
+        ]
+      },
+      {
+        "etiket": "Reddet",
+        "etkiler": { "itibar": -3 }
+      }
+    ]
+  },
+  {
+    "id": "sektor_odulu_01",
+    "baslik": "Yılın ödülüne aday gösterildin",
+    "metin": "Gecenin masası, kıyafeti, yolu sana ait. Kazanacağın belli değil.",
+    "tur": "firsat",
+    "agirlik": 7,
+    "bekleme": 60,
+    "kosullar": { "enAzItibar": 65 },
+    "secenekler": [
+      {
+        "etiket": "Katıl",
+        "etkiler": { "nakit": -32000 },
+        "sonuclar": [
+          {
+            "sans": 0.4,
+            "metin": "Ödül senin oldu. Ertesi gün telefonun susmadı.",
+            "etkiler": { "itibar": 10, "mutluluk": 13 }
+          },
+          {
+            "sans": 0.6,
+            "metin": "Kazanamadın ama masada iyi bağlantılar kurdun.",
+            "etkiler": { "itibar": 5, "mutluluk": -2 }
+          }
+        ]
+      },
+      {
+        "etiket": "İlgilenme",
+        "etkiler": { "itibar": -3 }
+      }
+    ]
+  },
+  {
+    "id": "vakif_yonetimi_01",
+    "baslik": "Vakıf yönetim kuruluna çağrı",
+    "metin": "Bir eğitim vakfı seni kurula istiyor. Ücret yok, bağış beklentisi var.",
+    "tur": "firsat",
+    "agirlik": 6,
+    "bekleme": 60,
+    "kosullar": { "enAzItibar": 75 },
+    "secenekler": [
+      {
+        "etiket": "Kabul et",
+        "etkiler": { "nakit": -25000, "enerji": -10, "itibar": 8, "mutluluk": 6 }
+      },
+      {
+        "etiket": "Reddet",
+        "etkiler": { "itibar": -2 }
+      }
+    ]
+  },
+  {
+    "id": "buyuk_ihale_01",
+    "baslik": "Konsorsiyumda adın geçiyor",
+    "metin": "Büyük bir işe giriyorlar, seni de istiyorlar. Teminat mektubu şart.",
+    "tur": "teklif",
+    "agirlik": 5,
+    "bekleme": 60,
+    "kosullar": { "enAzItibar": 80, "enAzNakit": 1100000 },
+    "secenekler": [
+      {
+        "etiket": "Gir",
+        "etkiler": { "nakit": -800000, "itibar": 6 },
+        "gecikmeTuru": 14,
+        "sonuclar": [
+          {
+            "sans": 0.35,
+            "metin": "İş sizde kaldı. Payın yıllarca konuşulacak.",
+            "etkiler": { "nakit": 3300000, "itibar": 10 }
+          },
+          {
+            "sans": 0.35,
+            "metin": "İhale iptal edildi. Teminat aynen geri döndü.",
+            "etkiler": { "nakit": 800000 }
+          },
+          {
+            "sans": 0.3,
+            "metin": "İş alındı ama zarar etti. Payına düşeni ödedin.",
+            "etkiler": { "nakit": 220000, "mutluluk": -15, "itibar": -7 }
+          }
+        ]
+      },
+      {
+        "etiket": "Girme",
+        "etkiler": { "mutluluk": -2 }
+      }
+    ]
   }
 ]

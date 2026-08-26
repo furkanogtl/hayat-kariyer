@@ -373,6 +373,46 @@ void main() {
       }
     });
 
+    test('itibar arttıkça fırsat havuzu büyümeye devam ediyor', () {
+      // Anayasa: "itibar fırsat kartlarının KALİTESİNİ belirler". Ölçümde
+      // havuzun itibar 20'den sonra SABİTLENDİĞİ çıktı: 13 fırsat kartından
+      // yalnız ikisinin itibar kapısı vardı, üst uçta biriken itibarın
+      // karşılığı yalnız ağırlık çarpanıydı. Kademeli kapılar eklendi.
+      //
+      // Nakit sabit ve bol tutuluyor: ölçülen tek değişken itibar olmalı,
+      // yoksa sermaye de isteyen üst kademe kartları sonucu bulandırır.
+      int havuz(int itibar) {
+        final oyuncu = Oyuncu(
+          ad: 'test',
+          sehir: Sehir.istanbul,
+          tur: 15 * 12,
+          egitim: EgitimSeviyesi.lisans,
+          kariyer: const KariyerDurumu.calisan(
+            meslekId: 'yazilim_gelistirici',
+          ),
+          nakit: 3000000,
+          itibar: itibar,
+        );
+        return katalog.tumu
+            .where((o) => o.tur == OlayTuru.firsat || o.tur == OlayTuru.teklif)
+            .where((o) => o.kosullar.uygunMu(oyuncu, _piyasa))
+            .length;
+      }
+
+      const kademeler = [0, 25, 50, 75];
+      final sayilar = [for (final i in kademeler) havuz(i)];
+      for (var i = 1; i < sayilar.length; i++) {
+        expect(
+          sayilar[i],
+          greaterThan(sayilar[i - 1]),
+          reason: 'itibar ${kademeler[i - 1]} -> ${kademeler[i]}: '
+              'havuz ${sayilar[i - 1]} -> ${sayilar[i]}, büyümüyor',
+        );
+      }
+      // İtibarsız oyuncu da tamamen fırsatsız kalmamalı.
+      expect(sayilar.first, greaterThanOrEqualTo(4));
+    });
+
     test('yazılan her kart en az bir oyuncuya çıkabiliyor', () {
       // Koşulları hiçbir durumda tutmayan kart, yazılıp hiç görülmeyen
       // içeriktir ve hiçbir yerde patlamaz. Ölçümde 480 turluk oyunda
