@@ -22,54 +22,76 @@ borç kartları olduğu için 12+ öneriliyor.
 ## Kısa açıklama (Play Store, en fazla 80 karakter)
 
 ```
-18 yaşında başla, kariyerini kur, yatırım yap, servet imparatorluğu kur.
+18 yaşında başla, 65'inde ne olduğunu gör. Kariyer ve yatırım simülasyonu.
 ```
-(72 karakter)
+(73 karakter)
+
+Alternatifler:
+- `Türkiye'de geçen hayat simülasyonu. Çalış, yatırım yap, işletme kur.` (68)
+- `Cebinde para yok, önünde 47 yıl var. Ne yapacağını sen bilirsin.` (63)
 
 ## Uzun açıklama
 
+> Play Store 4000 karakter veriyor; aşağıdaki metin ~2100. İlk üç satır
+> "devamını oku"dan önce görünen kısım, en çok orası önemli.
+
 ```
-Hayat & Kariyer, tamamen Türkiye'de geçen, tur tabanlı bir hayat ve
-kariyer simülasyonudur. 18 yaşında başlarsın; her tur bir aydır.
+Konya'da mı kalacaksın, İstanbul'a mı gideceksin? Kira mı ödeyeceksin,
+kredi mi çekeceksin? Maaşın yılda bir zamlanıyor, market her ay.
 
-ZAMANINI DAĞIT
-Her ay 10 puanın var: çalış, eğitim al, çevre edin, dinlen. Çalışmaya
-yüklenirsen para gelir ama tükenirsin. Dinlenmezsen performansın düşer.
-Çevrene yatırım yapmazsan iyi fırsatlar kapını çalmaz.
+18 yaşında başlıyorsun. Her tur bir ay. 65'inde ne olduğuna bakacağız.
 
-KARİYERİNİ KUR
-14 meslek, çok kademeli terfi merdivenleri. Yazılımcı, doktor, avukat,
-öğretmen, aşçı, emlakçı, çiftçi... Her mesleğin girişi, tavanı ve riski
-farklı. Memur güvenlidir ama tavanı düşüktür; doktor geç başlar, en
-yükseğe çıkar.
+AYIN ON PUANI
+Çalış, oku, çevre edin, dinlen. Hepsini birden yapamazsın. Mesaiye
+yüklenirsen para gelir ama bir yerden sonra tükenirsin ve performansın
+düşer. Kimseyle görüşmezsen kimse sana fırsat getirmez.
 
-PARANI KORU
-Yıllık enflasyon oyunun en büyük baskısı. Nakit tutmak kaybettirir.
-Mevduat, altın, döviz, gayrimenkul, arsa, kripto ve altı borsa sektörü
-arasında seçim yaparsın. Piyasa dört rejim arasında gezinir: büyüme,
-durgunluk, kriz, enflasyon. Krizde altın kazandırır, borsa çöker.
+MESLEK SEÇ, MERDİVENİ TIRMAN
+Yazılımcı, doktor, avukat, öğretmen, aşçı, emlakçı, oto tamircisi,
+çiftçi... On dört meslek, her birinin kendi terfi basamakları. Memurluk
+güvenlidir ama tavanı alçaktır. Doktorluk geç başlar, en yükseğe çıkar.
+Askerlik gelir: er misin, bedelli mi? Öğretmensen atama kurası bekler.
 
-İŞLETME AÇ
-Kafe ya da oto galeri kur. Ama her işletme aylık "ilgi" ister; yeterince
-bakmadığın işletmenin geliri düşer ve kriz kartları çıkmaya başlar. CEO
-atayabilirsin — yükü azaltır, kârı da azaltır, zimmet riski getirir.
+ENFLASYON SENİ BEKLEMİYOR
+Nakit tutmak kaybetmektir — bu oyunun ana kuralı. Mevduat, altın, döviz,
+gayrimenkul, arsa, kripto ve altı borsa sektörü var. Piyasa dört rejim
+arasında dolaşıyor: büyüme, durgunluk, kriz, enflasyon. Kriz gelince
+altın seni korur, borsa çöker. Daireyi satmaya karar verdiğinde alıcı üç
+tur bekletir; o arada fiyat düşerse zarar senindir.
 
-KARAR VER
-140'tan fazla olay kartı: kira zammı, düğün takısı, dayıdan borç isteği,
-imar söylentisi, kur şoku, ortaklık teklifi. Bazı kararların sonucu aylar
-sonra açığa çıkar. İtibarın yükseldikçe daha büyük fırsatlar görürsün.
+İŞLETME AÇ, AMA BAKABİLECEĞİN KADAR
+Kafe ya da oto galeri. Her işletme her ay senden ilgi ister; ayırmazsan
+cirosu düşer, personeli kaçar, zabıta kapıya dayanır. CEO atayabilirsin:
+yükü hafifletir, kârı da azaltır, üstüne zimmet riski getirir. Kaç
+işletmeyi aynı anda ayakta tutabileceğin bu oyunun asıl sorusu.
+
+KARARLAR KAPINI ÇALIYOR
+Yüz kırktan fazla olay kartı. Ev sahibi zam istiyor. Kuzeninin düğününe
+ne takacaksın? Dayın borç istiyor, "birkaç aya öderim" diyor. Arsanın
+yanından yol geçecekmiş — söylenti mi, bilgi mi? Bazı kararların sonucu
+aylar sonra ortaya çıkar; o zamana kadar merak edersin.
+
+Çevren genişledikçe gelen teklifler büyür. Tanınmayan birine kimse
+ortaklık önermez.
 
 DİP DE VAR
-Borcunu ödeyemezsen kemer sıkarsın, sonra icra gelir. Ama iflas bir
-bitiş değil bir diptir: toparlanabilirsin.
+Parası biten kemer sıkar. Taksitini ödeyemeyen icrayla tanışır: eline ne
+varsa satılır, borcun silinir, kredi kapın iki yıl kapanır. Ama bu bir
+son değil, bir dip. Oradan da geri dönülür.
 
-65 yaşında oyun biter ve ne olduğunu görürsün.
+Aynı hayatı ikinci kez yaşayamazsın, ama yeni bir tane kurabilirsin.
 
-Her oyun bir tohumdan üretilir; aynı tohum, aynı kararlar, aynı hayat.
-
-Bu bir oyundur, yatırım tavsiyesi değildir. Oyundaki şirket, banka,
-kulüp ve kişi isimlerinin tamamı kurgusaldır.
+Bu bir oyundur, yatırım tavsiyesi değildir. Oyundaki bütün şirket, banka,
+kulüp ve kişi isimleri kurgusaldır.
 ```
+
+### Metinde bilerek YAPILMAYANLAR
+- "Simülasyon motoru", "prosedürel üretim", "tohum" gibi geliştirici
+  terimleri yok: oyuncu bunları umursamıyor.
+- Oyunda OLMAYAN hiçbir şey vaat edilmiyor. İki işletme türü var, metin de
+  ikisini sayıyor; on dört meslek var, "onlarca" denmiyor.
+- Rakamlar veriyle uyumlu: 14 meslek, 141 kart, 12 yatırım aracı, 5 şehir,
+  4 rejim, 65 yaş sınırı. Denge değişirse **bu metin de güncellenmeli**.
 
 ## Paket boyutu
 
