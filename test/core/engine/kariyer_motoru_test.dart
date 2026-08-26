@@ -439,6 +439,57 @@ void main() {
   });
 
   group('Enerji ve mutluluk', () {
+    /// Verilen dağılımla uzun vadede oturduğu mutluluk.
+    int mutlulukPlatosu(ZamanDagilimi z) {
+      var o = calisan('yazilim_gelistirici', sektor: Sektor.teknoloji);
+      for (var t = 1; t <= 200; t++) {
+        o = motor
+            .turIsle(
+              oyuncu: o,
+              katalog: katalog,
+              piyasa: piyasa,
+              zaman: z,
+              maasEndeksi: 1.0,
+              akis: akis(5, t),
+            )
+            .oyuncu;
+      }
+      return o.mutluluk;
+    }
+
+    test('mutluluk platosu ayrılan dinlenme puanıyla belirleniyor', () {
+      // Mutluluk önce tek yönlü bir cırcırdı: dinlenmeye bir puan ayıran
+      // oyuncu 7 turda 100'e yapışıp orada kalıyordu. Ölçüldü — `dengeli()`
+      // her tur +4,5 veriyor, hiçbir aşınma yoktu. Hedonik uyumla her
+      // dinlenme seviyesi AYRI bir platoya oturmalı.
+      final az = mutlulukPlatosu(
+          const ZamanDagilimi(calisma: 6, egitim: 3, dinlenme: 1));
+      final orta = mutlulukPlatosu(ZamanDagilimi.dengeli());
+      final cok = mutlulukPlatosu(
+          const ZamanDagilimi(calisma: 4, egitim: 1, dinlenme: 5));
+
+      expect(orta, greaterThan(az), reason: '$az -> $orta');
+      expect(cok, greaterThan(orta), reason: '$orta -> $cok');
+      // Dengeli dağılım tavana YAPIŞMAMALI: yapışırsa mutluluğu harcayan
+      // kartların ve aşırı çalışmanın hiçbir etkisi kalmaz.
+      expect(orta, lessThan(Oyuncu.mutlulukTavan));
+    });
+
+    test('aşırı çalışma burnout getiriyor, dengeli dağılım getirmiyor', () {
+      // Anayasa: "Mutluluk/Stres — düşerse burnout, performans düşer."
+      // Eşik (20) daha önce hiç görülmüyordu; ölçüldü: `calisma: 8`
+      // oyuncusu hem en yüksek serveti hem 74 mutluluğu alıyordu, yani
+      // aşırı çalışmanın bedeli yoktu.
+      expect(
+        mutlulukPlatosu(const ZamanDagilimi(calisma: 8, dinlenme: 2)),
+        lessThan(Oyuncu.burnoutEsigi),
+      );
+      expect(
+        mutlulukPlatosu(ZamanDagilimi.dengeli()),
+        greaterThan(Oyuncu.burnoutEsigi),
+      );
+    });
+
     test('tam mesai enerji yakar, dinlenme doldurur', () {
       final o = calisan('asci', sektor: Sektor.esnaf, enerji: 60);
       expect(isle(o, zaman: ZamanDagilimi.tamMesai()).oyuncu.enerji,

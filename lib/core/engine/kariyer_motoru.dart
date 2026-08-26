@@ -61,8 +61,27 @@ class KariyerAyarlari {
   /// Bu puanın üstünde çalışmak mutluluğu düşürür.
   final int asiriCalismaEsigi = 6;
   final double asiriCalismaCezasi = 2.0;
-  final double dinlenmeMutlulugu = 2.0;
+  /// Dinlenme puanı başına mutluluk. 2,0'dan indirildi: aşağıdaki uyum
+  /// mekanizmasıyla birlikte dengeli dağılımın platosunu 100'den 85'e
+  /// çekiyor.
+  final double dinlenmeMutlulugu = 0.8;
   final double networkMutlulugu = 0.5;
+
+  /// Mutluluğun çekildiği nötr seviye ve her turdaki uyum oranı.
+  ///
+  /// Mutluluk önce tek yönlü bir cırcırdı: `dengeli()` her tur +4,5
+  /// veriyor, hiçbir aşınma yoktu. Ölçüldü — bir dinlenme puanı ayıran
+  /// oyuncu 7 turda 100'e yapışıp orada kalıyor, hiç ayırmayan birkaç
+  /// yılda 0'a çakılıyordu; arada bant yoktu. Sonuç: aşırı çalışmanın
+  /// bedeli yoktu, `calisma: 8` hem en yüksek serveti (18,5M) hem rahat
+  /// mutluluğu (74) veriyordu.
+  ///
+  /// Uyum, kazancı seviyeye bağlar (hedonik uyum): plato, ayrılan dinlenme
+  /// puanıyla belirlenir. Anayasadaki "Mutluluk/Stres — düşerse burnout,
+  /// performans düşer" kuralı ancak böyle işliyor; `burnout` eşiği (20)
+  /// daha önce hiç görülmüyordu.
+  final int mutlulukTabani = 50;
+  final double mutlulukUyumOrani = 0.06;
 
   /// Enerji bu seviyenin altına inince ek mutluluk kaybı.
   final int dusukEnerjiEsigi = 25;
@@ -697,6 +716,11 @@ class KariyerMotoru {
     if (guncel.enerji < ayarlar.dusukEnerjiEsigi) {
       mutluluk -= ayarlar.dusukEnerjiCezasi;
     }
+    // Hedonik uyum: mutluluk her tur nötr seviyeye doğru çekilir. İtibarın
+    // orantılı aşınmasıyla aynı gerekçe — kazanç seviyeye bağlanmazsa stat
+    // tek yönlü bir cırcıra dönüşüyor ve tavana yapışıp kalıyor.
+    mutluluk -= (oyuncu.mutluluk - ayarlar.mutlulukTabani) *
+        ayarlar.mutlulukUyumOrani;
     guncel = guncel.mutlulukDegistir(_yuvarla(mutluluk, akis));
 
     return guncel;
