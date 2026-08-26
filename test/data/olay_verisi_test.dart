@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:hayat_kariyer/core/engine/rejim.dart';
 import 'package:hayat_kariyer/core/models/isletme_katalogu.dart';
 import 'package:hayat_kariyer/core/models/meslek_katalogu.dart';
 import 'package:hayat_kariyer/core/models/olay.dart';
@@ -79,6 +80,20 @@ final _ornekOyuncular = <String, Oyuncu>{
     kariyer: KariyerDurumu.ogrenci(hedef: EgitimSeviyesi.lisans, kalanTur: 48),
     nakit: 5000,
   ),
+  // Öğrencilik 4 yıl sürüyor; tek 18'lik temsilci "staj" ve "değişim
+  // programı" gibi 19+ kartlarını ulaşılamaz gösteriyordu.
+  'öğrenci (21)': Oyuncu(
+    ad: 'test',
+    sehir: Sehir.izmir,
+    tur: 3 * 12,
+    egitim: EgitimSeviyesi.lise,
+    kariyer: const KariyerDurumu.ogrenci(
+      hedef: EgitimSeviyesi.lisans,
+      kalanTur: 12,
+    ),
+    nakit: 9000,
+    itibar: 6,
+  ),
   'çalışan (30)': Oyuncu(
     ad: 'test',
     sehir: Sehir.istanbul,
@@ -106,7 +121,55 @@ final _ornekOyuncular = <String, Oyuncu>{
     nakit: 100000,
     itibar: 25,
   ),
+  'asker (22)': Oyuncu(
+    ad: 'test',
+    sehir: Sehir.konya,
+    tur: 4 * 12,
+    egitim: EgitimSeviyesi.lise,
+    kariyer: const KariyerDurumu.askerlik(kalanTur: 4),
+    nakit: 20000,
+  ),
+  // Dip sisteminin hedefi: nakiti eksi, kredi notu tabanda. Bu temsilci
+  // olmadan dip kartlarının koşulları hiç sınanmıyordu.
+  'dipteki (33)': Oyuncu(
+    ad: 'test',
+    sehir: Sehir.istanbul,
+    tur: 15 * 12,
+    egitim: EgitimSeviyesi.lise,
+    kariyer: const KariyerDurumu.calisan(meslekId: 'satis_temsilcisi'),
+    nakit: -40000,
+    itibar: 8,
+    krediNotu: 380,
+  ),
+  'varlıklı (48)': Oyuncu(
+    ad: 'test',
+    sehir: Sehir.izmir,
+    tur: 30 * 12,
+    egitim: EgitimSeviyesi.lisans,
+    kariyer: const KariyerDurumu.calisan(meslekId: 'yazilim_gelistirici'),
+    nakit: 8000000,
+    itibar: 85,
+    krediNotu: 1700,
+  ),
 };
+
+/// Bir kartın çıkabileceği aday durumlar: temsilci oyuncular x rejimler.
+///
+/// Kart bir mesleğe bağlıysa o mesleği taşıyan varyant da denenir; yoksa
+/// meslek kartları "ulaşılamaz" görünürdü.
+Iterable<(Oyuncu, PiyasaDurumu)> _adayDurumlar(Olay olay) sync* {
+  final oyuncular = <Oyuncu>[
+    ..._ornekOyuncular.values,
+    for (final id in olay.kosullar.meslekler ?? const <String>[])
+      for (final temel in _ornekOyuncular.values)
+        temel.copyWith(kariyer: KariyerDurumu.calisan(meslekId: id)),
+  ];
+  for (final oyuncu in oyuncular) {
+    for (final rejim in Rejim.values) {
+      yield (oyuncu, PiyasaDurumu(rejim: rejim));
+    }
+  }
+}
 
 void main() {
   late OlayKatalogu katalog;
@@ -310,6 +373,30 @@ void main() {
       }
     });
 
+    test('yazılan her kart en az bir oyuncuya çıkabiliyor', () {
+      // Koşulları hiçbir durumda tutmayan kart, yazılıp hiç görülmeyen
+      // içeriktir ve hiçbir yerde patlamaz. Ölçümde 480 turluk oyunda
+      // havuzun yarısının hiç çıkmadığı görülünce bu kural yazıldı: o
+      // ölçüm bir defalık, bu kural kalıcı.
+      //
+      // İşletme kartları hariç; onların kapısı işletme sahibi olmak ve
+      // `isletme_verisi_test` tarafından ayrıca doğrulanıyor.
+      final isletmeninkiler = isletmeKartlari();
+      final ulasilamayan = <String>[];
+      for (final olay in katalog.tumu) {
+        if (isletmeninkiler.contains(olay.id)) continue;
+        final ulasilir = _adayDurumlar(olay).any(
+          (d) => olay.kosullar.uygunMu(d.$1, d.$2),
+        );
+        if (!ulasilir) ulasilamayan.add(olay.id);
+      }
+      expect(
+        ulasilamayan,
+        isEmpty,
+        reason: 'koşulları hiçbir temsilcide tutmuyor: $ulasilamayan',
+      );
+    });
+
     test('her oyuncu tipi yeterli kart görüyor', () {
       // İlk yazımda "koşulsuz kart sayısı" ölçülüyordu; asıl sorulması
       // gereken bu değil. Kartların hepsi koşulludur ama koşullar bir
@@ -324,7 +411,10 @@ void main() {
             .length;
         expect(
           havuz,
-          greaterThanOrEqualTo(8),
+          // Eşik 8'di; havuz genişletildikten sonra en dar temsilci 22
+          // kart görüyor. 20'ye çekildi: bir havuzun çökmesini yakalar,
+          // yeni temsilci eklemeyi gereksiz yere zorlaştırmaz.
+          greaterThanOrEqualTo(20),
           reason: '${ornek.key}: yalnız $havuz kart görüyor',
         );
       }

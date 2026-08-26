@@ -320,5 +320,316 @@
         "etkiler": { "enerji": 5 }
       }
     ]
+  },
+{
+    "id": "burs_basvurusu_01",
+    "baslik": "Burs başvuruları açıldı",
+    "metin": "Evrak toplamak, dilekçe yazmak, sıra beklemek gerek. Kontenjan dar.",
+    "tur": "firsat",
+    "agirlik": 11,
+    "bekleme": 12,
+    "kosullar": { "durumlar": ["ogrenci"] },
+    "secenekler": [
+      {
+        "etiket": "Başvur, evrakları topla",
+        "etkiler": { "enerji": -7 },
+        "sonuclar": [
+          {
+            "sans": 0.4,
+            "metin": "Burs çıktı. Her ayın başında hesaba düşecek.",
+            "etkiler": { "nakit": 26000, "mutluluk": 8 }
+          },
+          {
+            "sans": 0.6,
+            "metin": "Listeye giremedin. Puanın bir virgül altta kalmış.",
+            "etkiler": { "mutluluk": -5 }
+          }
+        ]
+      },
+      {
+        "etiket": "Uğraşma",
+        "etkiler": { "enerji": 4 }
+      }
+    ]
+  },
+  {
+    "id": "vize_kaldi_01",
+    "baslik": "Vizeden kaldın",
+    "metin": "Bu dersi üçüncü kez alıyorsun. Hocanın tavrı belli.",
+    "tur": "kriz",
+    "agirlik": 11,
+    "bekleme": 10,
+    "kosullar": { "durumlar": ["ogrenci"] },
+    "secenekler": [
+      {
+        "etiket": "Bütünlemeye kilitlen",
+        "etkiler": { "enerji": -15, "mutluluk": -5 }
+      },
+      {
+        "etiket": "Bırak, gelecek dönem al",
+        "etkiler": { "nakit": -5000, "mutluluk": -4 }
+      }
+    ]
+  },
+  {
+    "id": "degisim_programi_01",
+    "baslik": "Değişim programı çağrısı",
+    "metin": "Bir dönem yurt dışında okumak mümkün. Katkı payı ailene yük olacak.",
+    "tur": "teklif",
+    "agirlik": 7,
+    "tekSeferlik": true,
+    "kosullar": { "durumlar": ["ogrenci"], "yas": [19, 27] },
+    "secenekler": [
+      {
+        "etiket": "Git",
+        "etkiler": { "nakit": -95000, "mutluluk": 16, "itibar": 10, "enerji": -8 }
+      },
+      {
+        "etiket": "Bu sefer olmasın",
+        "etkiler": { "mutluluk": -6 }
+      }
+    ]
+  },
+  {
+    "id": "part_time_is_01",
+    "baslik": "Kafede yarı zamanlı iş",
+    "metin": "Akşamları beş saat. Ders çalışacak vaktin daralacak.",
+    "tur": "firsat",
+    "agirlik": 12,
+    "bekleme": 10,
+    "kosullar": { "durumlar": ["ogrenci"] },
+    "secenekler": [
+      {
+        "etiket": "Başla",
+        "etkiler": { "nakit": 13000, "enerji": -15, "itibar": 2 }
+      },
+      {
+        "etiket": "Derse odaklan",
+        "etkiler": { "enerji": 5, "mutluluk": 2 }
+      }
+    ]
+  },
+  {
+    "id": "ogrenci_kredisi_yatti_01",
+    "baslik": "Öğrenim kredisi hesaba düştü",
+    "metin": "Toplu bir para. Mezun olunca geri ödeneceğini herkes unutuyor.",
+    "tur": "hayat",
+    "agirlik": 10,
+    "bekleme": 14,
+    "kosullar": { "durumlar": ["ogrenci"] },
+    "secenekler": [
+      {
+        "etiket": "Kitap ve kurs için ayır",
+        "etkiler": { "nakit": -9000, "enerji": 5, "mutluluk": 2 }
+      },
+      {
+        "etiket": "Bir kısmını kenara koy",
+        "etkiler": { "mutluluk": -3, "krediNotu": 12 }
+      },
+      {
+        "etiket": "Arkadaşlarla harca",
+        "etkiler": { "nakit": -14000, "mutluluk": 9, "itibar": 3 }
+      }
+    ]
+  },
+  {
+    "id": "ev_arkadasi_kirasi_01",
+    "baslik": "Ev arkadaşı payını vermedi",
+    "metin": "Ay sonu geldi, o hâlâ 'yarın' diyor. Kira tek isme yazılı: seninkine.",
+    "tur": "kriz",
+    "agirlik": 10,
+    "bekleme": 16,
+    "kosullar": { "durumlar": ["ogrenci"], "yas": [18, 30] },
+    "secenekler": [
+      {
+        "etiket": "Sen kapat, sonra konuşursun",
+        "etkiler": { "nakit": -9000, "mutluluk": -4 }
+      },
+      {
+        "etiket": "Üstüne git",
+        "etkiler": { "mutluluk": -3 },
+        "sonuclar": [
+          {
+            "sans": 0.5,
+            "metin": "Ertesi gün parayı getirdi. Arada bir soğukluk kaldı.",
+            "etkiler": { "itibar": -2 }
+          },
+          {
+            "sans": 0.5,
+            "metin": "Kavga büyüdü, evden çıktı. Kirayı tek başına ödüyorsun.",
+            "etkiler": { "nakit": -14000, "mutluluk": -6, "itibar": -3 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "is_gorusmesi_reddi_01",
+    "baslik": "Yine olumsuz döndüler",
+    "metin": "Bu ayın dördüncüsü. 'Deneyimli aday tercih ettik' yazıyor.",
+    "tur": "kriz",
+    "agirlik": 12,
+    "bekleme": 8,
+    "kosullar": { "durumlar": ["issiz"], "yas": [20, 45] },
+    "secenekler": [
+      {
+        "etiket": "Başvurmaya devam et",
+        "etkiler": { "enerji": -8, "mutluluk": -5 }
+      },
+      {
+        "etiket": "Beklentiyi düşür, ne çıkarsa",
+        "etkiler": { "mutluluk": -8, "itibar": -3 }
+      },
+      {
+        "etiket": "Bir süre ara ver",
+        "etkiler": { "mutluluk": -3, "enerji": 6, "itibar": -4 }
+      }
+    ]
+  },
+  {
+    "id": "issizlik_odenegi_01",
+    "baslik": "İşsizlik ödeneği başvurusu",
+    "metin": "Prim günün tutuyor gibi. Kuyruk uzun, evrak eksik çıkarsa baştan.",
+    "tur": "hayat",
+    "agirlik": 11,
+    "bekleme": 18,
+    "kosullar": { "durumlar": ["issiz"], "yas": [21, 60] },
+    "secenekler": [
+      {
+        "etiket": "Başvur, sıraya gir",
+        "etkiler": { "enerji": -6 },
+        "sonuclar": [
+          {
+            "sans": 0.6,
+            "metin": "Onaylandı. Birkaç ay nefes alacaksın.",
+            "etkiler": { "nakit": 34000, "mutluluk": 6 }
+          },
+          {
+            "sans": 0.4,
+            "metin": "Prim günün eksik çıktı. Boşuna beklemişsin.",
+            "etkiler": { "mutluluk": -6 }
+          }
+        ]
+      },
+      {
+        "etiket": "Uğraşmaya değmez",
+        "etkiler": { "mutluluk": -2, "enerji": 3 }
+      }
+    ]
+  },
+  {
+    "id": "ilk_maas_01",
+    "baslik": "İlk maaş yattı",
+    "metin": "Hesapta gördüğün ilk maaş. Herkesin bir önerisi var.",
+    "tur": "hayat",
+    "agirlik": 10,
+    "tekSeferlik": true,
+    "kosullar": { "durumlar": ["calisan"], "yas": [19, 30] },
+    "secenekler": [
+      {
+        "etiket": "Aileye hediye al",
+        "etkiler": { "nakit": -12000, "mutluluk": 10, "itibar": 4 }
+      },
+      {
+        "etiket": "Kendine bir şey al",
+        "etkiler": { "nakit": -16000, "mutluluk": 12 }
+      },
+      {
+        "etiket": "Hepsini kenara koy",
+        "etkiler": { "mutluluk": -4, "krediNotu": 20 }
+      }
+    ]
+  },
+  {
+    "id": "ilk_araba_01",
+    "baslik": "İkinci el araba fırsatı",
+    "metin": "Tanıdığın satıyor, fiyat piyasanın altında. Muayenesi yakın.",
+    "tur": "teklif",
+    "agirlik": 8,
+    "bekleme": 36,
+    "kosullar": { "yas": [21, 40], "enAzNakit": 120000 },
+    "secenekler": [
+      {
+        "etiket": "Al",
+        "etkiler": { "nakit": -170000, "mutluluk": 12 },
+        "gecikmeTuru": 5,
+        "sonuclar": [
+          {
+            "sans": 0.5,
+            "metin": "Araba temiz çıktı. Hem işine yaradı hem değerini korudu.",
+            "etkiler": { "mutluluk": 5, "itibar": 2 }
+          },
+          {
+            "sans": 0.5,
+            "metin": "Beş ay sonra şanzıman. Tanıdıklıktan sesini de çıkaramadın.",
+            "etkiler": { "nakit": -70000, "mutluluk": -9 }
+          }
+        ]
+      },
+      {
+        "etiket": "Toplu taşıma bana yeter",
+        "etkiler": { "mutluluk": -3, "enerji": -4 }
+      }
+    ]
+  },
+  {
+    "id": "sosyal_medya_hesabi_01",
+    "baslik": "Hesap tutmaya başladı",
+    "metin": "Paylaştığın bir video beklenmedik ilgi gördü. Devamı emek ister.",
+    "tur": "firsat",
+    "agirlik": 9,
+    "bekleme": 24,
+    "kosullar": { "yas": [18, 45] },
+    "secenekler": [
+      {
+        "etiket": "Düzenli içerik üret",
+        "etkiler": { "enerji": -12 },
+        "gecikmeTuru": 6,
+        "sonuclar": [
+          {
+            "sans": 0.3,
+            "metin": "Kitle büyüdü, reklam teklifleri gelmeye başladı.",
+            "etkiler": { "nakit": 90000, "itibar": 12 }
+          },
+          {
+            "sans": 0.4,
+            "metin": "Küçük ama sadık bir takipçi kitlen oldu.",
+            "etkiler": { "nakit": 15000, "itibar": 5 }
+          },
+          {
+            "sans": 0.3,
+            "metin": "İlgi söndü. Harcadığın vakte yazık oldu.",
+            "etkiler": { "mutluluk": -6 }
+          }
+        ]
+      },
+      {
+        "etiket": "Tek seferlik kalsın",
+        "etkiler": { "itibar": 1 }
+      }
+    ]
+  },
+  {
+    "id": "dil_kursu_01",
+    "baslik": "Dil kursu kampanyası",
+    "metin": "Akşam grubu, haftada üç gün. Taksitli ödeme var ama vakit yok.",
+    "tur": "hayat",
+    "agirlik": 8,
+    "bekleme": 30,
+    "kosullar": { "yas": [18, 50] },
+    "secenekler": [
+      {
+        "etiket": "Kaydol, devam et",
+        "etkiler": { "nakit": -28000, "enerji": -10, "itibar": 4 }
+      },
+      {
+        "etiket": "Uygulamadan kendin çalış",
+        "etkiler": { "nakit": -2000, "enerji": -5, "mutluluk": -2 }
+      },
+      {
+        "etiket": "Sonraki döneme bırak",
+        "etkiler": { "mutluluk": -2 }
+      }
+    ]
   }
 ]

@@ -1,0 +1,179 @@
+[
+  {
+    "id": "kisitli_market_01",
+    "baslik": "Kasada sepeti azalttın",
+    "metin": "Sıra sana gelmeden birkaç şeyi rafa geri koydun. Arkadaki teyze görmezden geldi.",
+    "tur": "kriz",
+    "agirlik": 12,
+    "bekleme": 8,
+    "kosullar": { "enCokNakit": 0 },
+    "secenekler": [
+      {
+        "etiket": "Listeyi yarıya indir",
+        "etkiler": { "mutluluk": -6, "enerji": -8 }
+      },
+      {
+        "etiket": "Kartla çek, sonra düşünürüm",
+        "etkiler": { "nakit": -9000, "krediNotu": -20 }
+      }
+    ]
+  },
+  {
+    "id": "aileye_donme_01",
+    "baslik": "Baban 'gel eve' diyor",
+    "metin": "Kira gideri biter, oda hazır. Bir de herkesin bakışları var.",
+    "tur": "teklif",
+    "agirlik": 9,
+    "bekleme": 24,
+    "kosullar": { "enCokNakit": 3000, "yas": [22, 45] },
+    "secenekler": [
+      {
+        "etiket": "Eve dön",
+        "etkiler": { "nakit": 42000, "mutluluk": -12, "itibar": -8 }
+      },
+      {
+        "etiket": "Diret, kendi evinde kal",
+        "etkiler": { "nakit": -6000, "mutluluk": 4, "enerji": -8 }
+      }
+    ]
+  },
+  {
+    "id": "esyalari_sat_01",
+    "baslik": "Satılacak ne kaldı",
+    "metin": "Evde gözden geçirilmedik şey kalmadı. Televizyon ve konsol ilk sırada.",
+    "tur": "firsat",
+    "agirlik": 10,
+    "bekleme": 20,
+    "kosullar": { "enCokNakit": 0 },
+    "secenekler": [
+      {
+        "etiket": "Elektronikleri elden çıkar",
+        "etkiler": { "nakit": 46000, "mutluluk": -9 }
+      },
+      {
+        "etiket": "Bir süre daha idare et",
+        "etkiler": { "mutluluk": -4, "enerji": -5 }
+      }
+    ]
+  },
+  {
+    "id": "icra_memuru_kapida_01",
+    "baslik": "Kapıda haciz kâğıdı",
+    "metin": "Yapıştırılan kâğıdı komşular da gördü. Memur öğleden sonra tekrar gelecek.",
+    "tur": "kriz",
+    "agirlik": 11,
+    "bekleme": 16,
+    "kosullar": { "enCokKrediNotu": 520 },
+    "secenekler": [
+      {
+        "etiket": "Konuş, taksitlendirmeye çalış",
+        "etkiler": { "nakit": -16000, "mutluluk": -8, "itibar": -3 }
+      },
+      {
+        "etiket": "Kapıyı açma",
+        "etkiler": { "mutluluk": -13, "itibar": -8, "krediNotu": -35 }
+      }
+    ]
+  },
+  {
+    "id": "kart_limiti_kapandi_01",
+    "baslik": "Kart kasada geçmedi",
+    "metin": "Banka limiti kapatmış, haber bile vermemiş. Arkanda sıra vardı.",
+    "tur": "kriz",
+    "agirlik": 10,
+    "bekleme": 18,
+    "kosullar": { "enCokKrediNotu": 620 },
+    "secenekler": [
+      {
+        "etiket": "Şubeye git, konuş",
+        "etkiler": { "enerji": -6, "mutluluk": -5 },
+        "sonuclar": [
+          {
+            "sans": 0.35,
+            "metin": "Müdür limiti yarı yarıya geri açtı. Nefes aldın.",
+            "etkiler": { "krediNotu": 30 }
+          },
+          {
+            "sans": 0.65,
+            "metin": "Sistem kararı dediler, yapacak bir şey yok.",
+            "etkiler": { "mutluluk": -5, "krediNotu": -12 }
+          }
+        ]
+      },
+      {
+        "etiket": "Nakitle yaşamaya alış",
+        "etkiler": { "mutluluk": -6, "enerji": -5 }
+      }
+    ]
+  },
+  {
+    "id": "senetle_borc_01",
+    "baslik": "Senet karşılığı para",
+    "metin": "Tanıdığın bir tanıdık 'ben hallederim' diyor. İmza masada bekliyor.",
+    "tur": "teklif",
+    "agirlik": 8,
+    "bekleme": 36,
+    "kosullar": { "enCokNakit": 0, "enCokKrediNotu": 600 },
+    "secenekler": [
+      {
+        "etiket": "İmzala, parayı al",
+        "etkiler": { "nakit": 85000, "krediNotu": -45 },
+        "gecikmeTuru": 6,
+        "sonuclar": [
+          {
+            "sans": 0.45,
+            "metin": "Zar zor kapattın. Faizi düşününce içine oturdu.",
+            "etkiler": { "nakit": -145000 }
+          },
+          {
+            "sans": 0.55,
+            "metin": "Ödeyemedin. Adamın üslubu değişti, telefonlar sıklaştı.",
+            "etkiler": { "nakit": -95000, "mutluluk": -18, "itibar": -10 }
+          }
+        ]
+      },
+      {
+        "etiket": "Uzak dur",
+        "etkiler": { "mutluluk": -4 }
+      }
+    ]
+  },
+  {
+    "id": "ikinci_is_01",
+    "baslik": "Akşamları kuryelik",
+    "metin": "Mesai çıkışı üç saat, hafta sonu tam gün. Uykudan kısacaksın.",
+    "tur": "firsat",
+    "agirlik": 11,
+    "bekleme": 14,
+    "kosullar": { "enCokNakit": 20000, "durumlar": ["calisan"] },
+    "secenekler": [
+      {
+        "etiket": "Başla",
+        "etkiler": { "nakit": 30000, "enerji": -22 }
+      },
+      {
+        "etiket": "Bu tempoya dayanamam",
+        "etkiler": { "mutluluk": -3 }
+      }
+    ]
+  },
+  {
+    "id": "sifirdan_baslamak_01",
+    "baslik": "Hesapta hiçbir şey yok",
+    "metin": "Ne varlık kaldı ne borç. Yıllar silindi ama sayfa da temiz.",
+    "tur": "hayat",
+    "agirlik": 9,
+    "bekleme": 30,
+    "kosullar": { "enCokKrediNotu": 420 },
+    "secenekler": [
+      {
+        "etiket": "Ne bulursan çalış, açığı kapat",
+        "etkiler": { "nakit": 24000, "enerji": -18, "mutluluk": -4 }
+      },
+      {
+        "etiket": "Önce kendini toparla",
+        "etkiler": { "enerji": 12, "mutluluk": 6, "itibar": -3 }
+      }
+    ]
+  }
+]

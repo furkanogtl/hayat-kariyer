@@ -159,5 +159,442 @@
         "etkiler": { "enerji": -8, "yetkinlik": { "ticaret": 2 } }
       }
     ]
+  },
+  {
+    "id": "ev_sahibi_satiyor_01",
+    "baslik": "Ev sahibi daireyi satıyor",
+    "metin": "İki ay içinde çıkmanı istiyor. Yeni kiralar da eskisi gibi değil.",
+    "tur": "kriz",
+    "agirlik": 9,
+    "bekleme": 48,
+    "kosullar": { "yas": [22, 65] },
+    "secenekler": [
+      {
+        "etiket": "Hemen taşın",
+        "etkiler": { "nakit": -48000, "enerji": -12, "mutluluk": -5 }
+      },
+      {
+        "etiket": "Süre iste, direnç göster",
+        "etkiler": { "nakit": -6000, "mutluluk": -6 },
+        "sonuclar": [
+          {
+            "sans": 0.45,
+            "metin": "Üç ay daha kaldın, taşınmayı sindire sindire yaptın.",
+            "etkiler": { "nakit": -30000 }
+          },
+          {
+            "sans": 0.55,
+            "metin": "Tahliye kâğıdı geldi. Aceleyle ve pahalıya taşındın.",
+            "etkiler": { "nakit": -58000, "mutluluk": -6 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "bayram_memleket_01",
+    "baslik": "Bayram yaklaşıyor",
+    "metin": "Yol, hediye, çocuklara harçlık. Gitmemek de bir bedel.",
+    "tur": "hayat",
+    "agirlik": 12,
+    "bekleme": 11,
+    "kosullar": { "yas": [19, 70] },
+    "secenekler": [
+      {
+        "etiket": "Git, hepsini eksiksiz yap",
+        "etkiler": { "nakit": -19000, "mutluluk": 9, "itibar": 3 }
+      },
+      {
+        "etiket": "Kısa git, hediyeyi kıs",
+        "etkiler": { "nakit": -7000, "mutluluk": 3 }
+      },
+      {
+        "etiket": "Bu bayram gitme",
+        "etkiler": { "mutluluk": -7, "itibar": -3 }
+      }
+    ]
+  },
+  {
+    "id": "dogalgaz_faturasi_01",
+    "baslik": "Kışın ilk faturası",
+    "metin": "Rakamı iki kez okudun. Sayaç doğru çalışıyor, sorun o değil.",
+    "tur": "kriz",
+    "agirlik": 11,
+    "bekleme": 14,
+    "kosullar": { "yas": [20, 70] },
+    "secenekler": [
+      {
+        "etiket": "Öde, geç",
+        "etkiler": { "nakit": -11000 }
+      },
+      {
+        "etiket": "Peteği kıs, kazakla otur",
+        "etkiler": { "nakit": -4000, "enerji": -7, "mutluluk": -4 }
+      }
+    ]
+  },
+  {
+    "id": "buzdolabi_bozuldu_01",
+    "baslik": "Buzdolabı çalışmıyor",
+    "metin": "Sabah açtığında içerisi ılıktı. Yazın ortası.",
+    "tur": "kriz",
+    "agirlik": 8,
+    "bekleme": 40,
+    "kosullar": { "yas": [21, 70] },
+    "secenekler": [
+      {
+        "etiket": "Yenisini al",
+        "etkiler": { "nakit": -34000 }
+      },
+      {
+        "etiket": "Tamirciye ver",
+        "etkiler": { "nakit": -8000 },
+        "sonuclar": [
+          {
+            "sans": 0.5,
+            "metin": "Tamirci iş bildi, bir daha sorun çıkarmadı.",
+            "etkiler": { "mutluluk": 3 }
+          },
+          {
+            "sans": 0.5,
+            "metin": "İki ay sonra yine durdu. Sonunda yenisini aldın.",
+            "etkiler": { "nakit": -34000, "mutluluk": -4 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "telefon_kirildi_01",
+    "baslik": "Telefon elinden kaydı",
+    "metin": "Ekran örümcek ağına döndü. Dokunmatiğin yarısı çalışıyor.",
+    "tur": "kriz",
+    "agirlik": 9,
+    "bekleme": 30,
+    "secenekler": [
+      {
+        "etiket": "Yenisini al",
+        "etkiler": { "nakit": -38000 }
+      },
+      {
+        "etiket": "Ekranı değiştirt",
+        "etkiler": { "nakit": -9000, "mutluluk": -2 }
+      },
+      {
+        "etiket": "Çatlakla kullan",
+        "etkiler": { "mutluluk": -5, "enerji": -3 }
+      }
+    ]
+  },
+  {
+    "id": "trafik_cezasi_01",
+    "baslik": "Radara girmişsin",
+    "metin": "Ceza kâğıdı posta kutusunda. Erken ödemede indirim var.",
+    "tur": "kriz",
+    "agirlik": 9,
+    "bekleme": 20,
+    "kosullar": { "yas": [20, 70] },
+    "secenekler": [
+      {
+        "etiket": "Erken öde, indirimi al",
+        "etkiler": { "nakit": -3500 }
+      },
+      {
+        "etiket": "İtiraz et",
+        "etkiler": { "nakit": -800, "mutluluk": -3 },
+        "sonuclar": [
+          {
+            "sans": 0.3,
+            "metin": "İtiraz kabul edildi, ceza silindi.",
+            "etkiler": { "mutluluk": 6 }
+          },
+          {
+            "sans": 0.7,
+            "metin": "Reddedildi. İndirim hakkı da yandı, tam tutarı ödedin.",
+            "etkiler": { "nakit": -7000 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "gozluk_numarasi_01",
+    "baslik": "Numara değişmiş",
+    "metin": "Ekrana bakarken gözlerini kısıyorsun. Doktor yeni reçete yazdı.",
+    "tur": "hayat",
+    "agirlik": 8,
+    "bekleme": 48,
+    "secenekler": [
+      {
+        "etiket": "Gözlük yaptır",
+        "etkiler": { "nakit": -15000, "enerji": 6 }
+      },
+      {
+        "etiket": "Lens dene",
+        "etkiler": { "nakit": -9000, "enerji": 4, "mutluluk": 3 }
+      },
+      {
+        "etiket": "Şimdilik idare et",
+        "etkiler": { "enerji": -7, "mutluluk": -2 }
+      }
+    ]
+  },
+  {
+    "id": "bel_agrisi_01",
+    "baslik": "Bel ağrısı geçmiyor",
+    "metin": "Sabahları doğrulmak zor. Doktor fizik tedavi öneriyor.",
+    "tur": "kriz",
+    "agirlik": 8,
+    "bekleme": 36,
+    "kosullar": { "yas": [26, 70] },
+    "secenekler": [
+      {
+        "etiket": "Fizik tedaviye başla",
+        "etkiler": { "nakit": -20000, "enerji": 10, "mutluluk": -2 }
+      },
+      {
+        "etiket": "Ağrı kesiciyle idare et",
+        "etkiler": { "nakit": -1500, "enerji": -11, "mutluluk": -5 }
+      }
+    ]
+  },
+  {
+    "id": "evcil_hayvan_01",
+    "baslik": "Apartmanın önündeki kedi",
+    "metin": "Kimse sahiplenmiyor ama sana alıştı. Kapıyı her açışında orada.",
+    "tur": "hayat",
+    "agirlik": 7,
+    "bekleme": 60,
+    "secenekler": [
+      {
+        "etiket": "Sahiplen",
+        "etkiler": { "nakit": -7000, "mutluluk": 11 }
+      },
+      {
+        "etiket": "Mamasını ver, sokakta kalsın",
+        "etkiler": { "nakit": -1200, "mutluluk": 4 }
+      },
+      {
+        "etiket": "Karışma",
+        "etkiler": { "mutluluk": -3 }
+      }
+    ]
+  },
+  {
+    "id": "eski_dost_bulusmasi_01",
+    "baslik": "Yıllar sonra buluşma",
+    "metin": "Üniversiteden arkadaşların toplanıyor. Bir kısmı iyi yerlerde.",
+    "tur": "hayat",
+    "agirlik": 9,
+    "bekleme": 30,
+    "kosullar": { "yas": [24, 70] },
+    "secenekler": [
+      {
+        "etiket": "Git, geceyi uzat",
+        "etkiler": { "nakit": -5000, "itibar": 6, "mutluluk": 7, "enerji": -9 }
+      },
+      {
+        "etiket": "Kısa uğra",
+        "etkiler": { "nakit": -1500, "itibar": 2, "mutluluk": 2 }
+      },
+      {
+        "etiket": "Gitme",
+        "etkiler": { "mutluluk": -3, "itibar": -2 }
+      }
+    ]
+  },
+  {
+    "id": "yaz_tatili_01",
+    "baslik": "Yaz planı",
+    "metin": "Herkes bir yere gidiyor. Sen de bir şey yapmalısın gibi hissediyorsun.",
+    "tur": "hayat",
+    "agirlik": 10,
+    "bekleme": 11,
+    "kosullar": { "yas": [20, 70] },
+    "secenekler": [
+      {
+        "etiket": "Otelde bir hafta",
+        "etkiler": { "nakit": -60000, "mutluluk": 15, "enerji": 20 }
+      },
+      {
+        "etiket": "Memlekette akrabalarda",
+        "etkiler": { "nakit": -12000, "mutluluk": 7, "enerji": 12, "itibar": 2 }
+      },
+      {
+        "etiket": "Bu yaz olmaz",
+        "etkiler": { "mutluluk": -7, "enerji": -5 }
+      }
+    ]
+  },
+  {
+    "id": "akraba_dugunleri_01",
+    "baslik": "Bu ay üç davetiye",
+    "metin": "Takı, kına, yol. Üçü de yakın akraba, hiçbiri atlanacak gibi değil.",
+    "tur": "hayat",
+    "agirlik": 10,
+    "bekleme": 10,
+    "kosullar": { "yas": [20, 65] },
+    "secenekler": [
+      {
+        "etiket": "Hepsine git",
+        "etkiler": { "nakit": -24000, "itibar": 5, "enerji": -11 }
+      },
+      {
+        "etiket": "Birine git, ötekilere takı yolla",
+        "etkiler": { "nakit": -11000, "itibar": 1, "enerji": -4 }
+      },
+      {
+        "etiket": "Hiçbirine gitme",
+        "etkiler": { "mutluluk": -4, "itibar": -6 }
+      }
+    ]
+  },
+  {
+    "id": "komsu_gurultusu_01",
+    "baslik": "Üst kattaki gürültü",
+    "metin": "Gece yarısı yürüyüş sesleri, sabaha karşı matkap. Üçüncü hafta.",
+    "tur": "hayat",
+    "agirlik": 9,
+    "bekleme": 24,
+    "secenekler": [
+      {
+        "etiket": "Kapısını çal, konuş",
+        "etkiler": { "mutluluk": -2 },
+        "sonuclar": [
+          {
+            "sans": 0.6,
+            "metin": "Özür diledi, ses kesildi. Bayramlaşacak kadar tanıştınız.",
+            "etkiler": { "mutluluk": 6, "itibar": 2 }
+          },
+          {
+            "sans": 0.4,
+            "metin": "Tartışma büyüdü. Apartman ikiye bölündü.",
+            "etkiler": { "mutluluk": -7, "itibar": -3 }
+          }
+        ]
+      },
+      {
+        "etiket": "Yönetime şikâyet et",
+        "etkiler": { "itibar": -2, "mutluluk": 2 }
+      },
+      {
+        "etiket": "Kulak tıkacı al",
+        "etkiler": { "nakit": -700, "enerji": -7 }
+      }
+    ]
+  },
+  {
+    "id": "aile_buyugu_hastalandi_01",
+    "baslik": "Hastanede refakatçi lazım",
+    "metin": "Babaannen yattı, kardeşlerin uzakta. Gözler sana dönük.",
+    "tur": "kriz",
+    "agirlik": 8,
+    "bekleme": 36,
+    "kosullar": { "yas": [26, 70] },
+    "secenekler": [
+      {
+        "etiket": "İzin al, yanında kal",
+        "etkiler": { "nakit": -9000, "enerji": -19, "mutluluk": -5, "itibar": 3 }
+      },
+      {
+        "etiket": "Bakıcı tut",
+        "etkiler": { "nakit": -38000, "mutluluk": -4 }
+      },
+      {
+        "etiket": "Hafta sonları git",
+        "etkiler": { "enerji": -9, "mutluluk": -9, "itibar": -3 }
+      }
+    ]
+  },
+  {
+    "id": "evlilik_karari_01",
+    "baslik": "Konu düğüne geldi",
+    "metin": "Salon, eşya, takı listesi. Herkesin bir beklentisi var.",
+    "tur": "hayat",
+    "agirlik": 7,
+    "tekSeferlik": true,
+    "kosullar": { "yas": [23, 45] },
+    "secenekler": [
+      {
+        "etiket": "Büyük düğün yap",
+        "etkiler": { "nakit": -380000, "mutluluk": 18, "itibar": 9 }
+      },
+      {
+        "etiket": "Nikâh masasında bitir",
+        "etkiler": { "nakit": -65000, "mutluluk": 11, "itibar": -2 }
+      },
+      {
+        "etiket": "Biraz daha bekleyelim",
+        "etkiler": { "mutluluk": -8 }
+      }
+    ]
+  },
+  {
+    "id": "saglik_kontrolu_01",
+    "baslik": "Yıllık kontrol vakti",
+    "metin": "Yaşıtların birer birer tahlil yaptırıyor. Sen erteliyorsun.",
+    "tur": "hayat",
+    "agirlik": 8,
+    "bekleme": 36,
+    "kosullar": { "yas": [30, 70] },
+    "secenekler": [
+      {
+        "etiket": "Tam kontrolden geç",
+        "etkiler": { "nakit": -23000, "mutluluk": -2 },
+        "sonuclar": [
+          {
+            "sans": 0.75,
+            "metin": "Her şey normal çıktı. İçin rahat.",
+            "etkiler": { "mutluluk": 9 }
+          },
+          {
+            "sans": 0.25,
+            "metin": "Küçük bir sorun erken yakalandı. Tedavisi kolay oldu.",
+            "etkiler": { "nakit": -16000, "enerji": 8, "mutluluk": 3 }
+          }
+        ]
+      },
+      {
+        "etiket": "Gerek yok, iyiyim",
+        "etkiler": { "enerji": -4 }
+      }
+    ]
+  },
+  {
+    "id": "ikinci_el_satis_01",
+    "baslik": "Evdeki fazlalıklar",
+    "metin": "Depoda kullanılmayan eşya birikmiş. İlan vermek vakit ister.",
+    "tur": "firsat",
+    "agirlik": 8,
+    "bekleme": 20,
+    "secenekler": [
+      {
+        "etiket": "İlan ver, tek tek sat",
+        "etkiler": { "nakit": 15000, "enerji": -9 }
+      },
+      {
+        "etiket": "Hepsini bağışla",
+        "etkiler": { "mutluluk": 6, "itibar": 3 }
+      }
+    ]
+  },
+  {
+    "id": "su_tesisati_01",
+    "baslik": "Alt komşunun tavanı",
+    "metin": "Banyodan sızan su boyayı göçertmiş. Komşu kapıya dayandı.",
+    "tur": "kriz",
+    "agirlik": 8,
+    "bekleme": 40,
+    "kosullar": { "yas": [23, 70] },
+    "secenekler": [
+      {
+        "etiket": "Zararı tamamen karşıla",
+        "etkiler": { "nakit": -42000, "itibar": 3 }
+      },
+      {
+        "etiket": "Yarı yarıya bölüşmeyi öner",
+        "etkiler": { "nakit": -21000, "itibar": -4, "mutluluk": -4 }
+      }
+    ]
   }
 ]
