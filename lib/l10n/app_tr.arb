@@ -416,6 +416,24 @@
   "unvanImparator": "İmparator",
   "unvanAcikla": "40 yılın sonunda ulaştığın yer.",
 
+  "uyariKrediReddedildi": "Kredi çıkmadı: {sebep}",
+  "@uyariKrediReddedildi": {
+    "placeholders": { "sebep": { "type": "String" } }
+  },
+  "krediHatasiNotYetersiz": "kredi notun yetmiyor",
+  "krediHatasiLimitAsildi": "istenen tutar limitinin üstünde",
+  "krediHatasiTaksitGeliriAsiyor": "taksit gelirinin yarısını aşıyor",
+  "krediHatasiGecersizTutar": "tutar geçersiz",
+  "krediHatasiGecikmede": "geciken bir taksitin var",
+  "krediHatasiYasak": "haciz sonrası kredi yasağın sürüyor",
+  "uyariIsletmeKomutu": "İşletme işlemi yapılamadı: {sebep}",
+  "@uyariIsletmeKomutu": {
+    "placeholders": { "sebep": { "type": "String" } }
+  },
+  "isletmeHatasiTanimsiz": "böyle bir işletme yok",
+  "isletmeHatasiSartlar": "şartları sağlamıyorsun",
+  "isletmeHatasiNakit": "nakitin yetmiyor",
+
   "hataBaslik": "Bir şeyler ters gitti",
   "yukleniyor": "Yükleniyor…"
 }

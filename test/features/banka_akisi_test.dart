@@ -85,6 +85,17 @@ void main() {
   test('ekranın gösterdiği azami tutar banka tarafından kabul ediliyor', () {
     // Bu testin kırılması "gördüğüm krediyi alamıyorum" hatası demek.
     return kur().then((kap) {
+      // Kartlar ÖNCE cevaplanıyor. Kart seçimi nakiti ve kredi notunu
+      // değiştiriyor; teklif kart cevaplanmadan okunursa istenen tutar
+      // artık geçerli olmayan bir duruma ait olur. Sözleşme "ekranın O AN
+      // gösterdiği tutar kabul edilir", "beş dakika önce gösterdiği" değil.
+      final ilk = kap.read(oyunProvider.notifier);
+      while (kap.read(oyunProvider)!.kararBekliyor) {
+        ilk
+          ..secimYap(kap.read(oyunProvider)!.bekleyenKartlar.first, 0)
+          ..kartiKapat();
+      }
+
       final durum = kap.read(oyunProvider)!.durum;
       final teklifler = kap.read(turProcessorProvider).krediTeklifleri(durum);
       expect(teklifler, isNotEmpty);
@@ -93,12 +104,6 @@ void main() {
         kap.read(taleplerProvider.notifier).krediTalebi(
               KrediTalebi(tur: teklif.tur, anapara: teklif.enYuksekTutar),
             );
-        final n = kap.read(oyunProvider.notifier);
-        while (kap.read(oyunProvider)!.kararBekliyor) {
-          n
-            ..secimYap(kap.read(oyunProvider)!.bekleyenKartlar.first, 0)
-            ..kartiKapat();
-        }
         final sonuc = kap.read(turProcessorProvider).turuBitir(
               kap.read(oyunProvider)!.durum,
               TurGirdisi(

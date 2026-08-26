@@ -1676,6 +1676,72 @@ abstract class UygulamaMetinleri {
   /// **'40 yılın sonunda ulaştığın yer.'**
   String get unvanAcikla;
 
+  /// No description provided for @uyariKrediReddedildi.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kredi çıkmadı: {sebep}'**
+  String uyariKrediReddedildi(String sebep);
+
+  /// No description provided for @krediHatasiNotYetersiz.
+  ///
+  /// In tr, this message translates to:
+  /// **'kredi notun yetmiyor'**
+  String get krediHatasiNotYetersiz;
+
+  /// No description provided for @krediHatasiLimitAsildi.
+  ///
+  /// In tr, this message translates to:
+  /// **'istenen tutar limitinin üstünde'**
+  String get krediHatasiLimitAsildi;
+
+  /// No description provided for @krediHatasiTaksitGeliriAsiyor.
+  ///
+  /// In tr, this message translates to:
+  /// **'taksit gelirinin yarısını aşıyor'**
+  String get krediHatasiTaksitGeliriAsiyor;
+
+  /// No description provided for @krediHatasiGecersizTutar.
+  ///
+  /// In tr, this message translates to:
+  /// **'tutar geçersiz'**
+  String get krediHatasiGecersizTutar;
+
+  /// No description provided for @krediHatasiGecikmede.
+  ///
+  /// In tr, this message translates to:
+  /// **'geciken bir taksitin var'**
+  String get krediHatasiGecikmede;
+
+  /// No description provided for @krediHatasiYasak.
+  ///
+  /// In tr, this message translates to:
+  /// **'haciz sonrası kredi yasağın sürüyor'**
+  String get krediHatasiYasak;
+
+  /// No description provided for @uyariIsletmeKomutu.
+  ///
+  /// In tr, this message translates to:
+  /// **'İşletme işlemi yapılamadı: {sebep}'**
+  String uyariIsletmeKomutu(String sebep);
+
+  /// No description provided for @isletmeHatasiTanimsiz.
+  ///
+  /// In tr, this message translates to:
+  /// **'böyle bir işletme yok'**
+  String get isletmeHatasiTanimsiz;
+
+  /// No description provided for @isletmeHatasiSartlar.
+  ///
+  /// In tr, this message translates to:
+  /// **'şartları sağlamıyorsun'**
+  String get isletmeHatasiSartlar;
+
+  /// No description provided for @isletmeHatasiNakit.
+  ///
+  /// In tr, this message translates to:
+  /// **'nakitin yetmiyor'**
+  String get isletmeHatasiNakit;
+
   /// No description provided for @hataBaslik.
   ///
   /// In tr, this message translates to:

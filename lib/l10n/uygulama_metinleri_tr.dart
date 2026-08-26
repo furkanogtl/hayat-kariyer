@@ -881,6 +881,44 @@ class UygulamaMetinleriTr extends UygulamaMetinleri {
   String get unvanAcikla => '40 yılın sonunda ulaştığın yer.';
 
   @override
+  String uyariKrediReddedildi(String sebep) {
+    return 'Kredi çıkmadı: $sebep';
+  }
+
+  @override
+  String get krediHatasiNotYetersiz => 'kredi notun yetmiyor';
+
+  @override
+  String get krediHatasiLimitAsildi => 'istenen tutar limitinin üstünde';
+
+  @override
+  String get krediHatasiTaksitGeliriAsiyor =>
+      'taksit gelirinin yarısını aşıyor';
+
+  @override
+  String get krediHatasiGecersizTutar => 'tutar geçersiz';
+
+  @override
+  String get krediHatasiGecikmede => 'geciken bir taksitin var';
+
+  @override
+  String get krediHatasiYasak => 'haciz sonrası kredi yasağın sürüyor';
+
+  @override
+  String uyariIsletmeKomutu(String sebep) {
+    return 'İşletme işlemi yapılamadı: $sebep';
+  }
+
+  @override
+  String get isletmeHatasiTanimsiz => 'böyle bir işletme yok';
+
+  @override
+  String get isletmeHatasiSartlar => 'şartları sağlamıyorsun';
+
+  @override
+  String get isletmeHatasiNakit => 'nakitin yetmiyor';
+
+  @override
   String get hataBaslik => 'Bir şeyler ters gitti';
 
   @override

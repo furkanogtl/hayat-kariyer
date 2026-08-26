@@ -139,6 +139,34 @@ class _TurRaporuKagidi extends StatelessWidget {
                     ),
                   ),
               ],
+              // Uygulanamayan komutlar önce: oyuncu istediği krediyi ya da
+              // işletme işlemini alamadıysa bunu bilanço satırlarından önce
+              // görmeli. Söylenmezse "düğme çalışmıyor" sanır.
+              ..._uyarilar(m).map(
+                (metin) => Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 4),
+                        child: Icon(
+                          Icons.error_outline,
+                          size: 16,
+                          color: tema.oyun.uyari,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          metin,
+                          style: TextStyle(color: tema.oyun.uyari),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
               ..._olaylar(m).map(
                 (metin) => Padding(
                   padding: const EdgeInsets.only(top: 10),
@@ -184,6 +212,23 @@ class _TurRaporuKagidi extends StatelessWidget {
       sonuc.add(endeks);
     }
     return sonuc;
+  }
+
+  /// Oyuncunun verdiği ama uygulanamayan komutlar.
+  ///
+  /// Motor bunları baştan beri raporluyordu, arayüz hiç göstermiyordu.
+  /// Sessizce düşen komut oyuncuya "düğme bozuk" gibi görünür; en sık
+  /// karşılaşılacağı yer, kredi teklifini gördükten SONRA cevaplanan bir
+  /// kartın kredi notunu düşürmesi.
+  List<String> _uyarilar(UygulamaMetinleri m) {
+    final satirlar = <String>[];
+    for (final r in raporlar) {
+      final kredi = r.krediHatasi;
+      if (kredi != null) satirlar.add(m.uyariKrediReddedildi(kredi.ad(m)));
+      final isletme = r.isletmeHatasi;
+      if (isletme != null) satirlar.add(m.uyariIsletmeKomutu(isletme.ad(m)));
+    }
+    return satirlar;
   }
 
   /// Bu turlarda olan dikkat çekici şeyler. Atlamayı kesen olay da

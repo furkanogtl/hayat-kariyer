@@ -282,5 +282,23 @@
   "unvanAcikla": "Where forty years got you.",
 
   "hataBaslik": "Something went wrong",
-  "yukleniyor": "Loading…"
+  "yukleniyor": "Loading…",
+
+  "uyariKrediReddedildi": "Loan declined: {sebep}",
+  "@uyariKrediReddedildi": {
+    "placeholders": { "sebep": { "type": "String" } }
+  },
+  "krediHatasiNotYetersiz": "your credit score is too low",
+  "krediHatasiLimitAsildi": "the amount exceeds your limit",
+  "krediHatasiTaksitGeliriAsiyor": "the instalment exceeds half your income",
+  "krediHatasiGecersizTutar": "the amount is invalid",
+  "krediHatasiGecikmede": "you have an overdue instalment",
+  "krediHatasiYasak": "your post-foreclosure credit ban is still running",
+  "uyariIsletmeKomutu": "Business action failed: {sebep}",
+  "@uyariIsletmeKomutu": {
+    "placeholders": { "sebep": { "type": "String" } }
+  },
+  "isletmeHatasiTanimsiz": "no such business",
+  "isletmeHatasiSartlar": "you do not meet the requirements",
+  "isletmeHatasiNakit": "you do not have enough cash"
 }

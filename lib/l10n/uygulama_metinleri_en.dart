@@ -882,6 +882,45 @@ class UygulamaMetinleriEn extends UygulamaMetinleri {
   String get unvanAcikla => 'Where forty years got you.';
 
   @override
+  String uyariKrediReddedildi(String sebep) {
+    return 'Loan declined: $sebep';
+  }
+
+  @override
+  String get krediHatasiNotYetersiz => 'your credit score is too low';
+
+  @override
+  String get krediHatasiLimitAsildi => 'the amount exceeds your limit';
+
+  @override
+  String get krediHatasiTaksitGeliriAsiyor =>
+      'the instalment exceeds half your income';
+
+  @override
+  String get krediHatasiGecersizTutar => 'the amount is invalid';
+
+  @override
+  String get krediHatasiGecikmede => 'you have an overdue instalment';
+
+  @override
+  String get krediHatasiYasak =>
+      'your post-foreclosure credit ban is still running';
+
+  @override
+  String uyariIsletmeKomutu(String sebep) {
+    return 'Business action failed: $sebep';
+  }
+
+  @override
+  String get isletmeHatasiTanimsiz => 'no such business';
+
+  @override
+  String get isletmeHatasiSartlar => 'you do not meet the requirements';
+
+  @override
+  String get isletmeHatasiNakit => 'you do not have enough cash';
+
+  @override
   String get hataBaslik => 'Something went wrong';
 
   @override

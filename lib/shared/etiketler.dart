@@ -1,3 +1,5 @@
+import '../core/engine/borc_motoru.dart';
+import '../core/engine/isletme_motoru.dart';
 import '../core/engine/rejim.dart';
 import '../core/engine/skor.dart';
 import '../core/models/borc.dart';
@@ -200,3 +202,27 @@ int? kalanTur(KariyerDurumu durum) => switch (durum) {
       Askerlik(:final kalanTur) => kalanTur,
       _ => null,
     };
+
+/// Reddedilen kredinin sebebi.
+///
+/// Motor bunu üretiyordu ama hiçbir ekran göstermiyordu: oyuncunun kredisi
+/// sessizce düşüyor, düğme çalışmıyor gibi görünüyordu.
+extension KrediHatasiEtiketi on KrediHatasi {
+  String ad(UygulamaMetinleri m) => switch (this) {
+        KrediHatasi.krediNotuYetersiz => m.krediHatasiNotYetersiz,
+        KrediHatasi.limitAsildi => m.krediHatasiLimitAsildi,
+        KrediHatasi.taksitGeliriAsiyor => m.krediHatasiTaksitGeliriAsiyor,
+        KrediHatasi.gecersizTutar => m.krediHatasiGecersizTutar,
+        KrediHatasi.gecikmedeKrediVerilmez => m.krediHatasiGecikmede,
+        KrediHatasi.krediYasagi => m.krediHatasiYasak,
+      };
+}
+
+/// Uygulanamayan işletme komutunun sebebi.
+extension IsletmeHatasiEtiketi on IsletmeHatasi {
+  String ad(UygulamaMetinleri m) => switch (this) {
+        IsletmeHatasi.tanimsizIsletme => m.isletmeHatasiTanimsiz,
+        IsletmeHatasi.sartlarTutmuyor => m.isletmeHatasiSartlar,
+        IsletmeHatasi.yetersizNakit => m.isletmeHatasiNakit,
+      };
+}
