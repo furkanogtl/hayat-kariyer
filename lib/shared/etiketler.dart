@@ -193,7 +193,11 @@ String _calisanBasligi(
   final kademe = kademeIndeksi < meslek.kademeler.length
       ? meslek.kademeler[kademeIndeksi]
       : null;
-  return kademe == null ? meslek.ad : '${meslek.ad} · ${kademe.ad}';
+  if (kademe == null) return meslek.ad;
+  // Bazı mesleklerde bir kademenin adı mesleğin adıyla aynı ("Satış
+  // Temsilcisi · Satış Temsilcisi"). Tekrarı göstermek anlamsız.
+  if (kademe.ad == meslek.ad) return meslek.ad;
+  return '${meslek.ad} · ${kademe.ad}';
 }
 
 /// Geri sayımlı durumlarda kalan tur; süresiz durumlarda null.

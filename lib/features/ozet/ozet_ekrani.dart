@@ -16,6 +16,14 @@ import '../olay/olay_karti_sayfasi.dart';
 import '../oyun/oyun_saglayicilar.dart';
 import 'tur_raporu_kagidi.dart';
 
+/// Stat renkleri. Dördü de altın olsaydı altının "para" anlamı kaybolurdu;
+/// ayrı renkler oyuncunun çipi okumadan hangisi olduğunu görmesini de
+/// sağlıyor. Koyu yeşil zemine göre doygunlukları kısıldı.
+const Color _statEnerji = Color(0xFF63D68E);
+const Color _statMutluluk = Color(0xFFFFC163);
+const Color _statItibar = Color(0xFF7FB6E8);
+const Color _statYetkinlik = Color(0xFFB996F0);
+
 /// Enerji bu değerin altına düşünce çubuk kırmızıya döner. Motor sabiti
 /// değil, yalnızca "dinlenmeyi düşün" uyarısı.
 const int _enerjiUyariEsigi = 25;
@@ -80,6 +88,7 @@ class OzetEkrani extends ConsumerWidget {
                       etiket: m.enerji,
                       deger: oyuncu.enerji,
                       simge: Icons.bolt,
+                      renk: _statEnerji,
                       uyariEsigi: _enerjiUyariEsigi,
                     ),
                   ),
@@ -89,6 +98,7 @@ class OzetEkrani extends ConsumerWidget {
                       etiket: m.mutluluk,
                       deger: oyuncu.mutluluk,
                       simge: Icons.sentiment_satisfied_alt,
+                      renk: _statMutluluk,
                       uyariEsigi: Oyuncu.burnoutEsigi,
                     ),
                   ),
@@ -102,6 +112,7 @@ class OzetEkrani extends ConsumerWidget {
                       etiket: m.itibar,
                       deger: oyuncu.itibar,
                       simge: Icons.handshake_outlined,
+                      renk: _statItibar,
                     ),
                   ),
                   const SizedBox(width: 16),
@@ -114,6 +125,7 @@ class OzetEkrani extends ConsumerWidget {
                             etiket: m.yetkinlik,
                             deger: oyuncu.yetkinlik(sektor),
                             simge: Icons.workspace_premium_outlined,
+                            renk: _statYetkinlik,
                           ),
                   ),
                 ],

@@ -126,7 +126,7 @@ class HaberciCizimi extends CustomPainter {
     // SOLA yaslanıyor, ortalanmıyor: bant telefon genişliğinde ve figür
     // ortada kalınca iki yanı boş bir tabloya dönüşüyordu. Solda durunca
     // uzanan kol da sağa, kartın metnine doğru bakıyor.
-    final solBosluk = boyut.width * 0.06;
+    final solBosluk = boyut.width * 0.10;
     tuval
       ..save()
       ..translate(

@@ -16,11 +16,15 @@ class HaberciSahnesi extends StatefulWidget {
     super.key,
     required this.tip,
     required this.onTamamlandi,
-    this.yukseklik = 172,
+    this.yukseklik = 210,
   });
 
   final HaberciTipi tip;
   final VoidCallback onTamamlandi;
+
+  /// Sahne bandının yüksekliği. Figür yüksekliğe göre ölçekleniyor, yani
+  /// bu değer doğrudan figürün boyu demek; 172'de bant içinde küçük
+  /// kalıyordu.
   final double yukseklik;
 
   @override

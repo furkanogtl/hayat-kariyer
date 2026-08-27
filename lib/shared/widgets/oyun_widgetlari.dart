@@ -35,8 +35,10 @@ class StatCubugu extends StatelessWidget {
     final tema = Theme.of(context);
     final esik = uyariEsigi;
     final tehlikede = esik != null && deger < esik;
+    // Altın YALNIZ para ve ana eylem için; statlar da altın olursa vurgu
+    // ölür. Renk verilmezse nötr bir yeşile düşülüyor.
     final vurgu =
-        tehlikede ? tema.oyun.kayip : (renk ?? tema.colorScheme.primary);
+        tehlikede ? tema.oyun.kayip : (renk ?? const Color(0xFF6FB89E));
 
     return Container(
       padding: const EdgeInsets.fromLTRB(12, 10, 12, 12),

@@ -140,6 +140,17 @@ abstract final class Tema {
           borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
         ),
       ),
+      // Varsayılan seçili rengi parlak yeşile düşüyor ve altın paletle
+      // çakışıyordu.
+      segmentedButtonTheme: SegmentedButtonThemeData(
+        style: SegmentedButton.styleFrom(
+          backgroundColor: _kat1,
+          foregroundColor: _metinSolgun,
+          selectedBackgroundColor: altin.withValues(alpha: 0.20),
+          selectedForegroundColor: altin,
+          side: const BorderSide(color: _cizgi),
+        ),
+      ),
       dividerTheme: const DividerThemeData(color: _cizgi, thickness: 1),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
