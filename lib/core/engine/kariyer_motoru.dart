@@ -21,6 +21,15 @@ class KariyerAyarlari {
   /// Öğrencilikte eğitim katkısı bu çarpanla artar — okumanın karşılığı.
   final double ogrenciCarpani = 1.8;
 
+  /// İşe (yeniden) girerken yetkinliğin karşıladığı kademeden kaç basamak
+  /// geriden başlanır.
+  ///
+  /// 0 olsaydı kovulmanın bedeli yalnız işsiz geçen aylar olurdu ve oyuncu
+  /// doğrudan bıraktığı koltuğa dönerdi. 1 basamak, hem deneyimi tanıyor
+  /// hem tırmanacak bir şey bırakıyor: en üst kademe yeniden girişle ASLA
+  /// alınamaz, yalnız terfiyle kazanılır.
+  final int yenidenGirisKademeCezasi = 1;
+
   /// İtibar artışına network puanı başına katkı.
   final double networkKatkisi = 1.0;
 
@@ -269,7 +278,34 @@ class KariyerMotoru {
     if (oyuncu.kariyer is Askerlik) return null;
     return atamaGerektirirMi(meslek)
         ? KariyerDurumu.issiz(atamaBekliyor: true, bekleyenMeslekId: meslek.id)
-        : KariyerDurumu.calisan(meslekId: meslek.id);
+        : KariyerDurumu.calisan(
+            meslekId: meslek.id,
+            kademeIndeksi: baslangicKademesi(oyuncu, meslek),
+          );
+  }
+
+  /// Oyuncunun bu mesleğe hangi kademeden başlayacağı.
+  ///
+  /// Yetkinlik SEKTÖR bazında birikiyor; satış müdürüyken kovulan oyuncu
+  /// aynı işe stajyer olarak girmemeli, deneyiminin bir karşılığı olmalı.
+  /// Kademelerin `yetkinlikGerek` alanı bunu zaten tarif ediyordu, yalnız
+  /// giriş bu bilgiyi okumuyordu.
+  ///
+  /// Yetkinliğin karşıladığı en yüksek kademeden [KariyerAyarlari.
+  /// yenidenGirisKademeCezasi] kadar geriden başlanır. İlk kez işe giren
+  /// oyuncu için ayrı bir dal gerekmiyor: yetkinliği 0 olduğu için zaten
+  /// taban kademeye düşüyor.
+  int baslangicKademesi(Oyuncu oyuncu, Meslek meslek) {
+    final yetkinlik = oyuncu.yetkinlik(meslek.sektor);
+    // Sıralamanın artan olduğuna GÜVENİLMİYOR: ilk karşılanmayan kademede
+    // duruluyor, böylece veri sırası bozulsa bile sonuç tutarlı.
+    var enYuksek = 0;
+    for (var i = 1; i < meslek.kademeler.length; i++) {
+      if (meslek.kademeler[i].yetkinlikGerek > yetkinlik) break;
+      enYuksek = i;
+    }
+    return (enYuksek - ayarlar.yenidenGirisKademeCezasi)
+        .clamp(0, meslek.kademeler.length - 1);
   }
 
   /// Celp, tecil, bedelli ve askere alınma.
@@ -508,7 +544,12 @@ class KariyerMotoru {
             .kariyerDegistir(
               meslek == null
                   ? const KariyerDurumu.issiz()
-                  : KariyerDurumu.calisan(meslekId: meslek.id),
+                  // Atama da aynı yerleştirmeyi kullanıyor: memurluğa
+                  // dönen deneyimli oyuncu sıfırdan başlamamalı.
+                  : KariyerDurumu.calisan(
+                      meslekId: meslek.id,
+                      kademeIndeksi: baslangicKademesi(guncel, meslek),
+                    ),
             )
             .mutlulukDegistir(ayarlar.atamaMutlulugu);
       }

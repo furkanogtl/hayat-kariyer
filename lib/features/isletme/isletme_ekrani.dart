@@ -260,6 +260,7 @@ class _IsletmeKarti extends ConsumerWidget {
               child: StatCubugu(
                 etiket: stat,
                 deger: isletme.stat(stat),
+                simge: Icons.storefront_outlined,
                 uyariEsigi: 30,
               ),
             ),

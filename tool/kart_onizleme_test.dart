@@ -16,7 +16,7 @@ import 'package:hayat_kariyer/shared/widgets/zemin.dart';
 void main() {
   Widget kart(OlayTuru tur, String baslik, String metin, List<String> secenekler,
       {required bool karanlik}) {
-    final tema = karanlik ? Tema.koyu() : Tema.acik();
+    final tema = Tema.oyun();
     return MaterialApp(
       theme: tema,
       home: Scaffold(

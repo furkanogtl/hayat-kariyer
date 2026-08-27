@@ -302,6 +302,77 @@ void main() {
     });
   });
 
+  group('İşe giriş kademesi', () {
+    // Furkan'ın oyun içi geri bildirimi: "satış müdürü oldum, kovuldum,
+    // sonra aynı işe en alttan giriyorum; deneyimimin karşılığı olsun."
+    // Yetkinlik sektörde birikip korunuyordu ama kademe yerleşimi bunu
+    // hiç okumuyordu.
+    final satis = katalog.bul('satis_temsilcisi')!;
+
+    Oyuncu issizAday({required int ticaretYetkinligi, int yas = 35}) =>
+        Oyuncu.yeni(
+          ad: 'Test',
+          sehir: Sehir.konya,
+          egitim: EgitimSeviyesi.lisans,
+        )
+            .copyWith(baslangicYasi: yas)
+            .yetkinlikDegistir(Sektor.ticaret, ticaretYetkinligi);
+
+    test('ilk kez işe giren tabandan başlıyor', () {
+      final durum = motor.iseGir(issizAday(ticaretYetkinligi: 0, yas: 18), satis);
+      expect((durum! as Calisan).kademeIndeksi, 0);
+    });
+
+    test('deneyimli oyuncu aynı işe üst kademeden giriyor', () {
+      // Satış Müdürü kademe 3, yetkinlikGerek 65. O yetkinlikteki oyuncu
+      // "Saha Satış Elemanı" olarak başlamamalı.
+      final durum =
+          motor.iseGir(issizAday(ticaretYetkinligi: 70), satis) as Calisan;
+      expect(durum.kademeIndeksi, greaterThan(0));
+      expect(
+        satis.kademe(durum.kademeIndeksi).maas,
+        greaterThan(satis.kademe(0).maas * 2),
+        reason: 'deneyim maaşa yansımalı',
+      );
+    });
+
+    test('kademe yetkinlikle birlikte yükseliyor', () {
+      int giris(int y) =>
+          (motor.iseGir(issizAday(ticaretYetkinligi: y), satis)! as Calisan)
+              .kademeIndeksi;
+      expect(giris(0), lessThan(giris(40)));
+      expect(giris(40), lessThanOrEqualTo(giris(70)));
+      expect(giris(70), lessThan(satis.kademeler.length - 1));
+    });
+
+    test('en üst kademe yeniden girişle alınamıyor', () {
+      // Tavan yalnız TERFİYLE kazanılmalı; yoksa kovulmak bedelsiz olurdu.
+      final durum =
+          motor.iseGir(issizAday(ticaretYetkinligi: 100), satis) as Calisan;
+      expect(durum.kademeIndeksi, lessThan(satis.kademeler.length - 1));
+    });
+
+    test('başka sektörün yetkinliği sayılmıyor', () {
+      // Anayasa: sektör dışına geçiş sıfırdan başlatır.
+      final yazilimci = Oyuncu.yeni(
+        ad: 'Test',
+        sehir: Sehir.konya,
+        egitim: EgitimSeviyesi.lisans,
+      )
+          .copyWith(baslangicYasi: 35)
+          .yetkinlikDegistir(Sektor.teknoloji, 95);
+      expect((motor.iseGir(yazilimci, satis)! as Calisan).kademeIndeksi, 0);
+    });
+
+    test('kademe süresi sıfırdan başlıyor', () {
+      // Deneyim kademeyi veriyor ama koltukta geçen süreyi vermiyor:
+      // terfi sayacı yeniden işlemeli.
+      final durum =
+          motor.iseGir(issizAday(ticaretYetkinligi: 70), satis) as Calisan;
+      expect(durum.kademeTuru, 0);
+    });
+  });
+
   group('Yetkinlik ve itibar', () {
     test('eğitim yetkinliği çalışmadan hızlı artırır', () {
       final o = calisan('yazilim_gelistirici', yetkinlik: 0);

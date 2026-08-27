@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
+import '../tema.dart';
+
 /// Ekranların arkasındaki gradyan zemin.
 ///
-/// Düz beyaz bir yüzey oyunu form gibi gösteriyordu. Gradyan ÇOK hafif
-/// tutuluyor: amaç dekorasyon değil, kartların üstünde durduğu bir
-/// derinlik oluşturmak. Kontrast bozulursa metin okunaklığı gider.
+/// Düz bir yüzey oyunu form gibi gösteriyordu. Gradyan derinlik veriyor
+/// ama ölçülü: amaç dekorasyon değil, kartların üstünde durduğu bir
+/// zemin. Kontrast bozulursa metin okunaklığı gider.
 class ZeminGradyani extends StatelessWidget {
   const ZeminGradyani({super.key, required this.child});
 
@@ -13,26 +15,18 @@ class ZeminGradyani extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final sema = Theme.of(context).colorScheme;
-    final karanlik = Theme.of(context).brightness == Brightness.dark;
     return DecoratedBox(
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
           colors: [
-            Color.lerp(
-              sema.surface,
-              sema.primary,
-              karanlik ? 0.07 : 0.05,
-            )!,
+            // Üstte altına çalan hafif bir sıcaklık, dipte en koyu ton.
+            Color.lerp(sema.surface, sema.primary, 0.06)!,
             sema.surface,
-            Color.lerp(
-              sema.surface,
-              sema.primary,
-              karanlik ? 0.04 : 0.03,
-            )!,
+            Tema.dipRengi,
           ],
-          stops: const [0, 0.45, 1],
+          stops: const [0, 0.4, 1],
         ),
       ),
       child: child,

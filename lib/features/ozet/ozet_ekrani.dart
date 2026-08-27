@@ -79,6 +79,7 @@ class OzetEkrani extends ConsumerWidget {
                     child: StatCubugu(
                       etiket: m.enerji,
                       deger: oyuncu.enerji,
+                      simge: Icons.bolt,
                       uyariEsigi: _enerjiUyariEsigi,
                     ),
                   ),
@@ -87,6 +88,7 @@ class OzetEkrani extends ConsumerWidget {
                     child: StatCubugu(
                       etiket: m.mutluluk,
                       deger: oyuncu.mutluluk,
+                      simge: Icons.sentiment_satisfied_alt,
                       uyariEsigi: Oyuncu.burnoutEsigi,
                     ),
                   ),
@@ -96,7 +98,11 @@ class OzetEkrani extends ConsumerWidget {
               Row(
                 children: [
                   Expanded(
-                    child: StatCubugu(etiket: m.itibar, deger: oyuncu.itibar),
+                    child: StatCubugu(
+                      etiket: m.itibar,
+                      deger: oyuncu.itibar,
+                      simge: Icons.handshake_outlined,
+                    ),
                   ),
                   const SizedBox(width: 16),
                   Expanded(
@@ -107,6 +113,7 @@ class OzetEkrani extends ConsumerWidget {
                         : StatCubugu(
                             etiket: m.yetkinlik,
                             deger: oyuncu.yetkinlik(sektor),
+                            simge: Icons.workspace_premium_outlined,
                           ),
                   ),
                 ],
@@ -289,25 +296,52 @@ class ServetKarti extends StatelessWidget {
           durum.piyasa.gosterimTutari(durum.piyasa.reeleCevir(ham)),
         );
 
-    return OyunKarti(
+    // Ana skor kartı: oyunun kahraman öğesi. Diğer kartlardan AYRI
+    // duruyor — altın kenar ve gradyan, "bu ekrandaki en önemli rakam
+    // burası" diyor. Altın başka hiçbir kartta zemin olarak kullanılmıyor.
+    return Container(
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(18),
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Color.lerp(tema.colorScheme.surfaceContainerHigh, Tema.altin,
+                0.14)!,
+            tema.colorScheme.surfaceContainerLow,
+          ],
+        ),
+        border: Border.all(color: Tema.altin.withValues(alpha: 0.35)),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            m.reelNetDeger,
-            style: tema.textTheme.labelMedium?.copyWith(
-              color: tema.colorScheme.onSurfaceVariant,
-            ),
+          Row(
+            children: [
+              Icon(
+                Icons.savings_outlined,
+                size: 16,
+                color: Tema.altin.withValues(alpha: 0.9),
+              ),
+              const SizedBox(width: 6),
+              Text(
+                m.reelNetDeger.toUpperCase(),
+                style: tema.textTheme.labelSmall?.copyWith(
+                  color: Tema.altin.withValues(alpha: 0.9),
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 2),
+          const SizedBox(height: 6),
           // Ana skor akarak değişiyor: turdan sonra ne kadar oynadığı
           // sıçrayan bir sayıda görünmüyordu.
           SayiAkisi(
             deger: durum.netDeger,
             bicimle: (v) => reel(v.round()),
-            stil: tema.textTheme.headlineMedium?.copyWith(
-              fontWeight: FontWeight.w700,
-              color: tema.oyun.tutar(durum.netDeger),
+            stil: tema.textTheme.displaySmall?.copyWith(
+              // Servet altın; eksideyse kayıp rengi devralıyor.
+              color: durum.netDeger < 0 ? tema.oyun.kayip : Tema.altin,
             ),
           ),
           const Divider(height: 24),

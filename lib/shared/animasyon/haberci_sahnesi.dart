@@ -71,8 +71,8 @@ class _HaberciSahnesiDurumu extends State<HaberciSahnesi>
 
   @override
   Widget build(BuildContext context) {
-    final tema = Theme.of(context);
-    final karanlik = tema.brightness == Brightness.dark;
+    // Oyunun tek teması koyu; haberci paletini de ona göre alıyor.
+    const karanlik = true;
 
     return GestureDetector(
       onTap: _atla,

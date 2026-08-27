@@ -4,12 +4,17 @@ import '../animasyon/hareket.dart';
 import '../animasyon/sayi_akisi.dart';
 import '../tema.dart';
 
-/// 0-tavan aralığındaki bir istatistiğin çubuğu (enerji, mutluluk, itibar).
+/// Bir istatistiğin çipi: simge, iri rakam, ince dolum çubuğu.
+///
+/// Önce "etiket + rakam + ince çubuk" satırıydı ve ekran bir form gibi
+/// görünüyordu. Simge ve iri rakam, oyuncunun rakamı OKUMADAN durumu
+/// görmesini sağlıyor; renk de eşiğe göre değişiyor.
 class StatCubugu extends StatelessWidget {
   const StatCubugu({
     super.key,
     required this.etiket,
     required this.deger,
+    required this.simge,
     this.tavan = 100,
     this.renk,
     this.uyariEsigi,
@@ -17,10 +22,11 @@ class StatCubugu extends StatelessWidget {
 
   final String etiket;
   final int deger;
+  final IconData simge;
   final int tavan;
   final Color? renk;
 
-  /// Bu değerin altına düşünce çubuk uyarı rengine geçer (burnout,
+  /// Bu değerin altına düşünce çip uyarı rengine geçer (burnout,
   /// tükenmişlik eşikleri).
   final int? uyariEsigi;
 
@@ -29,47 +35,65 @@ class StatCubugu extends StatelessWidget {
     final tema = Theme.of(context);
     final esik = uyariEsigi;
     final tehlikede = esik != null && deger < esik;
-    final cubukRengi = tehlikede
-        ? tema.oyun.kayip
-        : (renk ?? tema.colorScheme.primary);
+    final vurgu =
+        tehlikede ? tema.oyun.kayip : (renk ?? tema.colorScheme.primary);
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(etiket, style: tema.textTheme.labelMedium),
-            SayiAkisi(
-              deger: deger,
-              bicimle: (v) => v.round().toString(),
-              stil: tema.textTheme.labelMedium?.copyWith(
-                fontWeight: FontWeight.w700,
-                color: tehlikede ? tema.oyun.kayip : null,
-              ),
-            ),
-          ],
+    return Container(
+      padding: const EdgeInsets.fromLTRB(12, 10, 12, 12),
+      decoration: BoxDecoration(
+        color: tema.colorScheme.surfaceContainerHigh,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(
+          color: tehlikede
+              ? vurgu.withValues(alpha: 0.55)
+              : tema.colorScheme.outlineVariant,
         ),
-        const SizedBox(height: 4),
-        ClipRRect(
-          borderRadius: BorderRadius.circular(4),
-          // Çubuk da sayıyla birlikte akıyor; ikisi ayrı hızda giderse
-          // göz tutarsızlığı yakalıyor.
-          child: TweenAnimationBuilder<double>(
-            tween: Tween(
-              end: tavan == 0 ? 0 : (deger / tavan).clamp(0.0, 1.0),
-            ),
-            duration: Hareket.sure(context, Hareket.sayac),
-            curve: Hareket.giris,
-            builder: (context, oran, _) => LinearProgressIndicator(
-              value: oran,
-              minHeight: 6,
-              backgroundColor: tema.colorScheme.surfaceContainerHighest,
-              valueColor: AlwaysStoppedAnimation(cubukRengi),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(simge, size: 18, color: vurgu),
+              const SizedBox(width: 8),
+              SayiAkisi(
+                deger: deger,
+                bicimle: (v) => v.round().toString(),
+                stil: tema.textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.w800,
+                  color: tehlikede ? vurgu : tema.colorScheme.onSurface,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 2),
+          Text(
+            etiket,
+            style: tema.textTheme.labelSmall?.copyWith(
+              color: tema.colorScheme.onSurfaceVariant,
             ),
           ),
-        ),
-      ],
+          const SizedBox(height: 8),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(3),
+            // Çubuk da sayıyla birlikte akıyor; ikisi ayrı hızda giderse
+            // göz tutarsızlığı yakalıyor.
+            child: TweenAnimationBuilder<double>(
+              tween: Tween(
+                end: tavan == 0 ? 0 : (deger / tavan).clamp(0.0, 1.0),
+              ),
+              duration: Hareket.sure(context, Hareket.sayac),
+              curve: Hareket.giris,
+              builder: (context, oran, _) => LinearProgressIndicator(
+                value: oran,
+                minHeight: 5,
+                backgroundColor: tema.colorScheme.surfaceContainerLowest,
+                valueColor: AlwaysStoppedAnimation(vurgu),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

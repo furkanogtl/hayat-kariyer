@@ -70,6 +70,7 @@ class KariyerEkrani extends ConsumerWidget {
                     child: StatCubugu(
                       etiket: s.ad(m),
                       deger: oyuncu.yetkinlik(s),
+                      simge: Icons.trending_up,
                     ),
                   ),
               // Hiç yetkinliği yoksa boş kart yerine açıklama.

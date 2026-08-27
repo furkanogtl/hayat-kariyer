@@ -25,8 +25,10 @@ class HayatKariyerUygulamasi extends StatelessWidget {
       supportedLocales: UygulamaMetinleri.supportedLocales,
       // TR varsayılan: cihaz dili desteklenmiyorsa Türkçeye düşer.
       locale: const Locale('tr'),
-      theme: Tema.acik(),
-      darkTheme: Tema.koyu(),
+      // Oyunun tek bir sanat yönü var; cihazın açık/koyu ayarını takip
+      // etmiyor.
+      theme: Tema.oyun(),
+      themeMode: ThemeMode.dark,
       home: const _Giris(),
     );
   }
