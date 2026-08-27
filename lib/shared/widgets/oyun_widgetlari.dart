@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../animasyon/hareket.dart';
+import '../animasyon/sayi_akisi.dart';
 import '../tema.dart';
 
 /// 0-tavan aralığındaki bir istatistiğin çubuğu (enerji, mutluluk, itibar).
@@ -38,9 +40,10 @@ class StatCubugu extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(etiket, style: tema.textTheme.labelMedium),
-            Text(
-              '$deger',
-              style: tema.textTheme.labelMedium?.copyWith(
+            SayiAkisi(
+              deger: deger,
+              bicimle: (v) => v.round().toString(),
+              stil: tema.textTheme.labelMedium?.copyWith(
                 fontWeight: FontWeight.w700,
                 color: tehlikede ? tema.oyun.kayip : null,
               ),
@@ -50,11 +53,20 @@ class StatCubugu extends StatelessWidget {
         const SizedBox(height: 4),
         ClipRRect(
           borderRadius: BorderRadius.circular(4),
-          child: LinearProgressIndicator(
-            value: tavan == 0 ? 0 : (deger / tavan).clamp(0.0, 1.0),
-            minHeight: 6,
-            backgroundColor: tema.colorScheme.surfaceContainerHighest,
-            valueColor: AlwaysStoppedAnimation(cubukRengi),
+          // Çubuk da sayıyla birlikte akıyor; ikisi ayrı hızda giderse
+          // göz tutarsızlığı yakalıyor.
+          child: TweenAnimationBuilder<double>(
+            tween: Tween(
+              end: tavan == 0 ? 0 : (deger / tavan).clamp(0.0, 1.0),
+            ),
+            duration: Hareket.sure(context, Hareket.sayac),
+            curve: Hareket.giris,
+            builder: (context, oran, _) => LinearProgressIndicator(
+              value: oran,
+              minHeight: 6,
+              backgroundColor: tema.colorScheme.surfaceContainerHighest,
+              valueColor: AlwaysStoppedAnimation(cubukRengi),
+            ),
           ),
         ),
       ],

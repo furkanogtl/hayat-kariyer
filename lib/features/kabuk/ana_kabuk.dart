@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../l10n/uygulama_metinleri.dart';
 import '../../shared/etiketler.dart';
+import '../../shared/widgets/zemin.dart';
 import '../banka/banka_ekrani.dart';
 import '../isletme/isletme_ekrani.dart';
 import '../kariyer/kariyer_ekrani.dart';
@@ -43,14 +44,16 @@ class _AnaKabukDurumu extends ConsumerState<AnaKabuk> {
           ],
         ),
       ),
-      body: SafeArea(
-        child: switch (_sekme) {
-          0 => const OzetEkrani(),
-          1 => const PiyasaEkrani(),
-          2 => const BankaEkrani(),
-          3 => const KariyerEkrani(),
-          _ => const IsletmeEkrani(),
-        },
+      body: ZeminGradyani(
+        child: SafeArea(
+          child: switch (_sekme) {
+            0 => const OzetEkrani(),
+            1 => const PiyasaEkrani(),
+            2 => const BankaEkrani(),
+            3 => const KariyerEkrani(),
+            _ => const IsletmeEkrani(),
+          },
+        ),
       ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _sekme,

@@ -4,6 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/engine/olay_motoru.dart';
 import '../../core/models/olay.dart';
 import '../../l10n/uygulama_metinleri.dart';
+import '../../shared/animasyon/haberci.dart';
+import '../../shared/animasyon/haberci_sahnesi.dart';
+import '../../shared/animasyon/hareket.dart';
 import '../../shared/etiketler.dart';
 import '../../shared/tema.dart';
 import '../oyun/oyun_saglayicilar.dart';
@@ -55,13 +58,18 @@ class _KartGovdesiDurumu extends ConsumerState<_KartGovdesi> {
   SecimSonucu? _sonuc;
   int? _secilenIndeks;
 
+  /// Haberci eşyayı uzattı mı. Kart metni ancak o zaman açılıyor;
+  /// önce açılsaydı animasyonun anlatısı boşa giderdi.
+  bool _teslimEdildi = false;
+
   @override
   void didUpdateWidget(_KartGovdesi eski) {
     super.didUpdateWidget(eski);
-    // Sıradaki karta geçildi: sonuç ekranını temizle.
+    // Sıradaki karta geçildi: sonuç ekranını ve sahneyi temizle.
     if (eski.kart.id != widget.kart.id) {
       _sonuc = null;
       _secilenIndeks = null;
+      _teslimEdildi = false;
     }
   }
 
@@ -89,6 +97,17 @@ class _KartGovdesiDurumu extends ConsumerState<_KartGovdesi> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              // Kartı GETİREN kişi. Kart türüne göre değişiyor; oyuncu
+              // kimin geldiğini metni okumadan anlıyor.
+              HaberciSahnesi(
+                // Kart değişince sahne baştan kurulsun.
+                key: ValueKey(kart.id),
+                tip: HaberciTipi.olayTurunden(kart.tur),
+                onTamamlandi: () {
+                  if (mounted) setState(() => _teslimEdildi = true);
+                },
+              ),
+              const SizedBox(height: 16),
               Row(
                 children: [
                   _TurRozeti(tur: kart.tur),
@@ -103,33 +122,88 @@ class _KartGovdesiDurumu extends ConsumerState<_KartGovdesi> {
                 ],
               ),
               const SizedBox(height: 12),
-              Text(
-                kart.baslik,
-                style: tema.textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.w700,
+              // Kart içeriği teslimden sonra açılıyor. AnimatedSize,
+              // kâğıdın boyunun zıplamadan büyümesini sağlıyor.
+              AnimatedOpacity(
+                opacity: _teslimEdildi ? 1 : 0,
+                duration: Hareket.sure(context, Hareket.orta),
+                curve: Hareket.giris,
+                child: AnimatedSlide(
+                  offset: _teslimEdildi ? Offset.zero : const Offset(0, 0.06),
+                  duration: Hareket.sure(context, Hareket.orta),
+                  curve: Hareket.giris,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        kart.baslik,
+                        style: tema.textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(kart.metin, style: tema.textTheme.bodyMedium),
+                      const SizedBox(height: 20),
+                      if (sonuc == null)
+                        for (var i = 0; i < kart.secenekler.length; i++)
+                          _SecenekDugmesi(
+                            etiket: kart.secenekler[i].etiket,
+                            sira: i,
+                            acik: _teslimEdildi,
+                            onSecildi: () => _sec(i),
+                          )
+                      else
+                        _SonucGovdesi(
+                          secenek: kart.secenekler[_secilenIndeks!],
+                          sonuc: sonuc,
+                        ),
+                    ],
+                  ),
                 ),
               ),
-              const SizedBox(height: 8),
-              Text(kart.metin, style: tema.textTheme.bodyMedium),
-              const SizedBox(height: 20),
-              if (sonuc == null)
-                for (var i = 0; i < kart.secenekler.length; i++)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
-                    child: OutlinedButton(
-                      onPressed: () => _sec(i),
-                      child: Align(
-                        alignment: AlignmentDirectional.centerStart,
-                        child: Text(kart.secenekler[i].etiket),
-                      ),
-                    ),
-                  )
-              else
-                _SonucGovdesi(
-                  secenek: kart.secenekler[_secilenIndeks!],
-                  sonuc: sonuc,
-                ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Seçenek düğmesi. Sırayla, hafif gecikmeyle beliriyor: hepsi birden
+/// gelirse oyuncunun gözü nereye bakacağını bilemiyor.
+class _SecenekDugmesi extends StatelessWidget {
+  const _SecenekDugmesi({
+    required this.etiket,
+    required this.sira,
+    required this.acik,
+    required this.onSecildi,
+  });
+
+  final String etiket;
+  final int sira;
+  final bool acik;
+  final VoidCallback onSecildi;
+
+  @override
+  Widget build(BuildContext context) {
+    final gecikme = Hareket.kapali(context)
+        ? Duration.zero
+        : Duration(milliseconds: 70 * sira);
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: AnimatedSlide(
+        offset: acik ? Offset.zero : const Offset(0.08, 0),
+        duration: Hareket.sure(context, Hareket.orta) + gecikme,
+        curve: Hareket.giris,
+        child: AnimatedOpacity(
+          opacity: acik ? 1 : 0,
+          duration: Hareket.sure(context, Hareket.orta) + gecikme,
+          child: OutlinedButton(
+            onPressed: acik ? onSecildi : null,
+            child: Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: Text(etiket),
+            ),
           ),
         ),
       ),

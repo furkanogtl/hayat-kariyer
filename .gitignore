@@ -57,3 +57,6 @@ android/.kotlin/
 android/key.properties
 *.jks
 *.keystore
+
+# Gecici gorsel onizlemeler
+scratch/

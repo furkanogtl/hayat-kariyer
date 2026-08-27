@@ -23,12 +23,19 @@ abstract final class Tema {
       colorScheme: sema,
       useMaterial3: true,
       scaffoldBackgroundColor: sema.surface,
+      // Kartlar düz beyaz lekeler halinde duruyordu. Hafif bir kenarlık
+      // ve gölge, ekranı katmanlı gösteriyor; yükseltiyi büyütmek yerine
+      // kenarlık kullanıldı çünkü koyu temada gölge görünmüyor.
       cardTheme: CardThemeData(
-        elevation: 0,
+        elevation: karanlik ? 0 : 1,
+        shadowColor: sema.shadow.withValues(alpha: 0.5),
         color: sema.surfaceContainerLow,
         margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(18),
+          side: BorderSide(
+            color: sema.outlineVariant.withValues(alpha: karanlik ? 0.5 : 0.7),
+          ),
         ),
       ),
       filledButtonTheme: FilledButtonThemeData(

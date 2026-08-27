@@ -7,6 +7,8 @@ import '../../core/models/oyuncu.dart';
 import '../../core/models/zaman_dagilimi.dart';
 import '../../l10n/uygulama_metinleri.dart';
 import '../../shared/bicimleme.dart';
+import '../../shared/animasyon/sayi_akisi.dart';
+import '../../shared/animasyon/tur_gecisi.dart';
 import '../../shared/etiketler.dart';
 import '../../shared/tema.dart';
 import '../../shared/widgets/oyun_widgetlari.dart';
@@ -186,7 +188,10 @@ class OzetEkrani extends ConsumerWidget {
   /// `turlariAtla` motor tarafında erken kesilebilir; kaç turun gerçekten
   /// işlendiği rapor listesinin uzunluğundan okunuyor.
   Future<void> _turuIsle(BuildContext context, WidgetRef ref, int adet) async {
+    final m = UygulamaMetinleri.of(context);
     final notifier = ref.read(oyunProvider.notifier);
+    // Geçiş perdesi için turdan ÖNCEKİ ay.
+    final oncekiAy = ayAdi(m, ref.read(oyunProvider)!.durum.ay);
     final talepler = ref.read(taleplerProvider);
     final girdi = TurGirdisi(
       zaman: ref.read(zamanProvider),
@@ -202,6 +207,22 @@ class OzetEkrani extends ConsumerWidget {
     }
     ref.read(taleplerProvider.notifier).temizle();
     final raporlar = ref.read(oyunProvider)?.sonRaporlar ?? const <TurRaporu>[];
+
+    // Zamanın aktığını gösteren perde. Rapordan ÖNCE oynuyor: önce ay
+    // değişiyor, sonra o ayın bilançosu geliyor.
+    final sonraki = ref.read(oyunProvider)?.durum;
+    if (sonraki != null && context.mounted && raporlar.isNotEmpty) {
+      await turGecisiniOynat(
+        context,
+        oncekiAy: oncekiAy,
+        sonrakiAy: ayAdi(m, sonraki.ay),
+        altYazi: raporlar.length > 1
+            ? m.atlananTur(raporlar.length)
+            : m.yasBilgisi(sonraki.yas),
+        cokTur: raporlar.length > 1,
+      );
+    }
+
     if (raporlar.isNotEmpty && context.mounted) {
       await turRaporunuGoster(context, raporlar);
       notifier.raporlariTemizle();
@@ -279,9 +300,12 @@ class ServetKarti extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 2),
-          Text(
-            reel(durum.netDeger),
-            style: tema.textTheme.headlineMedium?.copyWith(
+          // Ana skor akarak değişiyor: turdan sonra ne kadar oynadığı
+          // sıçrayan bir sayıda görünmüyordu.
+          SayiAkisi(
+            deger: durum.netDeger,
+            bicimle: (v) => reel(v.round()),
+            stil: tema.textTheme.headlineMedium?.copyWith(
               fontWeight: FontWeight.w700,
               color: tema.oyun.tutar(durum.netDeger),
             ),
