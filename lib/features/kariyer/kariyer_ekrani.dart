@@ -30,10 +30,16 @@ class KariyerEkrani extends ConsumerWidget {
     final katalog = ref.watch(kataloglarProvider).requireValue.meslekler;
     final talepler = ref.watch(taleplerProvider);
 
-    // Maaşlar TABAN TL yazılıdır; ekranda bugünkü paranın karşılığı
-    // gösteriliyor, yani endeksleme yapılmadan doğrudan reel tutar.
-    String tabanPara(int tabanTl) =>
-        bicim.kisaPara(durum.piyasa.gosterimTutari(tabanTl));
+    // Maaşlar veride TABAN TL yazılı; ekranda oyuncunun eline geçecek
+    // NOMİNAL tutar gösteriliyor. Taban tutar basılsaydı maaş 40 yıl
+    // boyunca aynı 28.000 görünür, tur raporundaki gelirle hiç tutmazdı.
+    //
+    // Bölen piyasa endeksi değil MAAŞ endeksi: maaş yılda bir zamlanır,
+    // market her ay. Yıl içinde açılan makas oyunun ana baskısı ve bu
+    // ekranda da doğru görünmeli.
+    String tabanPara(int tabanTl) => bicim.kisaPara(
+          durum.piyasa.gosterimTutari((tabanTl * durum.maasEndeksi).round()),
+        );
 
     final acikIsler = katalog.girilebilirler(oyuncu)
       ..sort((a, b) => a.kademeler.first.maas.compareTo(b.kademeler.first.maas));

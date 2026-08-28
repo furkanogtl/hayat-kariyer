@@ -51,6 +51,7 @@ class TurRaporu {
     required this.rejim,
     required this.rejimDegisti,
     required this.aylikEnflasyon,
+    required this.paraOlcegi,
     required this.maasZammiYapildi,
     required this.paraReformuYapildi,
     required this.performans,
@@ -101,6 +102,14 @@ class TurRaporu {
   final Rejim rejim;
   final bool rejimDegisti;
   final double aylikEnflasyon;
+
+  /// Bu turdaki para reformu böleni.
+  ///
+  /// Rapordaki tutarlar HAM nominal TL. Reform sonrası ekranın geri kalanı
+  /// üç sıfır atılmış parayı gösterirken rapor eski parayla yazmaya devam
+  /// ediyordu — 1000 katlık sessiz bir tutarsızlık.
+  final double paraOlcegi;
+
   final bool maasZammiYapildi;
   final bool paraReformuYapildi;
 
@@ -684,6 +693,7 @@ class TurProcessor {
         rejim: yeniPiyasa.rejim,
         rejimDegisti: rejimDegisti,
         aylikEnflasyon: yeniPiyasa.sonAylikEnflasyon,
+        paraOlcegi: yeniPiyasa.paraOlcegi,
         maasZammiYapildi: zamZamani,
         paraReformuYapildi: yeniPiyasa.paraReformuYapildi,
         performans: kariyerSonucu.performans,

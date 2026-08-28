@@ -303,10 +303,21 @@ class ServetKarti extends StatelessWidget {
     final tema = Theme.of(context);
     final bicim = Bicim(Localizations.localeOf(context).languageCode);
 
-    // Ham TL -> reel -> gösterim ölçeği (para reformu) -> metin.
+    // İKİ ÖLÇEK, ve ikisi de AÇIKÇA yazılıyor.
+    //
+    // Ana skor REEL: nominal rakam 40 yılda enflasyonla şişip anlamsızlaşır.
+    // Ama bilanço satırları (nakit, borç, taksit) NOMİNAL, çünkü oyuncunun
+    // Piyasa'da harcadığı, Banka'da borçlandığı para o. Karışık ölçek
+    // sessiz kalırsa oyuncu haklı olarak "gelirim 2 Mn ama nakdim 100 B,
+    // burada bir sıkıntı mı var" diye sorar — sordu da.
+    //
+    // İkisini bağlayan satır bu yüzden var: reel rakamın altında nominal
+    // karşılığı yazıyor, aradaki farkın adı enflasyon.
     String reel(int ham) => bicim.kisaPara(
           durum.piyasa.gosterimTutari(durum.piyasa.reeleCevir(ham)),
         );
+    String nominal(int ham) =>
+        bicim.kisaPara(durum.piyasa.gosterimTutari(ham));
 
     // Ana skor kartı: oyunun kahraman öğesi. Diğer kartlardan AYRI
     // duruyor — altın kenar ve gradyan, "bu ekrandaki en önemli rakam
@@ -356,17 +367,23 @@ class ServetKarti extends StatelessWidget {
               color: durum.netDeger < 0 ? tema.oyun.kayip : Tema.altin,
             ),
           ),
+          Text(
+            m.bugunkuParayla(nominal(durum.netDeger)),
+            style: tema.textTheme.bodySmall?.copyWith(
+              color: tema.colorScheme.onSurfaceVariant,
+            ),
+          ),
           const Divider(height: 24),
-          BilgiSatiri(etiket: m.nakit, deger: reel(durum.oyuncu.nakit)),
+          BilgiSatiri(etiket: m.nakit, deger: nominal(durum.oyuncu.nakit)),
           if (durum.toplamBorc > 0) ...[
             BilgiSatiri(
               etiket: m.borc,
-              deger: reel(durum.toplamBorc),
+              deger: nominal(durum.toplamBorc),
               renk: tema.oyun.kayip,
             ),
             BilgiSatiri(
               etiket: m.taksitYuku,
-              deger: reel(durum.taksitYuku),
+              deger: nominal(durum.taksitYuku),
             ),
           ],
           BilgiSatiri(

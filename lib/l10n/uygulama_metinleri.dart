@@ -470,6 +470,12 @@ abstract class UygulamaMetinleri {
   /// **'Maaşın {oran} geride'**
   String alimGucuKaybi(String oran);
 
+  /// No description provided for @bugunkuParayla.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bugünkü parayla {tutar}'**
+  String bugunkuParayla(String tutar);
+
   /// No description provided for @durumOgrenci.
   ///
   /// In tr, this message translates to:

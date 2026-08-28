@@ -32,6 +32,32 @@ Future<void> turRaporunuGoster(
       ),
     );
 
+/// Rapor satırlarının gösterim tutarı.
+///
+/// ÖLÇEK: NOMİNAL — oyuncunun cebine giren/çıkan gerçek tutar.
+///
+/// Reele çevirmek cazip görünüyor ama BİLANÇO TUTMAZ: rapor "+2 Mn" derken
+/// Özet'teki nakit de aynı 2 Mn artmalı. Reel gösterilseydi ikisi hiçbir
+/// zaman denk gelmezdi, çünkü mevcut bakiye de enflasyonla eriyor.
+/// Enflasyonun görünmesi gereken yer ana skor; oradaki rakam reel ve öyle
+/// etiketli.
+///
+/// Toplarken deflate EDİLMİYOR: 12 aylık atlama bir hesap özetidir.
+/// Uygulanan tek şey para reformu ölçeği — o uygulanmadığında rapor
+/// reformdan sonra eski parayla yazmaya devam ediyordu (1000 kat sapma).
+///
+/// Widget'tan ayrı duruyor: ölçek sözleşmesi metin aramadan test edilebilsin.
+double raporToplami(
+  List<TurRaporu> raporlar,
+  int Function(TurRaporu) alan,
+) {
+  var sonuc = 0.0;
+  for (final r in raporlar) {
+    sonuc += alan(r);
+  }
+  return sonuc / raporlar.last.paraOlcegi;
+}
+
 class _TurRaporuKagidi extends StatelessWidget {
   const _TurRaporuKagidi({super.key, required this.raporlar});
 
@@ -43,19 +69,8 @@ class _TurRaporuKagidi extends StatelessWidget {
     final tema = Theme.of(context);
     final son = raporlar.last;
     final coklu = raporlar.length > 1;
-    final endeksler = _endeksler();
-
-    // Nominal toplam almak yanlış olurdu: bir yılda fiyat seviyesi kayda
-    // değer büyür ve geç ayların katkısı olduğundan ağır görünür. Her
-    // turun deltası O TURUN endeksiyle bölünüp toplanıyor; sonuç atlamanın
-    // BAŞLADIĞI ayın parasıyla ifade ediliyor.
-    double toplam(int Function(TurRaporu) alan) {
-      var sonuc = 0.0;
-      for (var i = 0; i < raporlar.length; i++) {
-        sonuc += alan(raporlar[i]) / endeksler[i];
-      }
-      return sonuc;
-    }
+    double toplam(int Function(TurRaporu) alan) =>
+        raporToplami(raporlar, alan);
 
     bool varMi(int Function(TurRaporu) alan) =>
         raporlar.any((r) => alan(r) != 0);
@@ -202,17 +217,6 @@ class _TurRaporuKagidi extends StatelessWidget {
   /// Bu turlarda açığa çıkan gecikmeli sonuçlar.
   List<AcigaCikanSonuc> get _acilanlar =>
       [for (final r in raporlar) ...r.acilanOlaylar];
-
-  /// Her raporun, ilk rapora göre bileşik fiyat endeksi.
-  List<double> _endeksler() {
-    final sonuc = <double>[];
-    var endeks = 1.0;
-    for (final r in raporlar) {
-      endeks *= 1 + r.aylikEnflasyon;
-      sonuc.add(endeks);
-    }
-    return sonuc;
-  }
 
   /// Oyuncunun verdiği ama uygulanamayan komutlar.
   ///

@@ -85,6 +85,11 @@
     "placeholders": { "oran": { "type": "String" } }
   },
 
+  "bugunkuParayla": "Bugünkü parayla {tutar}",
+  "@bugunkuParayla": {
+    "placeholders": { "tutar": { "type": "String" } }
+  },
+
   "durumOgrenci": "Öğrenci",
   "durumIssiz": "İşsiz",
   "durumAtamaBekliyor": "Atama bekliyor",

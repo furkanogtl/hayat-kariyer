@@ -30,6 +30,7 @@ void main() {
         rejim: Rejim.buyume,
         rejimDegisti: false,
         aylikEnflasyon: 0.02,
+        paraOlcegi: 1,
         maasZammiYapildi: false,
         paraReformuYapildi: false,
         performans: 1,

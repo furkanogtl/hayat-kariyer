@@ -70,6 +70,8 @@
   "yillikEnflasyon": "Annual inflation",
   "alimGucuKaybi": "Pay is {oran} behind",
 
+  "bugunkuParayla": "{tutar} in today's money",
+
   "durumOgrenci": "Student",
   "durumIssiz": "Unemployed",
   "durumAtamaBekliyor": "Awaiting placement",

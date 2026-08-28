@@ -203,6 +203,11 @@ class UygulamaMetinleriEn extends UygulamaMetinleri {
   }
 
   @override
+  String bugunkuParayla(String tutar) {
+    return '$tutar in today\'s money';
+  }
+
+  @override
   String get durumOgrenci => 'Student';
 
   @override

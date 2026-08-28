@@ -203,6 +203,11 @@ class UygulamaMetinleriTr extends UygulamaMetinleri {
   }
 
   @override
+  String bugunkuParayla(String tutar) {
+    return 'Bugünkü parayla $tutar';
+  }
+
+  @override
   String get durumOgrenci => 'Öğrenci';
 
   @override
