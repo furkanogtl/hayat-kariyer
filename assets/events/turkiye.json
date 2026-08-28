@@ -115,6 +115,7 @@
   },
   {
     "id": "tapuda_dusuk_gosterme_01",
+    "olcekli": true,
     "baslik": "Tapuda düşük gösterme teklifi",
     "metin": "Satıcı harcı azaltmak için bedeli düşük yazmayı öneriyor. Aradaki farkı elden isteyecek.",
     "tur": "teklif",
@@ -146,6 +147,7 @@
   },
   {
     "id": "arac_kredisi_baskisi_01",
+    "olcekli": true,
     "baslik": "Herkes araba değiştiriyor",
     "metin": "Bacanağın sıfır araba almış, akşam yemeğinde tek konu o. Bankalar da taşıt kredisi kampanyası açmış.",
     "tur": "hayat",
@@ -203,6 +205,7 @@
   },
   {
     "id": "market_zammi_01",
+    "olcekli": true,
     "baslik": "Market fişi kabardı",
     "metin": "Aynı sepet geçen aya göre bambaşka bir rakam. Herkes markası düşük ürünlere kayıyor.",
     "tur": "hayat",
@@ -222,6 +225,7 @@
   },
   {
     "id": "kombi_arizasi_01",
+    "olcekli": true,
     "baslik": "Kombi kışın ortasında sustu",
     "metin": "Usta bu modelin parçasının kalmadığını söylüyor. Üşümek birkaç gün sürer, hastalanmak daha uzun.",
     "tur": "kriz",
@@ -271,6 +275,7 @@
   },
   {
     "id": "telefon_dolandiriciligi_01",
+    "olcekli": true,
     "baslik": "Bankadan aradıklarını söylüyorlar",
     "metin": "Karşıdaki adam adını da ekstre tutarını da biliyor. Hesabın güvenli hesaba aktarılacakmış.",
     "tur": "kriz",
@@ -301,6 +306,7 @@
   },
   {
     "id": "apartman_yardim_01",
+    "olcekli": true,
     "baslik": "Apartmanda yardım kampanyası",
     "metin": "Yönetim afet bölgesi için para topluyor. Bağış listesi kapıya asılacakmış.",
     "tur": "hayat",
@@ -355,6 +361,7 @@
   },
   {
     "id": "deprem_guclendirme_01",
+    "olcekli": true,
     "baslik": "Binada güçlendirme kararı",
     "metin": "Kat malikleri toplandı, rapor riskli çıkmış. Payına düşen az bir para değil.",
     "tur": "kriz",

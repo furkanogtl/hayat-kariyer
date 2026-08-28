@@ -516,6 +516,7 @@ class TurProcessor {
       final olaySonucu = olay!.bekleyenleriIsle(
         araDurum,
         kaynak.akis('olay', tur: sonrakiTur),
+        olcek: olayOlcegi(araDurum),
       );
       araDurum = olaySonucu.durum;
       acilanOlaylar = olaySonucu.sonuclar;
@@ -765,7 +766,7 @@ class TurProcessor {
     if (motor == null) return false;
     final akis =
         RastgeleKaynak(durum.anaTohum).akis('olay_deste', tur: durum.tur + 1);
-    return !motor.desteCek(durum, akis).bosMu;
+    return !motor.desteCek(durum, akis, olcek: olayOlcegi(durum)).bosMu;
   }
 
   /// Bu turun destesi. UI turu başlatırken çağırır.
@@ -775,7 +776,32 @@ class TurProcessor {
     return motor.desteCek(
       durum,
       RastgeleKaynak(durum.anaTohum).akis('olay_deste', tur: durum.tur + 1),
+      olcek: olayOlcegi(durum),
     );
+  }
+
+  /// Oyuncunun ekonomik ölçeği. 1,0 = kariyer başı bir aylık gelir.
+  ///
+  /// Kart tutarları taban TL ve o maaşa göre yazıldı; oyuncunun geliri
+  /// 40 yılda reel olarak 20 katına çıkıyor. Bu çarpan olmadan yaşam
+  /// kartları bir süre sonra bildirime dönüşüyor (ölçüldü: 141 kartın
+  /// 85'i 50.000 TL'nin altında bahis taşıyor).
+  ///
+  /// Gelir TABAN TL'ye indirgeniyor — bordro nominal döner ve maaş
+  /// endeksi piyasa endeksinden ayrı ilerler.
+  ///
+  /// Servet de bir tabana kuruyor: çalışmayan ama zengin oyuncunun
+  /// (emekli, işini bırakmış yatırımcı) hayatı ucuzlamamalı.
+  double olayOlcegi(OyunDurumu durum) {
+    final motor = olay;
+    if (motor == null) return 1;
+    final a = motor.ayarlar;
+
+    final tabanGelir = bordroGeliri(durum) / durum.maasEndeksi;
+    final servetten = durum.reelNetDeger / a.servetGelirBoleni;
+    final aylik = tabanGelir > servetten ? tabanGelir : servetten;
+
+    return (aylik / a.olcekReferansGeliri).clamp(1.0, a.olcekTavani);
   }
 
   /// Bankanın oyuncuya bugün sunduğu krediler.
@@ -823,6 +849,7 @@ class TurProcessor {
       secenekIndeksi,
       RastgeleKaynak(durum.anaTohum)
           .akis('olay_secim:${kart.id}', tur: durum.tur + 1),
+      olcek: olayOlcegi(durum),
     );
   }
 

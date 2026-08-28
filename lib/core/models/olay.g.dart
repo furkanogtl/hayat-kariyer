@@ -218,6 +218,7 @@ _Olay _$OlayFromJson(Map<String, dynamic> json) => _Olay(
   agirlik: (json['agirlik'] as num?)?.toDouble() ?? 10.0,
   tekSeferlik: json['tekSeferlik'] as bool? ?? false,
   bekleme: (json['bekleme'] as num?)?.toInt() ?? 60,
+  olcekli: json['olcekli'] as bool? ?? false,
   secenekler: (json['secenekler'] as List<dynamic>)
       .map((e) => OlaySecenegi.fromJson(e as Map<String, dynamic>))
       .toList(),
@@ -232,6 +233,7 @@ Map<String, dynamic> _$OlayToJson(_Olay instance) => <String, dynamic>{
   'agirlik': instance.agirlik,
   'tekSeferlik': instance.tekSeferlik,
   'bekleme': instance.bekleme,
+  'olcekli': instance.olcekli,
   'secenekler': instance.secenekler,
 };
 

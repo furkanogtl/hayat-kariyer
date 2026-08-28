@@ -1,6 +1,7 @@
 [
   {
     "id": "kira_zammi_01",
+    "olcekli": true,
     "baslik": "Ev sahibi aradı",
     "metin": "Kontrat yenileniyor, kirayı ciddi oranda artırmak istiyor. Taşınmak da bedava değil.",
     "tur": "hayat",
@@ -35,6 +36,7 @@
   },
   {
     "id": "dugun_takisi_01",
+    "olcekli": true,
     "baslik": "Kuzeninin düğünü",
     "metin": "Davetiye geldi. Herkes ne taktığına bakacak, gitmemek de ayıp.",
     "tur": "hayat",
@@ -58,6 +60,7 @@
   },
   {
     "id": "yakinindan_borc_01",
+    "olcekli": true,
     "baslik": "Dayın borç istiyor",
     "metin": "İşleri bozulmuş, birkaç ay içinde ödeyeceğine söz veriyor. Bu tür sözlerin ne olduğunu biliyorsun.",
     "tur": "hayat",
@@ -95,6 +98,7 @@
   },
   {
     "id": "dis_tedavisi_01",
+    "olcekli": true,
     "baslik": "Azı dişin dayanmadı",
     "metin": "Ağrı iki gündür geçmiyor. Devlette sıra üç ay sonraya, özelde hemen.",
     "tur": "kriz",
@@ -113,6 +117,7 @@
   },
   {
     "id": "arac_arizasi_01",
+    "olcekli": true,
     "baslik": "Araba yolda kaldı",
     "metin": "Sanayi ustası 'motor komple açılacak' diyor. Bir de çekici parası var.",
     "tur": "kriz",
@@ -162,6 +167,7 @@
   },
   {
     "id": "ev_sahibi_satiyor_01",
+    "olcekli": true,
     "baslik": "Ev sahibi daireyi satıyor",
     "metin": "İki ay içinde çıkmanı istiyor. Yeni kiralar da eskisi gibi değil.",
     "tur": "kriz",
@@ -193,6 +199,7 @@
   },
   {
     "id": "bayram_memleket_01",
+    "olcekli": true,
     "baslik": "Bayram yaklaşıyor",
     "metin": "Yol, hediye, çocuklara harçlık. Gitmemek de bir bedel.",
     "tur": "hayat",
@@ -216,6 +223,7 @@
   },
   {
     "id": "dogalgaz_faturasi_01",
+    "olcekli": true,
     "baslik": "Kışın ilk faturası",
     "metin": "Rakamı iki kez okudun. Sayaç doğru çalışıyor, sorun o değil.",
     "tur": "kriz",
@@ -235,6 +243,7 @@
   },
   {
     "id": "buzdolabi_bozuldu_01",
+    "olcekli": true,
     "baslik": "Buzdolabı çalışmıyor",
     "metin": "Sabah açtığında içerisi ılıktı. Yazın ortası.",
     "tur": "kriz",
@@ -266,6 +275,7 @@
   },
   {
     "id": "telefon_kirildi_01",
+    "olcekli": true,
     "baslik": "Telefon elinden kaydı",
     "metin": "Ekran örümcek ağına döndü. Dokunmatiğin yarısı çalışıyor.",
     "tur": "kriz",
@@ -319,6 +329,7 @@
   },
   {
     "id": "gozluk_numarasi_01",
+    "olcekli": true,
     "baslik": "Numara değişmiş",
     "metin": "Ekrana bakarken gözlerini kısıyorsun. Doktor yeni reçete yazdı.",
     "tur": "hayat",
@@ -341,6 +352,7 @@
   },
   {
     "id": "bel_agrisi_01",
+    "olcekli": true,
     "baslik": "Bel ağrısı geçmiyor",
     "metin": "Sabahları doğrulmak zor. Doktor fizik tedavi öneriyor.",
     "tur": "kriz",
@@ -360,6 +372,7 @@
   },
   {
     "id": "evcil_hayvan_01",
+    "olcekli": true,
     "baslik": "Apartmanın önündeki kedi",
     "metin": "Kimse sahiplenmiyor ama sana alıştı. Kapıyı her açışında orada.",
     "tur": "hayat",
@@ -382,6 +395,7 @@
   },
   {
     "id": "eski_dost_bulusmasi_01",
+    "olcekli": true,
     "baslik": "Yıllar sonra buluşma",
     "metin": "Üniversiteden arkadaşların toplanıyor. Bir kısmı iyi yerlerde.",
     "tur": "hayat",
@@ -405,6 +419,7 @@
   },
   {
     "id": "yaz_tatili_01",
+    "olcekli": true,
     "baslik": "Yaz planı",
     "metin": "Herkes bir yere gidiyor. Sen de bir şey yapmalısın gibi hissediyorsun.",
     "tur": "hayat",
@@ -428,6 +443,7 @@
   },
   {
     "id": "akraba_dugunleri_01",
+    "olcekli": true,
     "baslik": "Bu ay üç davetiye",
     "metin": "Takı, kına, yol. Üçü de yakın akraba, hiçbiri atlanacak gibi değil.",
     "tur": "hayat",
@@ -451,6 +467,7 @@
   },
   {
     "id": "komsu_gurultusu_01",
+    "olcekli": true,
     "baslik": "Üst kattaki gürültü",
     "metin": "Gece yarısı yürüyüş sesleri, sabaha karşı matkap. Üçüncü hafta.",
     "tur": "hayat",
@@ -485,6 +502,7 @@
   },
   {
     "id": "aile_buyugu_hastalandi_01",
+    "olcekli": true,
     "baslik": "Hastanede refakatçi lazım",
     "metin": "Babaannen yattı, kardeşlerin uzakta. Gözler sana dönük.",
     "tur": "kriz",
@@ -508,6 +526,7 @@
   },
   {
     "id": "evlilik_karari_01",
+    "olcekli": true,
     "baslik": "Konu düğüne geldi",
     "metin": "Salon, eşya, takı listesi. Herkesin bir beklentisi var.",
     "tur": "hayat",
@@ -531,6 +550,7 @@
   },
   {
     "id": "saglik_kontrolu_01",
+    "olcekli": true,
     "baslik": "Yıllık kontrol vakti",
     "metin": "Yaşıtların birer birer tahlil yaptırıyor. Sen erteliyorsun.",
     "tur": "hayat",
@@ -562,6 +582,7 @@
   },
   {
     "id": "ikinci_el_satis_01",
+    "olcekli": true,
     "baslik": "Evdeki fazlalıklar",
     "metin": "Depoda kullanılmayan eşya birikmiş. İlan vermek vakit ister.",
     "tur": "firsat",
@@ -580,6 +601,7 @@
   },
   {
     "id": "su_tesisati_01",
+    "olcekli": true,
     "baslik": "Alt komşunun tavanı",
     "metin": "Banyodan sızan su boyayı göçertmiş. Komşu kapıya dayandı.",
     "tur": "kriz",

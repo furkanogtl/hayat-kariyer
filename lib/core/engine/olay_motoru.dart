@@ -32,6 +32,31 @@ class OlayAyarlari {
   /// itibarı tavan olan (100) 2,4 katıyla.
   final double firsatTabani = 0.4;
   final double firsatBoleni = 50.0;
+
+  /// Ölçek 1,0'ın karşılığı: kariyer başı bir aylık gelir, TABAN TL.
+  ///
+  /// Kart tutarları bu maaşa göre yazıldı. 2026 ölçeğinde asgari ücret
+  /// ~26.000 varsayıldığı için referans onun biraz üstü.
+  final int olcekReferansGeliri = 35000;
+
+  /// Ölçek çarpanının tavanı. Tavansız bırakılırsa 40 yıl sonunda kira
+  /// zammı milyonlara çıkar ve kart bir hayat olayı olmaktan çıkıp
+  /// piyasadan büyük bir şoka döner.
+  final double olcekTavani = 15.0;
+
+  /// Serveti gelire çeviren bölen. Çalışmayan ama zengin oyuncunun
+  /// (emekli, işini bırakmış yatırımcı) ölçeği sıfıra düşmesin diye:
+  /// yıllık %4 çekim ≈ servetin 300'de biri aylık.
+  final int servetGelirBoleni = 300;
+
+  /// Bahsi oyuncunun ölçeğine göre önemsiz kalan kartın ağırlığı buraya
+  /// kadar söner. SIFIR DEĞİL: zengin adamın da buzdolabı bozulur, ama
+  /// bu ayın ana olayı o olmamalı.
+  final double onemsizAgirlikTabani = 0.15;
+
+  /// Kartın tam ağırlığı koruması için bahsinin aylık ölçeğe oranı.
+  /// Bunun altında sönüm başlar.
+  final double onemsizlikEsigi = 0.30;
 }
 
 /// Oyuncuya sunulan kart destesi.
@@ -119,7 +144,11 @@ class OlayMotoru {
   ///
   /// Aynı kart bir destede iki kez çıkmaz. Deste boş dönebilir; her tur
   /// karar vermek zorunda kalmak yorucu olurdu.
-  OlayDestesi desteCek(OyunDurumu durum, RastgeleAkis akis) {
+  OlayDestesi desteCek(
+    OyunDurumu durum,
+    RastgeleAkis akis, {
+    double olcek = 1.0,
+  }) {
     if (!akis.sans(ayarlar.kartCikmaSansi)) return const OlayDestesi([]);
 
     final havuz = uygunKartlar(durum);
@@ -134,7 +163,7 @@ class OlayMotoru {
     final secilenler = <Olay>[];
     for (var i = 0; i < adet && kalanlar.isNotEmpty; i++) {
       final indeks = akis.agirlikliIndeks(
-        [for (final o in kalanlar) _agirlik(o, durum)],
+        [for (final o in kalanlar) _agirlik(o, durum, olcek)],
       );
       secilenler.add(kalanlar.removeAt(indeks));
     }
@@ -164,12 +193,43 @@ class OlayMotoru {
     return adaylar.isEmpty ? null : adaylar.first;
   }
 
-  /// Kartın seçim havuzundaki ağırlığı. Fırsat kartları itibara bağlıdır.
-  double _agirlik(Olay olay, OyunDurumu durum) {
-    if (olay.tur != OlayTuru.firsat) return olay.agirlik;
-    final carpan =
-        ayarlar.firsatTabani + durum.oyuncu.itibar / ayarlar.firsatBoleni;
-    return olay.agirlik * carpan;
+  /// Kartın seçim havuzundaki ağırlığı.
+  ///
+  /// İki çarpan var: fırsat kartları itibara bağlı (anayasa: "itibar fırsat
+  /// kartlarının KALİTESİNİ belirler"), ve bahsi oyuncunun ölçeğine göre
+  /// önemsiz kalan kartlar sönüyor.
+  double _agirlik(Olay olay, OyunDurumu durum, double olcek) {
+    var agirlik = olay.agirlik;
+    if (olay.tur == OlayTuru.firsat) {
+      agirlik *=
+          ayarlar.firsatTabani + durum.oyuncu.itibar / ayarlar.firsatBoleni;
+    }
+    return agirlik * _onemKatsayisi(olay, olcek);
+  }
+
+  /// Kartın bahsi oyuncunun ölçeğine göre ne kadar anlamlı.
+  ///
+  /// Ölçüldü: 141 kartın 85'i 50.000 taban TL'nin altında bahis taşıyor.
+  /// Bu kartlar oyunun ilk 8 yılı için yazıldı; oyuncunun geliri 20 katına
+  /// çıktıktan sonra da tam ağırlıkla çıkmaya devam ediyorlardı ve "her yıl
+  /// aynı sıkıntılar" hissini üreten şey buydu.
+  ///
+  /// Sönüm SIFIRA gitmiyor: zengin adamın da buzdolabı bozulur. Değişen,
+  /// o ayın ana olayının bu olmaması.
+  ///
+  /// Bahsi olmayan kart (yalnız mutluluk/enerji/itibar) hiç sönmez —
+  /// onların ölçekle bir işi yok. Ölçeklenen kart da sönmez, bahsi zaten
+  /// oyuncuyla birlikte büyüyor.
+  double _onemKatsayisi(Olay olay, double olcek) {
+    if (olay.olcekli) return 1;
+    final bahis = olay.parasalBuyukluk;
+    if (bahis == 0) return 1;
+
+    final aylik = ayarlar.olcekReferansGeliri * olcek;
+    final oran = bahis / (aylik * ayarlar.onemsizlikEsigi);
+    if (oran >= 1) return 1;
+    return ayarlar.onemsizAgirlikTabani +
+        (1 - ayarlar.onemsizAgirlikTabani) * oran;
   }
 
   /// Oyuncunun bir seçeneği seçmesini işler.
@@ -177,13 +237,16 @@ class OlayMotoru {
     OyunDurumu durum,
     Olay olay,
     int secenekIndeksi,
-    RastgeleAkis akis,
-  ) {
+    RastgeleAkis akis, {
+    double olcek = 1.0,
+  }) {
     final secenek =
         olay.secenekler[secenekIndeksi.clamp(0, olay.secenekler.length - 1)];
     final hedefId = hedefIsletme(olay, durum)?.id;
+    final nakitCarpani = olay.olcekli ? olcek : 1.0;
 
-    var guncel = _etkileriUygula(durum, secenek.etkiler, hedefId);
+    var guncel =
+        _etkileriUygula(durum, secenek.etkiler, hedefId, nakitCarpani);
     guncel = guncel.copyWith(
       olayGecmisi: {...guncel.olayGecmisi, olay.id: durum.tur},
     );
@@ -211,7 +274,7 @@ class OlayMotoru {
 
     final sonuc = _dalSec(secenek, akis);
     return SecimSonucu(
-      durum: _etkileriUygula(guncel, sonuc.etkiler, hedefId),
+      durum: _etkileriUygula(guncel, sonuc.etkiler, hedefId, nakitCarpani),
       acilanSonuc: sonuc,
     );
   }
@@ -219,8 +282,9 @@ class OlayMotoru {
   /// Bekleyen kararların sayacını ilerletir, zamanı gelenleri çözer.
   ({OyunDurumu durum, List<AcigaCikanSonuc> sonuclar}) bekleyenleriIsle(
     OyunDurumu durum,
-    RastgeleAkis akis,
-  ) {
+    RastgeleAkis akis, {
+    double olcek = 1.0,
+  }) {
     if (durum.bekleyenOlaylar.isEmpty) {
       return (durum: durum, sonuclar: const []);
     }
@@ -240,7 +304,15 @@ class OlayMotoru {
       final secenek = olay.secenekler[
           bekleyen.secenekIndeksi.clamp(0, olay.secenekler.length - 1)];
       final sonuc = _dalSec(secenek, akis);
-      guncel = _etkileriUygula(guncel, sonuc.etkiler, bekleyen.hedefIsletmeId);
+      // Ölçek AÇIĞA ÇIKTIĞI andaki: para bugün eline geçiyor. Karar
+      // anındaki ölçeği saklamak kayda bir alan daha eklerdi ve ölçeklenen
+      // kartlar zaten gecikmesiz hayat kartları.
+      guncel = _etkileriUygula(
+        guncel,
+        sonuc.etkiler,
+        bekleyen.hedefIsletmeId,
+        olay.olcekli ? olcek : 1.0,
+      );
       acilanlar.add(
         AcigaCikanSonuc(olay: olay, secenek: secenek, sonuc: sonuc),
       );
@@ -264,12 +336,14 @@ class OlayMotoru {
     OyunDurumu durum,
     OlayEtkileri etkiler, [
     String? hedefIsletmeId,
+    double nakitCarpani = 1.0,
   ]) {
     if (etkiler.bosMu) return durum;
 
     var oyuncu = durum.oyuncu;
     if (etkiler.nakit != 0) {
-      oyuncu = oyuncu.nakitDegistir(durum.piyasa.endeksle(etkiler.nakit));
+      final taban = (etkiler.nakit * nakitCarpani).round();
+      oyuncu = oyuncu.nakitDegistir(durum.piyasa.endeksle(taban));
     }
     if (etkiler.enerji != 0) oyuncu = oyuncu.enerjiDegistir(etkiler.enerji);
     if (etkiler.mutluluk != 0) {

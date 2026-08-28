@@ -498,4 +498,94 @@ void main() {
       expect(k.dogrula().single, contains('karakter'));
     });
   });
+
+  /// ÖLÇEK: kart tutarları kariyer başındaki bir maaşa göre yazıldı.
+  /// Ölçüldü (15 oyun × 24 yıl, yazılım geliştirici): geç oyunda çekilen
+  /// kartların bahsi aylık maaşın medyan %6'sıydı, üçte ikisi %10'un
+  /// altındaydı. Kartlar karar olmaktan çıkıp bildirime dönüşüyordu;
+  /// "her yıl aynı sıkıntılar" şikâyetinin sayısal karşılığı buydu.
+  group('Oyuncu ölçeği', () {
+    const olcekliKart = '[{"id":"kira","baslik":"Kira","metin":"Zam geldi.",'
+        '"tur":"hayat","olcekli":true,"secenekler":'
+        '[{"etiket":"Öde","etkiler":{"nakit":-10000}}]}]';
+    const sabitKart = '[{"id":"ceza","baslik":"Ceza","metin":"Radara girdin.",'
+        '"tur":"kriz","secenekler":'
+        '[{"etiket":"Öde","etkiler":{"nakit":-10000}}]}]';
+
+    int odenen(String json, double olcek) {
+      final m = motorlu(json);
+      final d = durumKur(nakit: 100000000);
+      final sonuc =
+          m.secimYap(d, m.katalog.tumu.first, 0, akis(), olcek: olcek);
+      return d.oyuncu.nakit - sonuc.durum.oyuncu.nakit;
+    }
+
+    test('ölçekli kartın parası oyuncuyla büyüyor', () {
+      expect(odenen(olcekliKart, 1), 10000);
+      expect(odenen(olcekliKart, 8), 80000);
+    });
+
+    test('ölçeksiz kart sabit kalıyor', () {
+      // Trafik cezasını kanun belirler, maaş değil.
+      expect(odenen(sabitKart, 1), 10000);
+      expect(odenen(sabitKart, 8), 10000);
+    });
+
+    test('bahsi önemsizleşen kart sönüyor ama kaybolmuyor', () {
+      // Sönüm sıfıra gitmemeli: zengin adamın da buzdolabı bozulur, ama
+      // o ayın ana olayı bu olmamalı.
+      final iki = motorlu(
+        '[{"id":"ceza","baslik":"Ceza","metin":"Radar.","tur":"kriz",'
+        '"agirlik":10,"secenekler":'
+        '[{"etiket":"Öde","etkiler":{"nakit":-10000}}]},'
+        '{"id":"buyuk","baslik":"Buyuk","metin":"Buyuk.","tur":"kriz",'
+        '"agirlik":10,"secenekler":'
+        '[{"etiket":"Öde","etkiler":{"nakit":-5000000}}]}]',
+      );
+      final d = durumKur();
+
+      double kucugunPayi(double olcek) {
+        var kucuk = 0;
+        var toplam = 0;
+        for (var t = 1; t <= 600; t++) {
+          final deste =
+              iki.desteCek(d, RastgeleKaynak(t).akis('olay', tur: t),
+                  olcek: olcek);
+          // YALNIZ ilk kart sayılıyor: deste 1-3 kart olabiliyor ve iki
+          // kartlı destede ikisi de yer aldığı için oran 0,5'e doğru
+          // sürükleniyor, sönümü gizliyordu.
+          if (deste.kartlar.isEmpty) continue;
+          toplam++;
+          if (deste.kartlar.first.id == 'ceza') kucuk++;
+        }
+        return kucuk / toplam;
+      }
+
+      final tabanda = kucugunPayi(1);
+      final zenginde = kucugunPayi(12);
+      expect(tabanda, greaterThan(0.4), reason: 'tabanda iki kart eşit');
+      expect(zenginde, lessThan(tabanda * 0.6),
+          reason: 'zengin oyuncuda küçük kart geri çekilmeli');
+      expect(zenginde, greaterThan(0.0), reason: 'tamamen kaybolmamalı');
+    });
+
+    test('bahissiz kart sönmüyor', () {
+      // Yalnız mutluluk/enerji taşıyan kartın ölçekle işi yok.
+      final m = motorlu(
+        '[{"id":"dost","baslik":"Dost","metin":"Bulusma.","tur":"hayat",'
+        '"secenekler":[{"etiket":"Git","etkiler":{"mutluluk":5}}]}]',
+      );
+      expect(m.katalog.tumu.first.parasalBuyukluk, 0);
+      final d = durumKur();
+      var cikti = 0;
+      for (var t = 1; t <= 300; t++) {
+        if (!m
+            .desteCek(d, RastgeleKaynak(t).akis('olay', tur: t), olcek: 12)
+            .bosMu) {
+          cikti++;
+        }
+      }
+      expect(cikti, greaterThan(40));
+    });
+  });
 }

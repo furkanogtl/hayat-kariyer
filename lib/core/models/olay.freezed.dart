@@ -1595,7 +1595,18 @@ mixin _$Olay {
  String get metin; OlayTuru get tur; OlayKosullari get kosullar;/// Seçim havuzundaki ağırlık.
  double get agirlik;/// Oyun boyunca bir kez mi çıkar.
  bool get tekSeferlik;/// Tekrar çıkabilmesi için geçmesi gereken tur.
- int get bekleme; List<OlaySecenegi> get secenekler;
+ int get bekleme;/// Kartın parası oyuncunun ölçeğiyle büyür mü.
+///
+/// Kart tutarları TABAN TL ve kariyer başındaki bir maaşa göre yazıldı.
+/// Oyuncunun geliri 40 yılda reel olarak 20 katına çıkıyor; ölçeklenmeyen
+/// kart o noktada bir bildirime dönüşüyor. Ölçüldü: 141 kartın 85'i
+/// 50.000 TL'nin altında, yani içerik ilk 8 yıla göre ayarlıydı.
+///
+/// YAŞAM GİDERİ olan kartlarda açılır — kira, düğün, tatil, ev tamiri:
+/// zengin adamın evi de pahalıdır. Trafik cezası, KYK borcu gibi tutarı
+/// dışarıdan belirlenen kartlarda AÇILMAZ. Fırsat ve meslek kartlarında
+/// da açılmaz; onların ödülleri itibar kademesine göre elle dengelendi.
+ bool get olcekli; List<OlaySecenegi> get secenekler;
 /// Create a copy of Olay
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1608,16 +1619,16 @@ $OlayCopyWith<Olay> get copyWith => _$OlayCopyWithImpl<Olay>(this as Olay, _$ide
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Olay&&(identical(other.id, id) || other.id == id)&&(identical(other.baslik, baslik) || other.baslik == baslik)&&(identical(other.metin, metin) || other.metin == metin)&&(identical(other.tur, tur) || other.tur == tur)&&(identical(other.kosullar, kosullar) || other.kosullar == kosullar)&&(identical(other.agirlik, agirlik) || other.agirlik == agirlik)&&(identical(other.tekSeferlik, tekSeferlik) || other.tekSeferlik == tekSeferlik)&&(identical(other.bekleme, bekleme) || other.bekleme == bekleme)&&const DeepCollectionEquality().equals(other.secenekler, secenekler));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Olay&&(identical(other.id, id) || other.id == id)&&(identical(other.baslik, baslik) || other.baslik == baslik)&&(identical(other.metin, metin) || other.metin == metin)&&(identical(other.tur, tur) || other.tur == tur)&&(identical(other.kosullar, kosullar) || other.kosullar == kosullar)&&(identical(other.agirlik, agirlik) || other.agirlik == agirlik)&&(identical(other.tekSeferlik, tekSeferlik) || other.tekSeferlik == tekSeferlik)&&(identical(other.bekleme, bekleme) || other.bekleme == bekleme)&&(identical(other.olcekli, olcekli) || other.olcekli == olcekli)&&const DeepCollectionEquality().equals(other.secenekler, secenekler));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,baslik,metin,tur,kosullar,agirlik,tekSeferlik,bekleme,const DeepCollectionEquality().hash(secenekler));
+int get hashCode => Object.hash(runtimeType,id,baslik,metin,tur,kosullar,agirlik,tekSeferlik,bekleme,olcekli,const DeepCollectionEquality().hash(secenekler));
 
 @override
 String toString() {
-  return 'Olay(id: $id, baslik: $baslik, metin: $metin, tur: $tur, kosullar: $kosullar, agirlik: $agirlik, tekSeferlik: $tekSeferlik, bekleme: $bekleme, secenekler: $secenekler)';
+  return 'Olay(id: $id, baslik: $baslik, metin: $metin, tur: $tur, kosullar: $kosullar, agirlik: $agirlik, tekSeferlik: $tekSeferlik, bekleme: $bekleme, olcekli: $olcekli, secenekler: $secenekler)';
 }
 
 
@@ -1628,7 +1639,7 @@ abstract mixin class $OlayCopyWith<$Res>  {
   factory $OlayCopyWith(Olay value, $Res Function(Olay) _then) = _$OlayCopyWithImpl;
 @useResult
 $Res call({
- String id, String baslik, String metin, OlayTuru tur, OlayKosullari kosullar, double agirlik, bool tekSeferlik, int bekleme, List<OlaySecenegi> secenekler
+ String id, String baslik, String metin, OlayTuru tur, OlayKosullari kosullar, double agirlik, bool tekSeferlik, int bekleme, bool olcekli, List<OlaySecenegi> secenekler
 });
 
 
@@ -1645,7 +1656,7 @@ class _$OlayCopyWithImpl<$Res>
 
 /// Create a copy of Olay
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? baslik = null,Object? metin = null,Object? tur = null,Object? kosullar = null,Object? agirlik = null,Object? tekSeferlik = null,Object? bekleme = null,Object? secenekler = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? baslik = null,Object? metin = null,Object? tur = null,Object? kosullar = null,Object? agirlik = null,Object? tekSeferlik = null,Object? bekleme = null,Object? olcekli = null,Object? secenekler = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,baslik: null == baslik ? _self.baslik : baslik // ignore: cast_nullable_to_non_nullable
@@ -1655,7 +1666,8 @@ as OlayTuru,kosullar: null == kosullar ? _self.kosullar : kosullar // ignore: ca
 as OlayKosullari,agirlik: null == agirlik ? _self.agirlik : agirlik // ignore: cast_nullable_to_non_nullable
 as double,tekSeferlik: null == tekSeferlik ? _self.tekSeferlik : tekSeferlik // ignore: cast_nullable_to_non_nullable
 as bool,bekleme: null == bekleme ? _self.bekleme : bekleme // ignore: cast_nullable_to_non_nullable
-as int,secenekler: null == secenekler ? _self.secenekler : secenekler // ignore: cast_nullable_to_non_nullable
+as int,olcekli: null == olcekli ? _self.olcekli : olcekli // ignore: cast_nullable_to_non_nullable
+as bool,secenekler: null == secenekler ? _self.secenekler : secenekler // ignore: cast_nullable_to_non_nullable
 as List<OlaySecenegi>,
   ));
 }
@@ -1750,10 +1762,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String baslik,  String metin,  OlayTuru tur,  OlayKosullari kosullar,  double agirlik,  bool tekSeferlik,  int bekleme,  List<OlaySecenegi> secenekler)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String baslik,  String metin,  OlayTuru tur,  OlayKosullari kosullar,  double agirlik,  bool tekSeferlik,  int bekleme,  bool olcekli,  List<OlaySecenegi> secenekler)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Olay() when $default != null:
-return $default(_that.id,_that.baslik,_that.metin,_that.tur,_that.kosullar,_that.agirlik,_that.tekSeferlik,_that.bekleme,_that.secenekler);case _:
+return $default(_that.id,_that.baslik,_that.metin,_that.tur,_that.kosullar,_that.agirlik,_that.tekSeferlik,_that.bekleme,_that.olcekli,_that.secenekler);case _:
   return orElse();
 
 }
@@ -1771,10 +1783,10 @@ return $default(_that.id,_that.baslik,_that.metin,_that.tur,_that.kosullar,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String baslik,  String metin,  OlayTuru tur,  OlayKosullari kosullar,  double agirlik,  bool tekSeferlik,  int bekleme,  List<OlaySecenegi> secenekler)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String baslik,  String metin,  OlayTuru tur,  OlayKosullari kosullar,  double agirlik,  bool tekSeferlik,  int bekleme,  bool olcekli,  List<OlaySecenegi> secenekler)  $default,) {final _that = this;
 switch (_that) {
 case _Olay():
-return $default(_that.id,_that.baslik,_that.metin,_that.tur,_that.kosullar,_that.agirlik,_that.tekSeferlik,_that.bekleme,_that.secenekler);case _:
+return $default(_that.id,_that.baslik,_that.metin,_that.tur,_that.kosullar,_that.agirlik,_that.tekSeferlik,_that.bekleme,_that.olcekli,_that.secenekler);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -1791,10 +1803,10 @@ return $default(_that.id,_that.baslik,_that.metin,_that.tur,_that.kosullar,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String baslik,  String metin,  OlayTuru tur,  OlayKosullari kosullar,  double agirlik,  bool tekSeferlik,  int bekleme,  List<OlaySecenegi> secenekler)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String baslik,  String metin,  OlayTuru tur,  OlayKosullari kosullar,  double agirlik,  bool tekSeferlik,  int bekleme,  bool olcekli,  List<OlaySecenegi> secenekler)?  $default,) {final _that = this;
 switch (_that) {
 case _Olay() when $default != null:
-return $default(_that.id,_that.baslik,_that.metin,_that.tur,_that.kosullar,_that.agirlik,_that.tekSeferlik,_that.bekleme,_that.secenekler);case _:
+return $default(_that.id,_that.baslik,_that.metin,_that.tur,_that.kosullar,_that.agirlik,_that.tekSeferlik,_that.bekleme,_that.olcekli,_that.secenekler);case _:
   return null;
 
 }
@@ -1806,7 +1818,7 @@ return $default(_that.id,_that.baslik,_that.metin,_that.tur,_that.kosullar,_that
 @JsonSerializable()
 
 class _Olay extends Olay {
-  const _Olay({required this.id, required this.baslik, required this.metin, this.tur = OlayTuru.hayat, this.kosullar = const OlayKosullari(), this.agirlik = 10.0, this.tekSeferlik = false, this.bekleme = 60, required final  List<OlaySecenegi> secenekler}): _secenekler = secenekler,super._();
+  const _Olay({required this.id, required this.baslik, required this.metin, this.tur = OlayTuru.hayat, this.kosullar = const OlayKosullari(), this.agirlik = 10.0, this.tekSeferlik = false, this.bekleme = 60, this.olcekli = false, required final  List<OlaySecenegi> secenekler}): _secenekler = secenekler,super._();
   factory _Olay.fromJson(Map<String, dynamic> json) => _$OlayFromJson(json);
 
 @override final  String id;
@@ -1821,6 +1833,18 @@ class _Olay extends Olay {
 @override@JsonKey() final  bool tekSeferlik;
 /// Tekrar çıkabilmesi için geçmesi gereken tur.
 @override@JsonKey() final  int bekleme;
+/// Kartın parası oyuncunun ölçeğiyle büyür mü.
+///
+/// Kart tutarları TABAN TL ve kariyer başındaki bir maaşa göre yazıldı.
+/// Oyuncunun geliri 40 yılda reel olarak 20 katına çıkıyor; ölçeklenmeyen
+/// kart o noktada bir bildirime dönüşüyor. Ölçüldü: 141 kartın 85'i
+/// 50.000 TL'nin altında, yani içerik ilk 8 yıla göre ayarlıydı.
+///
+/// YAŞAM GİDERİ olan kartlarda açılır — kira, düğün, tatil, ev tamiri:
+/// zengin adamın evi de pahalıdır. Trafik cezası, KYK borcu gibi tutarı
+/// dışarıdan belirlenen kartlarda AÇILMAZ. Fırsat ve meslek kartlarında
+/// da açılmaz; onların ödülleri itibar kademesine göre elle dengelendi.
+@override@JsonKey() final  bool olcekli;
  final  List<OlaySecenegi> _secenekler;
 @override List<OlaySecenegi> get secenekler {
   if (_secenekler is EqualUnmodifiableListView) return _secenekler;
@@ -1842,16 +1866,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Olay&&(identical(other.id, id) || other.id == id)&&(identical(other.baslik, baslik) || other.baslik == baslik)&&(identical(other.metin, metin) || other.metin == metin)&&(identical(other.tur, tur) || other.tur == tur)&&(identical(other.kosullar, kosullar) || other.kosullar == kosullar)&&(identical(other.agirlik, agirlik) || other.agirlik == agirlik)&&(identical(other.tekSeferlik, tekSeferlik) || other.tekSeferlik == tekSeferlik)&&(identical(other.bekleme, bekleme) || other.bekleme == bekleme)&&const DeepCollectionEquality().equals(other._secenekler, _secenekler));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Olay&&(identical(other.id, id) || other.id == id)&&(identical(other.baslik, baslik) || other.baslik == baslik)&&(identical(other.metin, metin) || other.metin == metin)&&(identical(other.tur, tur) || other.tur == tur)&&(identical(other.kosullar, kosullar) || other.kosullar == kosullar)&&(identical(other.agirlik, agirlik) || other.agirlik == agirlik)&&(identical(other.tekSeferlik, tekSeferlik) || other.tekSeferlik == tekSeferlik)&&(identical(other.bekleme, bekleme) || other.bekleme == bekleme)&&(identical(other.olcekli, olcekli) || other.olcekli == olcekli)&&const DeepCollectionEquality().equals(other._secenekler, _secenekler));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,baslik,metin,tur,kosullar,agirlik,tekSeferlik,bekleme,const DeepCollectionEquality().hash(_secenekler));
+int get hashCode => Object.hash(runtimeType,id,baslik,metin,tur,kosullar,agirlik,tekSeferlik,bekleme,olcekli,const DeepCollectionEquality().hash(_secenekler));
 
 @override
 String toString() {
-  return 'Olay(id: $id, baslik: $baslik, metin: $metin, tur: $tur, kosullar: $kosullar, agirlik: $agirlik, tekSeferlik: $tekSeferlik, bekleme: $bekleme, secenekler: $secenekler)';
+  return 'Olay(id: $id, baslik: $baslik, metin: $metin, tur: $tur, kosullar: $kosullar, agirlik: $agirlik, tekSeferlik: $tekSeferlik, bekleme: $bekleme, olcekli: $olcekli, secenekler: $secenekler)';
 }
 
 
@@ -1862,7 +1886,7 @@ abstract mixin class _$OlayCopyWith<$Res> implements $OlayCopyWith<$Res> {
   factory _$OlayCopyWith(_Olay value, $Res Function(_Olay) _then) = __$OlayCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String baslik, String metin, OlayTuru tur, OlayKosullari kosullar, double agirlik, bool tekSeferlik, int bekleme, List<OlaySecenegi> secenekler
+ String id, String baslik, String metin, OlayTuru tur, OlayKosullari kosullar, double agirlik, bool tekSeferlik, int bekleme, bool olcekli, List<OlaySecenegi> secenekler
 });
 
 
@@ -1879,7 +1903,7 @@ class __$OlayCopyWithImpl<$Res>
 
 /// Create a copy of Olay
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? baslik = null,Object? metin = null,Object? tur = null,Object? kosullar = null,Object? agirlik = null,Object? tekSeferlik = null,Object? bekleme = null,Object? secenekler = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? baslik = null,Object? metin = null,Object? tur = null,Object? kosullar = null,Object? agirlik = null,Object? tekSeferlik = null,Object? bekleme = null,Object? olcekli = null,Object? secenekler = null,}) {
   return _then(_Olay(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,baslik: null == baslik ? _self.baslik : baslik // ignore: cast_nullable_to_non_nullable
@@ -1889,7 +1913,8 @@ as OlayTuru,kosullar: null == kosullar ? _self.kosullar : kosullar // ignore: ca
 as OlayKosullari,agirlik: null == agirlik ? _self.agirlik : agirlik // ignore: cast_nullable_to_non_nullable
 as double,tekSeferlik: null == tekSeferlik ? _self.tekSeferlik : tekSeferlik // ignore: cast_nullable_to_non_nullable
 as bool,bekleme: null == bekleme ? _self.bekleme : bekleme // ignore: cast_nullable_to_non_nullable
-as int,secenekler: null == secenekler ? _self._secenekler : secenekler // ignore: cast_nullable_to_non_nullable
+as int,olcekli: null == olcekli ? _self.olcekli : olcekli // ignore: cast_nullable_to_non_nullable
+as bool,secenekler: null == secenekler ? _self._secenekler : secenekler // ignore: cast_nullable_to_non_nullable
 as List<OlaySecenegi>,
   ));
 }

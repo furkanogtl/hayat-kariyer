@@ -258,10 +258,42 @@ abstract class Olay with _$Olay {
 
     /// Tekrar çıkabilmesi için geçmesi gereken tur.
     @Default(60) int bekleme,
+
+    /// Kartın parası oyuncunun ölçeğiyle büyür mü.
+    ///
+    /// Kart tutarları TABAN TL ve kariyer başındaki bir maaşa göre yazıldı.
+    /// Oyuncunun geliri 40 yılda reel olarak 20 katına çıkıyor; ölçeklenmeyen
+    /// kart o noktada bir bildirime dönüşüyor. Ölçüldü: 141 kartın 85'i
+    /// 50.000 TL'nin altında, yani içerik ilk 8 yıla göre ayarlıydı.
+    ///
+    /// YAŞAM GİDERİ olan kartlarda açılır — kira, düğün, tatil, ev tamiri:
+    /// zengin adamın evi de pahalıdır. Trafik cezası, KYK borcu gibi tutarı
+    /// dışarıdan belirlenen kartlarda AÇILMAZ. Fırsat ve meslek kartlarında
+    /// da açılmaz; onların ödülleri itibar kademesine göre elle dengelendi.
+    @Default(false) bool olcekli,
     required List<OlaySecenegi> secenekler,
   }) = _Olay;
 
   factory Olay.fromJson(Map<String, dynamic> json) => _$OlayFromJson(json);
+
+  /// Kartın en büyük nakit etkisinin mutlak değeri, TABAN TL.
+  ///
+  /// Veriden türetiliyor, elle yazılmıyor: ikinci bir doğruluk kaynağı
+  /// olurdu ve kartın parası değişince güncellenmeyi unuturdu. Bahsi
+  /// olmayan kart (yalnız mutluluk/enerji/itibar) 0 döner — o kartların
+  /// ölçekle bir işi yok.
+  int get parasalBuyukluk {
+    var enBuyuk = 0;
+    for (final secenek in secenekler) {
+      final n = secenek.etkiler.nakit.abs();
+      if (n > enBuyuk) enBuyuk = n;
+      for (final sonuc in secenek.sonuclar) {
+        final m = sonuc.etkiler.nakit.abs();
+        if (m > enBuyuk) enBuyuk = m;
+      }
+    }
+    return enBuyuk;
+  }
 
   /// Veri dosyası doğrulaması. Boş liste = geçerli.
   List<String> dogrula() {

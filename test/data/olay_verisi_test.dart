@@ -39,6 +39,22 @@ OlayKatalogu katalogYukle() {
   );
 }
 
+/// Dosya adı → o dosyadaki kart kimlikleri. `olcekli` bayrağının yalnız
+/// yaşam kartlarında açılmasını denetlemek için gerekiyor; katalog
+/// birleştirilmiş olduğu için kartın hangi dosyadan geldiği orada yok.
+Map<String, Set<String>> dosyayaGoreKartlar() {
+  final sonuc = <String, Set<String>>{};
+  for (final f in Directory('assets/events')
+      .listSync()
+      .whereType<File>()
+      .where((f) => f.path.endsWith('.json'))) {
+    final ad = f.uri.pathSegments.last;
+    final katalog = OlayKatalogu.jsonMetinlerinden([f.readAsStringSync()]);
+    sonuc[ad] = {for (final o in katalog.tumu) o.id};
+  }
+  return sonuc;
+}
+
 /// İşletmelerin `olayHavuzu` alanlarında geçen kart kimlikleri. Bunlar
 /// yalnız o işletmeye sahip oyuncuya çıkar; genel havuz sayımına girmemeli.
 Set<String> isletmeKartlari() => IsletmeKatalogu.jsonMetinlerinden(
@@ -232,6 +248,49 @@ void main() {
   });
 
   group('denge', () {
+    // Kart tutarları taban TL ve kariyer başındaki bir maaşa göre yazıldı.
+    // Ölçüldü: geç oyunda çekilen kartların bahsi aylık maaşın MEDYAN
+    // %6'sıydı, üçte ikisi %10'un altındaydı — kartlar bildirime dönüşüyordu.
+    // `olcekli` bunu düzeltiyor ama her karta açılamaz.
+    test('olcekli yalnız yaşam giderlerinde açık', () {
+      final dosyalar = dosyayaGoreKartlar();
+      // Fırsat kartlarının ödülü itibar kademesine göre elle dengelendi
+      // (kapılar 25-80). Ölçeklenirlerse o merdiven bozulur.
+      // Meslek kartları mesleğe göre, işletme kartları işletme ekonomisine
+      // göre ayarlı. Dip kartları parasızlığı anlatıyor; büyütmek
+      // mekaniğin kendisini geri alır.
+      const yasak = {
+        'firsat.json',
+        'meslek.json',
+        'isletme.json',
+        'dip.json',
+        'genclik.json',
+      };
+      final hatalar = <String>[];
+      for (final olay in katalog.tumu) {
+        if (!olay.olcekli) continue;
+        for (final girdi in dosyalar.entries) {
+          if (yasak.contains(girdi.key) && girdi.value.contains(olay.id)) {
+            hatalar.add('${girdi.key}/${olay.id}');
+          }
+        }
+      }
+      expect(hatalar, isEmpty,
+          reason: 'bu dosyalardaki kartlar elle dengelendi, ölçeklenemez');
+    });
+
+    test('yaşam kartlarının çoğu ölçekleniyor', () {
+      // Ters yön: hayat kartları ölçeklenmezse geç oyun yine bildirime
+      // döner. Tamamı şart değil (trafik cezası kanunla belli), ama
+      // çoğunluk olmalı.
+      final hayat = dosyayaGoreKartlar()['hayat.json']!;
+      final parali = katalog.tumu
+          .where((o) => hayat.contains(o.id) && o.parasalBuyukluk > 0);
+      final olcekli = parali.where((o) => o.olcekli).length;
+      expect(olcekli / parali.length, greaterThan(0.7),
+          reason: 'paralı hayat kartlarının çoğu oyuncuyla büyümeli');
+    });
+
     test('bedava büyük para yok', () {
       // Anlık, dalsız VE bedelsiz bir seçenek serbest kazanç demektir.
       // İlk yazımda ölçüt yalnız nakitti; işletme kartları gelince
