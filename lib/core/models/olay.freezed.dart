@@ -945,7 +945,13 @@ mixin _$OlayKosullari {
  int? get enAzNakit; int? get enAzEnerji; int? get enAzMutluluk; int? get enAzKrediNotu;/// Üst sınırlar. Kriz ve borç kartları "durumu kötü olana çıksın"
 /// diyebilmek için var; yalnız `enAz...` olsaydı sıkışmış oyuncuya özel
 /// kart yazılamazdı. [enCokNakit] de TABAN TL'dir.
- int? get enCokNakit; int? get enCokKrediNotu;/// `[enAz, enCok]`.
+ int? get enCokNakit;/// Servet kapısı. NAKDE DEĞİL NET DEĞERE bakar (reel).
+///
+/// Nakde bakan bir kapı, geç oyun içeriğini tam da doğru oynayan
+/// oyuncuya kapatırdı: parasını borsada ya da gayrimenkulde tutanın
+/// nakiti azdır ama zengindir. `enAzNakit` "cebinde şu kadar var mı"
+/// sorusu için duruyor; bu ise "bu kart senin ligin mi".
+ int? get enAzNetDeger; int? get enCokNetDeger; int? get enCokKrediNotu;/// `[enAz, enCok]`.
 @JsonKey(name: 'yas') List<int>? get yasAraligi; List<Sehir>? get sehirler; List<String>? get meslekler; List<Sektor>? get sektorler; List<Rejim>? get rejimler; List<KariyerTuru>? get durumlar; Cinsiyet? get cinsiyet; EgitimSeviyesi? get enAzEgitim;/// İşletme kartları için: hedef işletme bu kadar turdur ihmal edilmiş
 /// olmalı. "Bakmadığın kafede personel kavgası" kartlarının kapısı.
  int? get enAzIhmalTuru;
@@ -961,16 +967,16 @@ $OlayKosullariCopyWith<OlayKosullari> get copyWith => _$OlayKosullariCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is OlayKosullari&&(identical(other.enAzItibar, enAzItibar) || other.enAzItibar == enAzItibar)&&(identical(other.enAzNakit, enAzNakit) || other.enAzNakit == enAzNakit)&&(identical(other.enAzEnerji, enAzEnerji) || other.enAzEnerji == enAzEnerji)&&(identical(other.enAzMutluluk, enAzMutluluk) || other.enAzMutluluk == enAzMutluluk)&&(identical(other.enAzKrediNotu, enAzKrediNotu) || other.enAzKrediNotu == enAzKrediNotu)&&(identical(other.enCokNakit, enCokNakit) || other.enCokNakit == enCokNakit)&&(identical(other.enCokKrediNotu, enCokKrediNotu) || other.enCokKrediNotu == enCokKrediNotu)&&const DeepCollectionEquality().equals(other.yasAraligi, yasAraligi)&&const DeepCollectionEquality().equals(other.sehirler, sehirler)&&const DeepCollectionEquality().equals(other.meslekler, meslekler)&&const DeepCollectionEquality().equals(other.sektorler, sektorler)&&const DeepCollectionEquality().equals(other.rejimler, rejimler)&&const DeepCollectionEquality().equals(other.durumlar, durumlar)&&(identical(other.cinsiyet, cinsiyet) || other.cinsiyet == cinsiyet)&&(identical(other.enAzEgitim, enAzEgitim) || other.enAzEgitim == enAzEgitim)&&(identical(other.enAzIhmalTuru, enAzIhmalTuru) || other.enAzIhmalTuru == enAzIhmalTuru));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is OlayKosullari&&(identical(other.enAzItibar, enAzItibar) || other.enAzItibar == enAzItibar)&&(identical(other.enAzNakit, enAzNakit) || other.enAzNakit == enAzNakit)&&(identical(other.enAzEnerji, enAzEnerji) || other.enAzEnerji == enAzEnerji)&&(identical(other.enAzMutluluk, enAzMutluluk) || other.enAzMutluluk == enAzMutluluk)&&(identical(other.enAzKrediNotu, enAzKrediNotu) || other.enAzKrediNotu == enAzKrediNotu)&&(identical(other.enCokNakit, enCokNakit) || other.enCokNakit == enCokNakit)&&(identical(other.enAzNetDeger, enAzNetDeger) || other.enAzNetDeger == enAzNetDeger)&&(identical(other.enCokNetDeger, enCokNetDeger) || other.enCokNetDeger == enCokNetDeger)&&(identical(other.enCokKrediNotu, enCokKrediNotu) || other.enCokKrediNotu == enCokKrediNotu)&&const DeepCollectionEquality().equals(other.yasAraligi, yasAraligi)&&const DeepCollectionEquality().equals(other.sehirler, sehirler)&&const DeepCollectionEquality().equals(other.meslekler, meslekler)&&const DeepCollectionEquality().equals(other.sektorler, sektorler)&&const DeepCollectionEquality().equals(other.rejimler, rejimler)&&const DeepCollectionEquality().equals(other.durumlar, durumlar)&&(identical(other.cinsiyet, cinsiyet) || other.cinsiyet == cinsiyet)&&(identical(other.enAzEgitim, enAzEgitim) || other.enAzEgitim == enAzEgitim)&&(identical(other.enAzIhmalTuru, enAzIhmalTuru) || other.enAzIhmalTuru == enAzIhmalTuru));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,enAzItibar,enAzNakit,enAzEnerji,enAzMutluluk,enAzKrediNotu,enCokNakit,enCokKrediNotu,const DeepCollectionEquality().hash(yasAraligi),const DeepCollectionEquality().hash(sehirler),const DeepCollectionEquality().hash(meslekler),const DeepCollectionEquality().hash(sektorler),const DeepCollectionEquality().hash(rejimler),const DeepCollectionEquality().hash(durumlar),cinsiyet,enAzEgitim,enAzIhmalTuru);
+int get hashCode => Object.hash(runtimeType,enAzItibar,enAzNakit,enAzEnerji,enAzMutluluk,enAzKrediNotu,enCokNakit,enAzNetDeger,enCokNetDeger,enCokKrediNotu,const DeepCollectionEquality().hash(yasAraligi),const DeepCollectionEquality().hash(sehirler),const DeepCollectionEquality().hash(meslekler),const DeepCollectionEquality().hash(sektorler),const DeepCollectionEquality().hash(rejimler),const DeepCollectionEquality().hash(durumlar),cinsiyet,enAzEgitim,enAzIhmalTuru);
 
 @override
 String toString() {
-  return 'OlayKosullari(enAzItibar: $enAzItibar, enAzNakit: $enAzNakit, enAzEnerji: $enAzEnerji, enAzMutluluk: $enAzMutluluk, enAzKrediNotu: $enAzKrediNotu, enCokNakit: $enCokNakit, enCokKrediNotu: $enCokKrediNotu, yasAraligi: $yasAraligi, sehirler: $sehirler, meslekler: $meslekler, sektorler: $sektorler, rejimler: $rejimler, durumlar: $durumlar, cinsiyet: $cinsiyet, enAzEgitim: $enAzEgitim, enAzIhmalTuru: $enAzIhmalTuru)';
+  return 'OlayKosullari(enAzItibar: $enAzItibar, enAzNakit: $enAzNakit, enAzEnerji: $enAzEnerji, enAzMutluluk: $enAzMutluluk, enAzKrediNotu: $enAzKrediNotu, enCokNakit: $enCokNakit, enAzNetDeger: $enAzNetDeger, enCokNetDeger: $enCokNetDeger, enCokKrediNotu: $enCokKrediNotu, yasAraligi: $yasAraligi, sehirler: $sehirler, meslekler: $meslekler, sektorler: $sektorler, rejimler: $rejimler, durumlar: $durumlar, cinsiyet: $cinsiyet, enAzEgitim: $enAzEgitim, enAzIhmalTuru: $enAzIhmalTuru)';
 }
 
 
@@ -981,7 +987,7 @@ abstract mixin class $OlayKosullariCopyWith<$Res>  {
   factory $OlayKosullariCopyWith(OlayKosullari value, $Res Function(OlayKosullari) _then) = _$OlayKosullariCopyWithImpl;
 @useResult
 $Res call({
- int? enAzItibar, int? enAzNakit, int? enAzEnerji, int? enAzMutluluk, int? enAzKrediNotu, int? enCokNakit, int? enCokKrediNotu,@JsonKey(name: 'yas') List<int>? yasAraligi, List<Sehir>? sehirler, List<String>? meslekler, List<Sektor>? sektorler, List<Rejim>? rejimler, List<KariyerTuru>? durumlar, Cinsiyet? cinsiyet, EgitimSeviyesi? enAzEgitim, int? enAzIhmalTuru
+ int? enAzItibar, int? enAzNakit, int? enAzEnerji, int? enAzMutluluk, int? enAzKrediNotu, int? enCokNakit, int? enAzNetDeger, int? enCokNetDeger, int? enCokKrediNotu,@JsonKey(name: 'yas') List<int>? yasAraligi, List<Sehir>? sehirler, List<String>? meslekler, List<Sektor>? sektorler, List<Rejim>? rejimler, List<KariyerTuru>? durumlar, Cinsiyet? cinsiyet, EgitimSeviyesi? enAzEgitim, int? enAzIhmalTuru
 });
 
 
@@ -998,7 +1004,7 @@ class _$OlayKosullariCopyWithImpl<$Res>
 
 /// Create a copy of OlayKosullari
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? enAzItibar = freezed,Object? enAzNakit = freezed,Object? enAzEnerji = freezed,Object? enAzMutluluk = freezed,Object? enAzKrediNotu = freezed,Object? enCokNakit = freezed,Object? enCokKrediNotu = freezed,Object? yasAraligi = freezed,Object? sehirler = freezed,Object? meslekler = freezed,Object? sektorler = freezed,Object? rejimler = freezed,Object? durumlar = freezed,Object? cinsiyet = freezed,Object? enAzEgitim = freezed,Object? enAzIhmalTuru = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? enAzItibar = freezed,Object? enAzNakit = freezed,Object? enAzEnerji = freezed,Object? enAzMutluluk = freezed,Object? enAzKrediNotu = freezed,Object? enCokNakit = freezed,Object? enAzNetDeger = freezed,Object? enCokNetDeger = freezed,Object? enCokKrediNotu = freezed,Object? yasAraligi = freezed,Object? sehirler = freezed,Object? meslekler = freezed,Object? sektorler = freezed,Object? rejimler = freezed,Object? durumlar = freezed,Object? cinsiyet = freezed,Object? enAzEgitim = freezed,Object? enAzIhmalTuru = freezed,}) {
   return _then(_self.copyWith(
 enAzItibar: freezed == enAzItibar ? _self.enAzItibar : enAzItibar // ignore: cast_nullable_to_non_nullable
 as int?,enAzNakit: freezed == enAzNakit ? _self.enAzNakit : enAzNakit // ignore: cast_nullable_to_non_nullable
@@ -1006,6 +1012,8 @@ as int?,enAzEnerji: freezed == enAzEnerji ? _self.enAzEnerji : enAzEnerji // ign
 as int?,enAzMutluluk: freezed == enAzMutluluk ? _self.enAzMutluluk : enAzMutluluk // ignore: cast_nullable_to_non_nullable
 as int?,enAzKrediNotu: freezed == enAzKrediNotu ? _self.enAzKrediNotu : enAzKrediNotu // ignore: cast_nullable_to_non_nullable
 as int?,enCokNakit: freezed == enCokNakit ? _self.enCokNakit : enCokNakit // ignore: cast_nullable_to_non_nullable
+as int?,enAzNetDeger: freezed == enAzNetDeger ? _self.enAzNetDeger : enAzNetDeger // ignore: cast_nullable_to_non_nullable
+as int?,enCokNetDeger: freezed == enCokNetDeger ? _self.enCokNetDeger : enCokNetDeger // ignore: cast_nullable_to_non_nullable
 as int?,enCokKrediNotu: freezed == enCokKrediNotu ? _self.enCokKrediNotu : enCokKrediNotu // ignore: cast_nullable_to_non_nullable
 as int?,yasAraligi: freezed == yasAraligi ? _self.yasAraligi : yasAraligi // ignore: cast_nullable_to_non_nullable
 as List<int>?,sehirler: freezed == sehirler ? _self.sehirler : sehirler // ignore: cast_nullable_to_non_nullable
@@ -1101,10 +1109,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int? enAzItibar,  int? enAzNakit,  int? enAzEnerji,  int? enAzMutluluk,  int? enAzKrediNotu,  int? enCokNakit,  int? enCokKrediNotu, @JsonKey(name: 'yas')  List<int>? yasAraligi,  List<Sehir>? sehirler,  List<String>? meslekler,  List<Sektor>? sektorler,  List<Rejim>? rejimler,  List<KariyerTuru>? durumlar,  Cinsiyet? cinsiyet,  EgitimSeviyesi? enAzEgitim,  int? enAzIhmalTuru)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int? enAzItibar,  int? enAzNakit,  int? enAzEnerji,  int? enAzMutluluk,  int? enAzKrediNotu,  int? enCokNakit,  int? enAzNetDeger,  int? enCokNetDeger,  int? enCokKrediNotu, @JsonKey(name: 'yas')  List<int>? yasAraligi,  List<Sehir>? sehirler,  List<String>? meslekler,  List<Sektor>? sektorler,  List<Rejim>? rejimler,  List<KariyerTuru>? durumlar,  Cinsiyet? cinsiyet,  EgitimSeviyesi? enAzEgitim,  int? enAzIhmalTuru)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _OlayKosullari() when $default != null:
-return $default(_that.enAzItibar,_that.enAzNakit,_that.enAzEnerji,_that.enAzMutluluk,_that.enAzKrediNotu,_that.enCokNakit,_that.enCokKrediNotu,_that.yasAraligi,_that.sehirler,_that.meslekler,_that.sektorler,_that.rejimler,_that.durumlar,_that.cinsiyet,_that.enAzEgitim,_that.enAzIhmalTuru);case _:
+return $default(_that.enAzItibar,_that.enAzNakit,_that.enAzEnerji,_that.enAzMutluluk,_that.enAzKrediNotu,_that.enCokNakit,_that.enAzNetDeger,_that.enCokNetDeger,_that.enCokKrediNotu,_that.yasAraligi,_that.sehirler,_that.meslekler,_that.sektorler,_that.rejimler,_that.durumlar,_that.cinsiyet,_that.enAzEgitim,_that.enAzIhmalTuru);case _:
   return orElse();
 
 }
@@ -1122,10 +1130,10 @@ return $default(_that.enAzItibar,_that.enAzNakit,_that.enAzEnerji,_that.enAzMutl
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int? enAzItibar,  int? enAzNakit,  int? enAzEnerji,  int? enAzMutluluk,  int? enAzKrediNotu,  int? enCokNakit,  int? enCokKrediNotu, @JsonKey(name: 'yas')  List<int>? yasAraligi,  List<Sehir>? sehirler,  List<String>? meslekler,  List<Sektor>? sektorler,  List<Rejim>? rejimler,  List<KariyerTuru>? durumlar,  Cinsiyet? cinsiyet,  EgitimSeviyesi? enAzEgitim,  int? enAzIhmalTuru)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int? enAzItibar,  int? enAzNakit,  int? enAzEnerji,  int? enAzMutluluk,  int? enAzKrediNotu,  int? enCokNakit,  int? enAzNetDeger,  int? enCokNetDeger,  int? enCokKrediNotu, @JsonKey(name: 'yas')  List<int>? yasAraligi,  List<Sehir>? sehirler,  List<String>? meslekler,  List<Sektor>? sektorler,  List<Rejim>? rejimler,  List<KariyerTuru>? durumlar,  Cinsiyet? cinsiyet,  EgitimSeviyesi? enAzEgitim,  int? enAzIhmalTuru)  $default,) {final _that = this;
 switch (_that) {
 case _OlayKosullari():
-return $default(_that.enAzItibar,_that.enAzNakit,_that.enAzEnerji,_that.enAzMutluluk,_that.enAzKrediNotu,_that.enCokNakit,_that.enCokKrediNotu,_that.yasAraligi,_that.sehirler,_that.meslekler,_that.sektorler,_that.rejimler,_that.durumlar,_that.cinsiyet,_that.enAzEgitim,_that.enAzIhmalTuru);case _:
+return $default(_that.enAzItibar,_that.enAzNakit,_that.enAzEnerji,_that.enAzMutluluk,_that.enAzKrediNotu,_that.enCokNakit,_that.enAzNetDeger,_that.enCokNetDeger,_that.enCokKrediNotu,_that.yasAraligi,_that.sehirler,_that.meslekler,_that.sektorler,_that.rejimler,_that.durumlar,_that.cinsiyet,_that.enAzEgitim,_that.enAzIhmalTuru);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -1142,10 +1150,10 @@ return $default(_that.enAzItibar,_that.enAzNakit,_that.enAzEnerji,_that.enAzMutl
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int? enAzItibar,  int? enAzNakit,  int? enAzEnerji,  int? enAzMutluluk,  int? enAzKrediNotu,  int? enCokNakit,  int? enCokKrediNotu, @JsonKey(name: 'yas')  List<int>? yasAraligi,  List<Sehir>? sehirler,  List<String>? meslekler,  List<Sektor>? sektorler,  List<Rejim>? rejimler,  List<KariyerTuru>? durumlar,  Cinsiyet? cinsiyet,  EgitimSeviyesi? enAzEgitim,  int? enAzIhmalTuru)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int? enAzItibar,  int? enAzNakit,  int? enAzEnerji,  int? enAzMutluluk,  int? enAzKrediNotu,  int? enCokNakit,  int? enAzNetDeger,  int? enCokNetDeger,  int? enCokKrediNotu, @JsonKey(name: 'yas')  List<int>? yasAraligi,  List<Sehir>? sehirler,  List<String>? meslekler,  List<Sektor>? sektorler,  List<Rejim>? rejimler,  List<KariyerTuru>? durumlar,  Cinsiyet? cinsiyet,  EgitimSeviyesi? enAzEgitim,  int? enAzIhmalTuru)?  $default,) {final _that = this;
 switch (_that) {
 case _OlayKosullari() when $default != null:
-return $default(_that.enAzItibar,_that.enAzNakit,_that.enAzEnerji,_that.enAzMutluluk,_that.enAzKrediNotu,_that.enCokNakit,_that.enCokKrediNotu,_that.yasAraligi,_that.sehirler,_that.meslekler,_that.sektorler,_that.rejimler,_that.durumlar,_that.cinsiyet,_that.enAzEgitim,_that.enAzIhmalTuru);case _:
+return $default(_that.enAzItibar,_that.enAzNakit,_that.enAzEnerji,_that.enAzMutluluk,_that.enAzKrediNotu,_that.enCokNakit,_that.enAzNetDeger,_that.enCokNetDeger,_that.enCokKrediNotu,_that.yasAraligi,_that.sehirler,_that.meslekler,_that.sektorler,_that.rejimler,_that.durumlar,_that.cinsiyet,_that.enAzEgitim,_that.enAzIhmalTuru);case _:
   return null;
 
 }
@@ -1157,7 +1165,7 @@ return $default(_that.enAzItibar,_that.enAzNakit,_that.enAzEnerji,_that.enAzMutl
 @JsonSerializable()
 
 class _OlayKosullari extends OlayKosullari {
-  const _OlayKosullari({this.enAzItibar, this.enAzNakit, this.enAzEnerji, this.enAzMutluluk, this.enAzKrediNotu, this.enCokNakit, this.enCokKrediNotu, @JsonKey(name: 'yas') final  List<int>? yasAraligi, final  List<Sehir>? sehirler, final  List<String>? meslekler, final  List<Sektor>? sektorler, final  List<Rejim>? rejimler, final  List<KariyerTuru>? durumlar, this.cinsiyet, this.enAzEgitim, this.enAzIhmalTuru}): _yasAraligi = yasAraligi,_sehirler = sehirler,_meslekler = meslekler,_sektorler = sektorler,_rejimler = rejimler,_durumlar = durumlar,super._();
+  const _OlayKosullari({this.enAzItibar, this.enAzNakit, this.enAzEnerji, this.enAzMutluluk, this.enAzKrediNotu, this.enCokNakit, this.enAzNetDeger, this.enCokNetDeger, this.enCokKrediNotu, @JsonKey(name: 'yas') final  List<int>? yasAraligi, final  List<Sehir>? sehirler, final  List<String>? meslekler, final  List<Sektor>? sektorler, final  List<Rejim>? rejimler, final  List<KariyerTuru>? durumlar, this.cinsiyet, this.enAzEgitim, this.enAzIhmalTuru}): _yasAraligi = yasAraligi,_sehirler = sehirler,_meslekler = meslekler,_sektorler = sektorler,_rejimler = rejimler,_durumlar = durumlar,super._();
   factory _OlayKosullari.fromJson(Map<String, dynamic> json) => _$OlayKosullariFromJson(json);
 
 @override final  int? enAzItibar;
@@ -1171,6 +1179,14 @@ class _OlayKosullari extends OlayKosullari {
 /// diyebilmek için var; yalnız `enAz...` olsaydı sıkışmış oyuncuya özel
 /// kart yazılamazdı. [enCokNakit] de TABAN TL'dir.
 @override final  int? enCokNakit;
+/// Servet kapısı. NAKDE DEĞİL NET DEĞERE bakar (reel).
+///
+/// Nakde bakan bir kapı, geç oyun içeriğini tam da doğru oynayan
+/// oyuncuya kapatırdı: parasını borsada ya da gayrimenkulde tutanın
+/// nakiti azdır ama zengindir. `enAzNakit` "cebinde şu kadar var mı"
+/// sorusu için duruyor; bu ise "bu kart senin ligin mi".
+@override final  int? enAzNetDeger;
+@override final  int? enCokNetDeger;
 @override final  int? enCokKrediNotu;
 /// `[enAz, enCok]`.
  final  List<int>? _yasAraligi;
@@ -1247,16 +1263,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OlayKosullari&&(identical(other.enAzItibar, enAzItibar) || other.enAzItibar == enAzItibar)&&(identical(other.enAzNakit, enAzNakit) || other.enAzNakit == enAzNakit)&&(identical(other.enAzEnerji, enAzEnerji) || other.enAzEnerji == enAzEnerji)&&(identical(other.enAzMutluluk, enAzMutluluk) || other.enAzMutluluk == enAzMutluluk)&&(identical(other.enAzKrediNotu, enAzKrediNotu) || other.enAzKrediNotu == enAzKrediNotu)&&(identical(other.enCokNakit, enCokNakit) || other.enCokNakit == enCokNakit)&&(identical(other.enCokKrediNotu, enCokKrediNotu) || other.enCokKrediNotu == enCokKrediNotu)&&const DeepCollectionEquality().equals(other._yasAraligi, _yasAraligi)&&const DeepCollectionEquality().equals(other._sehirler, _sehirler)&&const DeepCollectionEquality().equals(other._meslekler, _meslekler)&&const DeepCollectionEquality().equals(other._sektorler, _sektorler)&&const DeepCollectionEquality().equals(other._rejimler, _rejimler)&&const DeepCollectionEquality().equals(other._durumlar, _durumlar)&&(identical(other.cinsiyet, cinsiyet) || other.cinsiyet == cinsiyet)&&(identical(other.enAzEgitim, enAzEgitim) || other.enAzEgitim == enAzEgitim)&&(identical(other.enAzIhmalTuru, enAzIhmalTuru) || other.enAzIhmalTuru == enAzIhmalTuru));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OlayKosullari&&(identical(other.enAzItibar, enAzItibar) || other.enAzItibar == enAzItibar)&&(identical(other.enAzNakit, enAzNakit) || other.enAzNakit == enAzNakit)&&(identical(other.enAzEnerji, enAzEnerji) || other.enAzEnerji == enAzEnerji)&&(identical(other.enAzMutluluk, enAzMutluluk) || other.enAzMutluluk == enAzMutluluk)&&(identical(other.enAzKrediNotu, enAzKrediNotu) || other.enAzKrediNotu == enAzKrediNotu)&&(identical(other.enCokNakit, enCokNakit) || other.enCokNakit == enCokNakit)&&(identical(other.enAzNetDeger, enAzNetDeger) || other.enAzNetDeger == enAzNetDeger)&&(identical(other.enCokNetDeger, enCokNetDeger) || other.enCokNetDeger == enCokNetDeger)&&(identical(other.enCokKrediNotu, enCokKrediNotu) || other.enCokKrediNotu == enCokKrediNotu)&&const DeepCollectionEquality().equals(other._yasAraligi, _yasAraligi)&&const DeepCollectionEquality().equals(other._sehirler, _sehirler)&&const DeepCollectionEquality().equals(other._meslekler, _meslekler)&&const DeepCollectionEquality().equals(other._sektorler, _sektorler)&&const DeepCollectionEquality().equals(other._rejimler, _rejimler)&&const DeepCollectionEquality().equals(other._durumlar, _durumlar)&&(identical(other.cinsiyet, cinsiyet) || other.cinsiyet == cinsiyet)&&(identical(other.enAzEgitim, enAzEgitim) || other.enAzEgitim == enAzEgitim)&&(identical(other.enAzIhmalTuru, enAzIhmalTuru) || other.enAzIhmalTuru == enAzIhmalTuru));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,enAzItibar,enAzNakit,enAzEnerji,enAzMutluluk,enAzKrediNotu,enCokNakit,enCokKrediNotu,const DeepCollectionEquality().hash(_yasAraligi),const DeepCollectionEquality().hash(_sehirler),const DeepCollectionEquality().hash(_meslekler),const DeepCollectionEquality().hash(_sektorler),const DeepCollectionEquality().hash(_rejimler),const DeepCollectionEquality().hash(_durumlar),cinsiyet,enAzEgitim,enAzIhmalTuru);
+int get hashCode => Object.hash(runtimeType,enAzItibar,enAzNakit,enAzEnerji,enAzMutluluk,enAzKrediNotu,enCokNakit,enAzNetDeger,enCokNetDeger,enCokKrediNotu,const DeepCollectionEquality().hash(_yasAraligi),const DeepCollectionEquality().hash(_sehirler),const DeepCollectionEquality().hash(_meslekler),const DeepCollectionEquality().hash(_sektorler),const DeepCollectionEquality().hash(_rejimler),const DeepCollectionEquality().hash(_durumlar),cinsiyet,enAzEgitim,enAzIhmalTuru);
 
 @override
 String toString() {
-  return 'OlayKosullari(enAzItibar: $enAzItibar, enAzNakit: $enAzNakit, enAzEnerji: $enAzEnerji, enAzMutluluk: $enAzMutluluk, enAzKrediNotu: $enAzKrediNotu, enCokNakit: $enCokNakit, enCokKrediNotu: $enCokKrediNotu, yasAraligi: $yasAraligi, sehirler: $sehirler, meslekler: $meslekler, sektorler: $sektorler, rejimler: $rejimler, durumlar: $durumlar, cinsiyet: $cinsiyet, enAzEgitim: $enAzEgitim, enAzIhmalTuru: $enAzIhmalTuru)';
+  return 'OlayKosullari(enAzItibar: $enAzItibar, enAzNakit: $enAzNakit, enAzEnerji: $enAzEnerji, enAzMutluluk: $enAzMutluluk, enAzKrediNotu: $enAzKrediNotu, enCokNakit: $enCokNakit, enAzNetDeger: $enAzNetDeger, enCokNetDeger: $enCokNetDeger, enCokKrediNotu: $enCokKrediNotu, yasAraligi: $yasAraligi, sehirler: $sehirler, meslekler: $meslekler, sektorler: $sektorler, rejimler: $rejimler, durumlar: $durumlar, cinsiyet: $cinsiyet, enAzEgitim: $enAzEgitim, enAzIhmalTuru: $enAzIhmalTuru)';
 }
 
 
@@ -1267,7 +1283,7 @@ abstract mixin class _$OlayKosullariCopyWith<$Res> implements $OlayKosullariCopy
   factory _$OlayKosullariCopyWith(_OlayKosullari value, $Res Function(_OlayKosullari) _then) = __$OlayKosullariCopyWithImpl;
 @override @useResult
 $Res call({
- int? enAzItibar, int? enAzNakit, int? enAzEnerji, int? enAzMutluluk, int? enAzKrediNotu, int? enCokNakit, int? enCokKrediNotu,@JsonKey(name: 'yas') List<int>? yasAraligi, List<Sehir>? sehirler, List<String>? meslekler, List<Sektor>? sektorler, List<Rejim>? rejimler, List<KariyerTuru>? durumlar, Cinsiyet? cinsiyet, EgitimSeviyesi? enAzEgitim, int? enAzIhmalTuru
+ int? enAzItibar, int? enAzNakit, int? enAzEnerji, int? enAzMutluluk, int? enAzKrediNotu, int? enCokNakit, int? enAzNetDeger, int? enCokNetDeger, int? enCokKrediNotu,@JsonKey(name: 'yas') List<int>? yasAraligi, List<Sehir>? sehirler, List<String>? meslekler, List<Sektor>? sektorler, List<Rejim>? rejimler, List<KariyerTuru>? durumlar, Cinsiyet? cinsiyet, EgitimSeviyesi? enAzEgitim, int? enAzIhmalTuru
 });
 
 
@@ -1284,7 +1300,7 @@ class __$OlayKosullariCopyWithImpl<$Res>
 
 /// Create a copy of OlayKosullari
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? enAzItibar = freezed,Object? enAzNakit = freezed,Object? enAzEnerji = freezed,Object? enAzMutluluk = freezed,Object? enAzKrediNotu = freezed,Object? enCokNakit = freezed,Object? enCokKrediNotu = freezed,Object? yasAraligi = freezed,Object? sehirler = freezed,Object? meslekler = freezed,Object? sektorler = freezed,Object? rejimler = freezed,Object? durumlar = freezed,Object? cinsiyet = freezed,Object? enAzEgitim = freezed,Object? enAzIhmalTuru = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? enAzItibar = freezed,Object? enAzNakit = freezed,Object? enAzEnerji = freezed,Object? enAzMutluluk = freezed,Object? enAzKrediNotu = freezed,Object? enCokNakit = freezed,Object? enAzNetDeger = freezed,Object? enCokNetDeger = freezed,Object? enCokKrediNotu = freezed,Object? yasAraligi = freezed,Object? sehirler = freezed,Object? meslekler = freezed,Object? sektorler = freezed,Object? rejimler = freezed,Object? durumlar = freezed,Object? cinsiyet = freezed,Object? enAzEgitim = freezed,Object? enAzIhmalTuru = freezed,}) {
   return _then(_OlayKosullari(
 enAzItibar: freezed == enAzItibar ? _self.enAzItibar : enAzItibar // ignore: cast_nullable_to_non_nullable
 as int?,enAzNakit: freezed == enAzNakit ? _self.enAzNakit : enAzNakit // ignore: cast_nullable_to_non_nullable
@@ -1292,6 +1308,8 @@ as int?,enAzEnerji: freezed == enAzEnerji ? _self.enAzEnerji : enAzEnerji // ign
 as int?,enAzMutluluk: freezed == enAzMutluluk ? _self.enAzMutluluk : enAzMutluluk // ignore: cast_nullable_to_non_nullable
 as int?,enAzKrediNotu: freezed == enAzKrediNotu ? _self.enAzKrediNotu : enAzKrediNotu // ignore: cast_nullable_to_non_nullable
 as int?,enCokNakit: freezed == enCokNakit ? _self.enCokNakit : enCokNakit // ignore: cast_nullable_to_non_nullable
+as int?,enAzNetDeger: freezed == enAzNetDeger ? _self.enAzNetDeger : enAzNetDeger // ignore: cast_nullable_to_non_nullable
+as int?,enCokNetDeger: freezed == enCokNetDeger ? _self.enCokNetDeger : enCokNetDeger // ignore: cast_nullable_to_non_nullable
 as int?,enCokKrediNotu: freezed == enCokKrediNotu ? _self.enCokKrediNotu : enCokKrediNotu // ignore: cast_nullable_to_non_nullable
 as int?,yasAraligi: freezed == yasAraligi ? _self._yasAraligi : yasAraligi // ignore: cast_nullable_to_non_nullable
 as List<int>?,sehirler: freezed == sehirler ? _self._sehirler : sehirler // ignore: cast_nullable_to_non_nullable

@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import '../models/borc.dart';
 import '../models/kariyer_durumu.dart';
 import '../models/meslek_katalogu.dart';
@@ -801,7 +803,9 @@ class TurProcessor {
     final servetten = durum.reelNetDeger / a.servetGelirBoleni;
     final aylik = tabanGelir > servetten ? tabanGelir : servetten;
 
-    return (aylik / a.olcekReferansGeliri).clamp(1.0, a.olcekTavani);
+    final oran = aylik / a.olcekReferansGeliri;
+    if (oran <= 1) return 1;
+    return math.pow(oran, a.olcekUssu).toDouble().clamp(1.0, a.olcekTavani);
   }
 
   /// Bankanın oyuncuya bugün sunduğu krediler.

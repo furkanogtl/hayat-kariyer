@@ -157,6 +157,20 @@ final _ornekOyuncular = <String, Oyuncu>{
     itibar: 8,
     krediNotu: 380,
   ),
+  // Geç oyun kartlarının servet kapıları 3M-60M reel net değer. Tek
+  // varlıklı temsilci 8M'de kalıyordu ve üst kademeler "ulaşılamaz"
+  // görünüyordu — oysa gerçek oyunda borsaya yatıran oyuncu 40 yılda
+  // yüz milyonları buluyor.
+  'imparator (55)': Oyuncu(
+    ad: 'test',
+    sehir: Sehir.istanbul,
+    tur: 37 * 12,
+    egitim: EgitimSeviyesi.lisans,
+    kariyer: const KariyerDurumu.calisan(meslekId: 'yazilim_gelistirici'),
+    nakit: 120000000,
+    itibar: 88,
+    krediNotu: 1800,
+  ),
   'varlıklı (48)': Oyuncu(
     ad: 'test',
     sehir: Sehir.izmir,
@@ -265,6 +279,10 @@ void main() {
         'isletme.json',
         'dip.json',
         'genclik.json',
+        // Geç oyun kartları zaten servet kademesine göre kapılı ve o
+        // kademenin ölçeğinde yazıldı; bir de çarpılırlarsa iki kez
+        // ölçeklenmiş olurlar.
+        'gec_oyun.json',
       };
       final hatalar = <String>[];
       for (final olay in katalog.tumu) {

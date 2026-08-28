@@ -1,0 +1,706 @@
+[
+  {
+    "id": "gec_yazlik_teklifi_01",
+    "baslik": "Kıyıda müstakil bir ev",
+    "metin": "Emlakçı arıyor: sahile yürüme mesafesinde, bahçeli. Yazın kullanırsın, kışın kiraya verirsin diyor.",
+    "tur": "teklif",
+    "agirlik": 9,
+    "bekleme": 48,
+    "kosullar": { "yas": [35, 70], "enAzNetDeger": 3000000 },
+    "secenekler": [
+      { "etiket": "Al", "etkiler": { "nakit": -1220000, "mutluluk": 10 } },
+      {
+        "etiket": "Kirala, bağlanma",
+        "etkiler": { "nakit": -150000, "mutluluk": 5 }
+      },
+      { "etiket": "Gerek yok", "etkiler": { "mutluluk": -2 } }
+    ]
+  },
+  {
+    "id": "gec_akraba_kefil_01",
+    "baslik": "Kuzenin kefil arıyor",
+    "metin": "İşini büyütmek için kredi çekecek, imzanı istiyor. Aile arasında hayır demek zor.",
+    "tur": "teklif",
+    "agirlik": 11,
+    "bekleme": 60,
+    "kosullar": { "yas": [32, 70], "enAzNetDeger": 3000000 },
+    "secenekler": [
+      {
+        "etiket": "Kefil ol",
+        "gecikmeTuru": 10,
+        "sonuclar": [
+          {
+            "sans": 0.55,
+            "metin": "İşi tuttu, borcunu kapattı. Aile içinde adın büyüdü.",
+            "etkiler": { "itibar": 6, "mutluluk": 4 }
+          },
+          {
+            "sans": 0.45,
+            "metin": "Batırdı. Banka senin kapını çaldı, borcu sen kapattın.",
+            "etkiler": { "nakit": -940000, "mutluluk": -12, "itibar": -3 }
+          }
+        ]
+      },
+      {
+        "etiket": "Kefil olma, borç ver",
+        "etkiler": { "nakit": -270000, "itibar": 1 }
+      },
+      { "etiket": "Reddet", "etkiler": { "itibar": -4, "mutluluk": -3 } }
+    ]
+  },
+  {
+    "id": "gec_vergi_incelemesi_01",
+    "baslik": "Vergi dairesinden inceleme yazısı",
+    "metin": "Son üç yılın hesapları isteniyor. Mali müşavirin uzlaşma ile mahkeme arasında bir yerde duruyor.",
+    "tur": "kriz",
+    "agirlik": 10,
+    "bekleme": 72,
+    "kosullar": { "yas": [33, 70], "enAzNetDeger": 3000000 },
+    "secenekler": [
+      {
+        "etiket": "Uzlaş, kapat",
+        "etkiler": { "nakit": -600000, "mutluluk": -5 }
+      },
+      {
+        "etiket": "İtiraz et",
+        "gecikmeTuru": 8,
+        "sonuclar": [
+          {
+            "sans": 0.4,
+            "metin": "Komisyon lehine karar verdi. Ceza kaldırıldı.",
+            "etkiler": { "mutluluk": 5 }
+          },
+          {
+            "sans": 0.6,
+            "metin": "İtiraz reddedildi, gecikme faiziyle birlikte ödedin.",
+            "etkiler": { "nakit": -1020000, "mutluluk": -10 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "gec_cocuk_egitim_01",
+    "baslik": "Yurt dışında okumak istiyor",
+    "metin": "Kabul mektubu geldi. Dört yıllık maliyeti duyunca bir süre sustun.",
+    "tur": "hayat",
+    "agirlik": 9,
+    "bekleme": 60,
+    "tekSeferlik": true,
+    "kosullar": { "yas": [40, 62], "enAzNetDeger": 3000000 },
+    "secenekler": [
+      {
+        "etiket": "Gönder",
+        "etkiler": { "nakit": -1760000, "mutluluk": 12, "itibar": 3 }
+      },
+      {
+        "etiket": "Burs şartıyla",
+        "gecikmeTuru": 6,
+        "sonuclar": [
+          {
+            "sans": 0.45,
+            "metin": "Bursu kaptı. Maliyet yarıya indi, gururlusun.",
+            "etkiler": { "nakit": -750000, "mutluluk": 10 }
+          },
+          {
+            "sans": 0.55,
+            "metin": "Burs çıkmadı. Yine de gönderdin, bütçe zorlandı.",
+            "etkiler": { "nakit": -1760000, "mutluluk": 2 }
+          }
+        ]
+      },
+      {
+        "etiket": "Burada okusun",
+        "etkiler": { "nakit": -210000, "mutluluk": -8 }
+      }
+    ]
+  },
+  {
+    "id": "gec_aile_bakimevi_01",
+    "baslik": "Anne baba artık yalnız kalamıyor",
+    "metin": "Ya yanına alacaksın ya bakım desteği tutacaksın. Kardeşlerin sana bakıyor.",
+    "tur": "hayat",
+    "agirlik": 10,
+    "bekleme": 40,
+    "kosullar": { "yas": [42, 70], "enAzNetDeger": 3000000 },
+    "secenekler": [
+      {
+        "etiket": "Yanına al, bakıcı tut",
+        "etkiler": {
+          "nakit": -520000,
+          "enerji": -8,
+          "mutluluk": 6,
+          "itibar": 4
+        }
+      },
+      {
+        "etiket": "Özel bakım evi",
+        "etkiler": { "nakit": -870000, "mutluluk": -4 }
+      },
+      {
+        "etiket": "Kardeşlerine bırak",
+        "etkiler": { "nakit": -120000, "mutluluk": -10, "itibar": -6 }
+      }
+    ]
+  },
+  {
+    "id": "gec_eski_ortak_davasi_01",
+    "baslik": "Eski ortağından dava",
+    "metin": "Yıllar önce ayrıldığınız işten hak iddia ediyor. Avukatın sürecin uzun olacağını söylüyor.",
+    "tur": "kriz",
+    "agirlik": 8,
+    "bekleme": 84,
+    "kosullar": { "yas": [38, 70], "enAzNetDeger": 3000000 },
+    "secenekler": [
+      {
+        "etiket": "Sulh ol",
+        "etkiler": { "nakit": -750000, "mutluluk": -4, "itibar": -1 }
+      },
+      {
+        "etiket": "Mahkemeye git",
+        "gecikmeTuru": 12,
+        "sonuclar": [
+          {
+            "sans": 0.5,
+            "metin": "Dava düştü. Masrafı karşı taraf ödedi.",
+            "etkiler": { "itibar": 3, "mutluluk": 4 }
+          },
+          {
+            "sans": 0.5,
+            "metin": "Aleyhine sonuçlandı. Faiziyle birlikte ödedin.",
+            "etkiler": { "nakit": -1620000, "mutluluk": -12, "itibar": -4 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "gec_burs_fonu_01",
+    "baslik": "Memleket okulundan mektup",
+    "metin": "Müdür, üniversiteyi kazanan öğrenciler için bir burs fonu kurmanı istiyor. Adın anılacak.",
+    "tur": "firsat",
+    "agirlik": 10,
+    "bekleme": 36,
+    "kosullar": { "yas": [35, 70], "enAzNetDeger": 3000000, "enAzItibar": 30 },
+    "secenekler": [
+      {
+        "etiket": "Fonu kur",
+        "etkiler": { "nakit": -440000, "itibar": 12, "mutluluk": 8 }
+      },
+      {
+        "etiket": "Bir öğrenciye destek ol",
+        "etkiler": { "nakit": -60000, "itibar": 3, "mutluluk": 3 }
+      },
+      { "etiket": "Şimdi olmaz", "etkiler": { "itibar": -2 } }
+    ]
+  },
+  {
+    "id": "gec_koleksiyon_01",
+    "baslik": "Müzayede daveti",
+    "metin": "Tanıdığın bir galerici, imzalı bir koleksiyonun satışa çıktığını söylüyor. Değerlenir diyor.",
+    "tur": "teklif",
+    "agirlik": 8,
+    "bekleme": 40,
+    "kosullar": { "yas": [35, 70], "enAzNetDeger": 3000000 },
+    "secenekler": [
+      {
+        "etiket": "Al",
+        "gecikmeTuru": 14,
+        "sonuclar": [
+          {
+            "sans": 0.3,
+            "metin": "Sanatçının değeri arttı. Koleksiyon üç katına çıktı.",
+            "etkiler": { "nakit": 2520000, "itibar": 4 }
+          },
+          {
+            "sans": 0.4,
+            "metin": "Fiyat yerinde saydı. Enflasyon farkını bile vermedi.",
+            "etkiler": { "nakit": 840000 }
+          },
+          {
+            "sans": 0.3,
+            "metin": "Eserin gerçekliği tartışmalı çıktı. Elinde kaldı.",
+            "etkiler": { "nakit": 0, "mutluluk": -6 }
+          }
+        ]
+      },
+      { "etiket": "İlgilenmiyorum", "etkiler": { "itibar": -1 } }
+    ]
+  },
+  {
+    "id": "gec_kat_karsiligi_01",
+    "baslik": "Müteahhit kat karşılığı istiyor",
+    "metin": "Arsana proje çizmiş. Yüzde kırk sana, gerisi ona. İnşaat üç yıl sürecek.",
+    "tur": "teklif",
+    "agirlik": 10,
+    "bekleme": 72,
+    "kosullar": { "yas": [35, 70], "enAzNetDeger": 10000000 },
+    "secenekler": [
+      {
+        "etiket": "Anlaşmayı imzala",
+        "gecikmeTuru": 14,
+        "sonuclar": [
+          {
+            "sans": 0.45,
+            "metin": "Bloklar teslim edildi. Payına düşen daireler elinde.",
+            "etkiler": { "nakit": 6820000, "itibar": 5 }
+          },
+          {
+            "sans": 0.35,
+            "metin": "İnşaat gecikti ama bitti. Kâr beklediğinin altında.",
+            "etkiler": { "nakit": 2940000 }
+          },
+          {
+            "sans": 0.2,
+            "metin": "Firma yarıda battı. Yarım bina ve dava kaldı.",
+            "etkiler": { "nakit": -600000, "mutluluk": -14, "itibar": -4 }
+          }
+        ]
+      },
+      {
+        "etiket": "Arsayı sat, uğraşma",
+        "etkiler": { "nakit": 3360000, "mutluluk": -2, "itibar": -1 }
+      },
+      { "etiket": "Bekle, imar değişir", "etkiler": { "mutluluk": -1 } }
+    ]
+  },
+  {
+    "id": "gec_varlik_barisi_01",
+    "baslik": "Varlık barışı düzenlemesi",
+    "metin": "Kayıt dışı duran varlıklar düşük vergiyle beyan edilebilecek. Süre altı ay.",
+    "tur": "firsat",
+    "agirlik": 9,
+    "bekleme": 60,
+    "kosullar": { "yas": [35, 70], "enAzNetDeger": 10000000 },
+    "secenekler": [
+      {
+        "etiket": "Beyan et, temize çık",
+        "etkiler": { "nakit": -480000, "krediNotu": 60, "mutluluk": 5 }
+      },
+      {
+        "etiket": "Bekle, sonra bakarız",
+        "gecikmeTuru": 10,
+        "sonuclar": [
+          {
+            "sans": 0.6,
+            "metin": "Kimse kapını çalmadı. Parayı cebinde tuttun.",
+            "etkiler": { "mutluluk": 2 }
+          },
+          {
+            "sans": 0.4,
+            "metin": "İnceleme başladı. Cezalı olarak ödemek zorunda kaldın.",
+            "etkiler": { "nakit": -1480000, "krediNotu": -80, "mutluluk": -10 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "gec_gazeteci_01",
+    "baslik": "Bir gazeteci seni arıyor",
+    "metin": "Servetinin kaynağı üzerine bir yazı hazırlıyormuş. Sorular kibarca ama ısrarlı.",
+    "tur": "kriz",
+    "agirlik": 8,
+    "bekleme": 72,
+    "kosullar": { "yas": [35, 70], "enAzNetDeger": 10000000 },
+    "secenekler": [
+      {
+        "etiket": "Röportaj ver, açık ol",
+        "gecikmeTuru": 5,
+        "sonuclar": [
+          {
+            "sans": 0.55,
+            "metin": "Yazı dengeli çıktı. Şeffaflığın konuşuldu.",
+            "etkiler": { "itibar": 8, "mutluluk": 3 }
+          },
+          {
+            "sans": 0.45,
+            "metin": "Sözlerin bağlamından koparıldı. Günlerce konuşuldun.",
+            "etkiler": { "itibar": -10, "mutluluk": -8 }
+          }
+        ]
+      },
+      {
+        "etiket": "Avukat gönder",
+        "etkiler": { "nakit": -300000, "itibar": -4, "mutluluk": -3 }
+      },
+      { "etiket": "Cevap verme", "etkiler": { "itibar": -6, "mutluluk": -4 } }
+    ]
+  },
+  {
+    "id": "gec_aile_ofisi_01",
+    "baslik": "Portföyünü yönetmek istiyorlar",
+    "metin": "Bir yönetim şirketi, varlığını tek elden yönetmeyi teklif ediyor. Yıllık sabit ücret istiyorlar.",
+    "tur": "teklif",
+    "agirlik": 8,
+    "bekleme": 48,
+    "kosullar": { "yas": [38, 70], "enAzNetDeger": 10000000 },
+    "secenekler": [
+      {
+        "etiket": "Anlaş",
+        "gecikmeTuru": 12,
+        "sonuclar": [
+          {
+            "sans": 0.45,
+            "metin": "Doğru zamanlarda çıktılar. Ücreti fazlasıyla çıkardı.",
+            "etkiler": { "nakit": 3150000, "mutluluk": 4 }
+          },
+          {
+            "sans": 0.55,
+            "metin": "Ortalamayı bile tutturamadılar. Ücret cebinden gitti.",
+            "etkiler": { "nakit": -810000, "mutluluk": -6 }
+          }
+        ]
+      },
+      { "etiket": "Kendim yönetirim", "etkiler": { "enerji": -5, "mutluluk": 2 } }
+    ]
+  },
+  {
+    "id": "gec_miras_anlasmazligi_01",
+    "baslik": "Miras paylaşımı büyüdü",
+    "metin": "Dededen kalan arazi için kardeşler anlaşamadı. Biri mahkemeye vermekten söz ediyor.",
+    "tur": "kriz",
+    "agirlik": 9,
+    "bekleme": 84,
+    "kosullar": { "yas": [40, 70], "enAzNetDeger": 10000000 },
+    "secenekler": [
+      {
+        "etiket": "Payını devret, huzur kalsın",
+        "etkiler": { "nakit": -40000, "mutluluk": -3, "itibar": 5 }
+      },
+      {
+        "etiket": "Diğerlerinin payını al",
+        "etkiler": { "nakit": -1950000, "mutluluk": -5, "itibar": -3 }
+      },
+      {
+        "etiket": "Mahkemeye bırak",
+        "gecikmeTuru": 16,
+        "sonuclar": [
+          {
+            "sans": 0.5,
+            "metin": "Arazi satıldı, pay hesabına geçti. Kimse konuşmuyor.",
+            "etkiler": { "nakit": 2000000, "mutluluk": -8, "itibar": -6 }
+          },
+          {
+            "sans": 0.5,
+            "metin": "Dava uzadı, masraf büyüdü. Aile ikiye bölündü.",
+            "etkiler": { "nakit": -540000, "mutluluk": -14, "itibar": -8 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "gec_dernek_bagis_01",
+    "baslik": "Kampanyanın onur listesi",
+    "metin": "Dernek bir sağlık merkezi yaptırıyor. Bağış yapanların adı girişteki panoya yazılacak.",
+    "tur": "firsat",
+    "agirlik": 9,
+    "bekleme": 36,
+    "kosullar": { "yas": [35, 70], "enAzNetDeger": 10000000, "enAzItibar": 40 },
+    "secenekler": [
+      {
+        "etiket": "Listenin başında ol",
+        "etkiler": { "nakit": -1080000, "itibar": 16, "mutluluk": 6 }
+      },
+      {
+        "etiket": "Mütevazı bir katkı",
+        "etkiler": { "nakit": -160000, "itibar": 4 }
+      },
+      {
+        "etiket": "Adım geçmesin",
+        "etkiler": { "nakit": -160000, "mutluluk": 3 }
+      }
+    ]
+  },
+  {
+    "id": "gec_dolandirici_sirket_01",
+    "baslik": "Adına şirket kurulmuş",
+    "metin": "Bilmediğin bir firmanın ortağı görünüyorsun. Vergi borcu da sana yazılmış.",
+    "tur": "kriz",
+    "agirlik": 8,
+    "bekleme": 84,
+    "kosullar": { "yas": [35, 70], "enAzNetDeger": 10000000 },
+    "secenekler": [
+      {
+        "etiket": "Avukat tut, iptal ettir",
+        "gecikmeTuru": 8,
+        "sonuclar": [
+          {
+            "sans": 0.6,
+            "metin": "Kayıt silindi, borç kalktı. Sadece masraf kaldı.",
+            "etkiler": { "nakit": -240000, "mutluluk": -4 }
+          },
+          {
+            "sans": 0.4,
+            "metin": "Süreç uzadı. Borcun bir kısmını ödemek zorunda kaldın.",
+            "etkiler": { "nakit": -1140000, "krediNotu": -70, "mutluluk": -10 }
+          }
+        ]
+      },
+      {
+        "etiket": "Borcu kapat, uğraşma",
+        "etkiler": { "nakit": -870000, "mutluluk": -6 }
+      }
+    ]
+  },
+  {
+    "id": "gec_bosanma_01",
+    "baslik": "Yollar ayrılıyor",
+    "metin": "Uzun bir sessizliğin sonunda karar verildi. Şimdi konuşulan tek şey mal paylaşımı.",
+    "tur": "kriz",
+    "agirlik": 6,
+    "bekleme": 120,
+    "tekSeferlik": true,
+    "kosullar": { "yas": [38, 65], "enAzNetDeger": 10000000 },
+    "secenekler": [
+      {
+        "etiket": "Anlaşmalı bitir",
+        "etkiler": { "nakit": -2840000, "mutluluk": -14 }
+      },
+      {
+        "etiket": "Mahkemede paylaş",
+        "gecikmeTuru": 14,
+        "sonuclar": [
+          {
+            "sans": 0.45,
+            "metin": "Paylaşım lehine sonuçlandı ama iki yılını aldı.",
+            "etkiler": { "nakit": -1760000, "mutluluk": -18, "itibar": -3 }
+          },
+          {
+            "sans": 0.55,
+            "metin": "Karar aleyhine çıktı. Hem para hem yıpranma.",
+            "etkiler": { "nakit": -4380000, "mutluluk": -22, "itibar": -5 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "gec_kentsel_donusum_01",
+    "baslik": "Bölgen dönüşüme giriyor",
+    "metin": "Belediye alanı riskli ilan etti. Elindeki taşınmazlar için üç yıllık bir süreç başlıyor.",
+    "tur": "teklif",
+    "agirlik": 9,
+    "bekleme": 96,
+    "kosullar": { "yas": [38, 70], "enAzNetDeger": 25000000 },
+    "secenekler": [
+      {
+        "etiket": "Projede kal",
+        "gecikmeTuru": 16,
+        "sonuclar": [
+          {
+            "sans": 0.5,
+            "metin": "Yeni bloklar teslim edildi, değer ikiye katlandı.",
+            "etkiler": { "nakit": 11550000, "itibar": 3 }
+          },
+          {
+            "sans": 0.5,
+            "metin": "Proje askıda kaldı, kira geliri de kesildi.",
+            "etkiler": { "nakit": -1680000, "mutluluk": -12 }
+          }
+        ]
+      },
+      {
+        "etiket": "Şimdiden çık",
+        "etkiler": { "nakit": 4720000, "mutluluk": -3, "itibar": -2 }
+      }
+    ]
+  },
+  {
+    "id": "gec_siyasi_bagis_01",
+    "baslik": "Kampanyaya destek isteniyor",
+    "metin": "Tanıdık bir isim yemekte konuyu açtı. Bu işin karşılıksız kalmayacağını gülümseyerek ekledi.",
+    "tur": "teklif",
+    "agirlik": 8,
+    "bekleme": 72,
+    "kosullar": { "yas": [40, 70], "enAzNetDeger": 25000000 },
+    "secenekler": [
+      {
+        "etiket": "Destek ol",
+        "gecikmeTuru": 10,
+        "sonuclar": [
+          {
+            "sans": 0.5,
+            "metin": "Kapılar açıldı. Beklemediğin yerlerde adın geçiyor.",
+            "etkiler": { "nakit": 6300000, "itibar": 8 }
+          },
+          {
+            "sans": 0.5,
+            "metin": "Rüzgâr tersine döndü. Yakınlığın şimdi yük oldu.",
+            "etkiler": { "nakit": -2020000, "itibar": -14, "mutluluk": -10 }
+          }
+        ]
+      },
+      { "etiket": "Uzak dur", "etkiler": { "itibar": -3, "mutluluk": 2 } }
+    ]
+  },
+  {
+    "id": "gec_tekne_01",
+    "baslik": "Marinada bir tekne",
+    "metin": "Arkadaş grubunun yarısının teknesi var. Bakımı ve bağlama ücreti her yıl cebinden çıkacak.",
+    "tur": "hayat",
+    "agirlik": 7,
+    "bekleme": 60,
+    "kosullar": { "yas": [40, 70], "enAzNetDeger": 25000000 },
+    "secenekler": [
+      {
+        "etiket": "Al",
+        "etkiler": { "nakit": -5400000, "mutluluk": 14, "itibar": 4 }
+      },
+      {
+        "etiket": "Sezonluk kirala",
+        "etkiler": { "nakit": -600000, "mutluluk": 6 }
+      },
+      { "etiket": "Bana göre değil", "etkiler": { "mutluluk": -2 } }
+    ]
+  },
+  {
+    "id": "gec_okul_yaptirma_01",
+    "baslik": "Okul yaptırma teklifi",
+    "metin": "Kaymakamlık, ilçeye okul yaptırmak isteyen olup olmadığını soruyor. Adın tabelaya yazılır.",
+    "tur": "firsat",
+    "agirlik": 9,
+    "bekleme": 60,
+    "kosullar": { "yas": [42, 70], "enAzNetDeger": 25000000, "enAzItibar": 55 },
+    "secenekler": [
+      {
+        "etiket": "Yaptır",
+        "etkiler": { "nakit": -6080000, "itibar": 24, "mutluluk": 14 }
+      },
+      {
+        "etiket": "Derslik bağışla",
+        "etkiler": { "nakit": -940000, "itibar": 7, "mutluluk": 5 }
+      },
+      { "etiket": "Bu sefer değil", "etkiler": { "itibar": -3 } }
+    ]
+  },
+  {
+    "id": "gec_ev_hirsizligi_01",
+    "baslik": "Eve girmişler",
+    "metin": "Kasa açılmış, takılar ve nakit gitmiş. Sigorta eksperi poliçendeki limiti hatırlatıyor.",
+    "tur": "kriz",
+    "agirlik": 7,
+    "bekleme": 84,
+    "kosullar": { "yas": [38, 70], "enAzNetDeger": 25000000 },
+    "secenekler": [
+      {
+        "etiket": "Güvenlik sistemi kur",
+        "etkiler": { "nakit": -1480000, "mutluluk": -6 }
+      },
+      {
+        "etiket": "Zararı yaz, devam et",
+        "etkiler": { "nakit": -1020000, "mutluluk": -12 }
+      }
+    ]
+  },
+  {
+    "id": "gec_holding_hissesi_01",
+    "baslik": "Bir gruba ortak olma teklifi",
+    "metin": "Orta ölçekli bir grup sermaye artırımına gidiyor. Yönetimde söz hakkı da veriyorlar.",
+    "tur": "teklif",
+    "agirlik": 9,
+    "bekleme": 48,
+    "kosullar": { "yas": [40, 70], "enAzNetDeger": 25000000, "enAzItibar": 50 },
+    "secenekler": [
+      {
+        "etiket": "Ortak ol",
+        "gecikmeTuru": 18,
+        "sonuclar": [
+          {
+            "sans": 0.3,
+            "metin": "Grup halka açıldı. Payın birkaç katına çıktı.",
+            "etkiler": { "nakit": 31500000, "itibar": 12 }
+          },
+          {
+            "sans": 0.4,
+            "metin": "Şirket ayakta ama büyümedi. Paranı ancak korudun.",
+            "etkiler": { "nakit": 9450000 }
+          },
+          {
+            "sans": 0.3,
+            "metin": "Grup konkordato ilan etti. Payın kâğıt oldu.",
+            "etkiler": { "nakit": 0, "mutluluk": -16, "itibar": -6 }
+          }
+        ]
+      },
+      { "etiket": "Teşekkür et, geç", "etkiler": { "itibar": -2 } }
+    ]
+  },
+  {
+    "id": "gec_ikinci_pasaport_01",
+    "baslik": "Yatırım yoluyla ikinci pasaport",
+    "metin": "Danışman bir ülkeyi işaret ediyor: belli bir yatırımla vatandaşlık veriyorlar. Çocukları da kapsıyor.",
+    "tur": "teklif",
+    "agirlik": 8,
+    "bekleme": 60,
+    "kosullar": { "yas": [40, 70], "enAzNetDeger": 60000000 },
+    "secenekler": [
+      {
+        "etiket": "Başvur",
+        "etkiler": { "nakit": -12150000, "mutluluk": 10, "itibar": 3 }
+      },
+      {
+        "etiket": "Sadece oturum al",
+        "etkiler": { "nakit": -2700000, "mutluluk": 4 }
+      },
+      { "etiket": "Buradan gitmem", "etkiler": { "mutluluk": 2, "itibar": 2 } }
+    ]
+  },
+  {
+    "id": "gec_universite_kursusu_01",
+    "baslik": "Üniversiteden kürsü teklifi",
+    "metin": "Rektörlük, adına bir araştırma kürsüsü kurmayı öneriyor. Her yıl bir bütçe bekleniyor.",
+    "tur": "firsat",
+    "agirlik": 8,
+    "bekleme": 72,
+    "kosullar": { "yas": [45, 70], "enAzNetDeger": 60000000, "enAzItibar": 65 },
+    "secenekler": [
+      {
+        "etiket": "Kürsüyü kur",
+        "etkiler": { "nakit": -14850000, "itibar": 30, "mutluluk": 16 }
+      },
+      {
+        "etiket": "Tek seferlik bağış yap",
+        "etkiler": { "nakit": -2370000, "itibar": 8, "mutluluk": 5 }
+      },
+      { "etiket": "Reddet", "etkiler": { "itibar": -4 } }
+    ]
+  },
+  {
+    "id": "gec_fon_kurma_01",
+    "baslik": "Kendi fonunu kur",
+    "metin": "Eski bir meslektaşın, birlikte bir yatırım fonu kurmayı öneriyor. Sermayenin çoğu senden.",
+    "tur": "teklif",
+    "agirlik": 9,
+    "bekleme": 60,
+    "kosullar": { "yas": [42, 70], "enAzNetDeger": 60000000, "enAzItibar": 60 },
+    "secenekler": [
+      {
+        "etiket": "Kur",
+        "gecikmeTuru": 20,
+        "sonuclar": [
+          {
+            "sans": 0.35,
+            "metin": "Fon adını duyurdu. Dışarıdan para akmaya başladı.",
+            "etkiler": { "nakit": 57750000, "itibar": 18 }
+          },
+          {
+            "sans": 0.35,
+            "metin": "Getiri vasat kaldı. Yatırımcılar sessizce çıktı.",
+            "etkiler": { "nakit": 14700000, "itibar": -2 }
+          },
+          {
+            "sans": 0.3,
+            "metin": "Kötü bir yıla denk geldi. Fon kapandı, adın da yandı.",
+            "etkiler": { "nakit": -8100000, "itibar": -16, "mutluluk": -18 }
+          }
+        ]
+      },
+      {
+        "etiket": "Kendi paranı yönet",
+        "etkiler": { "mutluluk": 2, "enerji": -3 }
+      }
+    ]
+  }
+]

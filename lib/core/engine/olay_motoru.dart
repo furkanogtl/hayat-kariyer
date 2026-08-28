@@ -39,10 +39,20 @@ class OlayAyarlari {
   /// ~26.000 varsayıldığı için referans onun biraz üstü.
   final int olcekReferansGeliri = 35000;
 
-  /// Ölçek çarpanının tavanı. Tavansız bırakılırsa 40 yıl sonunda kira
-  /// zammı milyonlara çıkar ve kart bir hayat olayı olmaktan çıkıp
-  /// piyasadan büyük bir şoka döner.
-  final double olcekTavani = 15.0;
+  /// Ölçek çarpanının tavanı.
+  final double olcekTavani = 8.0;
+
+  /// Ölçek üssü — gelirle DOĞRUSAL değil, altdoğrusal büyür.
+  ///
+  /// Doğrusal (üs 1) denendi ve fazla sertti: ölçüldü, 33 yıllık yatırım
+  /// yapan oyuncunun reel net değeri kartsız 96,2M iken kartlarla 6,1M'ye
+  /// iniyordu. Kartların bedeli %94. Sebep yalnız tutar değil bileşiklenme:
+  /// karta giden her lira on yıllarca büyümüyor.
+  ///
+  /// Altdoğrusal olması aynı zamanda daha doğru: düğün takısı gelirle
+  /// birlikte büyür, bozulan buzdolabı pek büyümez. Geliri 14 katına çıkan
+  /// oyuncunun kart bedeli ~5 katına çıkıyor.
+  final double olcekUssu = 0.65;
 
   /// Serveti gelire çeviren bölen. Çalışmayan ama zengin oyuncunun
   /// (emekli, işini bırakmış yatırımcı) ölçeği sıfıra düşmesin diye:
@@ -129,7 +139,13 @@ class OlayMotoru {
         if (olay.tekSeferlik) continue;
         if (durum.tur - gorulduguTur < olay.bekleme) continue;
       }
-      if (!olay.kosullar.uygunMu(durum.oyuncu, durum.piyasa)) continue;
+      if (!olay.kosullar.uygunMu(
+        durum.oyuncu,
+        durum.piyasa,
+        reelNetDeger: durum.reelNetDeger,
+      )) {
+        continue;
+      }
       // İşletme kartı, o işletmeye sahip olmayana çıkmaz.
       if (isletmeKartlari.containsKey(olay.id) &&
           hedefIsletme(olay, durum) == null) {

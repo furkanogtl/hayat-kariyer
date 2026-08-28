@@ -147,6 +147,15 @@ abstract class OlayKosullari with _$OlayKosullari {
     /// diyebilmek için var; yalnız `enAz...` olsaydı sıkışmış oyuncuya özel
     /// kart yazılamazdı. [enCokNakit] de TABAN TL'dir.
     int? enCokNakit,
+
+    /// Servet kapısı. NAKDE DEĞİL NET DEĞERE bakar (reel).
+    ///
+    /// Nakde bakan bir kapı, geç oyun içeriğini tam da doğru oynayan
+    /// oyuncuya kapatırdı: parasını borsada ya da gayrimenkulde tutanın
+    /// nakiti azdır ama zengindir. `enAzNakit` "cebinde şu kadar var mı"
+    /// sorusu için duruyor; bu ise "bu kart senin ligin mi".
+    int? enAzNetDeger,
+    int? enCokNetDeger,
     int? enCokKrediNotu,
 
     /// `[enAz, enCok]`.
@@ -168,7 +177,11 @@ abstract class OlayKosullari with _$OlayKosullari {
       _$OlayKosullariFromJson(json);
 
   /// Oyuncu ve piyasa bu koşulları sağlıyor mu.
-  bool uygunMu(Oyuncu oyuncu, PiyasaDurumu piyasa) {
+  ///
+  /// [reelNetDeger] portföy ve işletmeleri de içeren reel net değer.
+  /// Verilmezse reel nakde düşülür — motor her zaman veriyor, bu geri
+  /// düşüş yalnız elde kurulan test oyuncuları için.
+  bool uygunMu(Oyuncu oyuncu, PiyasaDurumu piyasa, {int? reelNetDeger}) {
     if (enAzItibar != null && oyuncu.itibar < enAzItibar!) return false;
     if (enAzEnerji != null && oyuncu.enerji < enAzEnerji!) return false;
     if (enAzMutluluk != null && oyuncu.mutluluk < enAzMutluluk!) return false;
@@ -181,6 +194,11 @@ abstract class OlayKosullari with _$OlayKosullari {
       final reelNakit = piyasa.reeleCevir(oyuncu.nakit);
       if (enAzNakit != null && reelNakit < enAzNakit!) return false;
       if (enCokNakit != null && reelNakit > enCokNakit!) return false;
+    }
+    if (enAzNetDeger != null || enCokNetDeger != null) {
+      final net = reelNetDeger ?? piyasa.reeleCevir(oyuncu.nakit);
+      if (enAzNetDeger != null && net < enAzNetDeger!) return false;
+      if (enCokNetDeger != null && net > enCokNetDeger!) return false;
     }
     if (yasAraligi != null && yasAraligi!.length == 2) {
       if (oyuncu.yas < yasAraligi![0] || oyuncu.yas > yasAraligi![1]) {
