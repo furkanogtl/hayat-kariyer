@@ -8,6 +8,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hayat_kariyer/core/models/olay.dart';
+import 'package:hayat_kariyer/features/olay/olay_karti_sayfasi.dart';
 import 'package:hayat_kariyer/shared/animasyon/haberci.dart';
 import 'package:hayat_kariyer/shared/animasyon/haberci_sahnesi.dart';
 import 'package:hayat_kariyer/shared/tema.dart';
@@ -34,12 +35,9 @@ void main() {
                 const SizedBox(height: 16),
                 Builder(builder: (context) {
                   final t = Theme.of(context);
-                  final renk = switch (tur) {
-                    OlayTuru.firsat => t.oyun.kazanc,
-                    OlayTuru.kriz => t.oyun.kayip,
-                    OlayTuru.teklif => t.colorScheme.primary,
-                    OlayTuru.hayat => t.oyun.notr,
-                  };
+                  // Renk de ekranla AYNI kaynaktan: burada ayrı bir switch
+                  // vardı ve önizleme ile ekran ayrışabiliyordu.
+                  final renk = turRengi(context, tur);
                   return Align(
                     alignment: Alignment.centerLeft,
                     child: Container(
@@ -69,15 +67,13 @@ void main() {
                       const SizedBox(height: 8),
                       Text(metin, style: t.textTheme.bodyMedium),
                       const SizedBox(height: 20),
-                      for (final s in secenekler)
+                      for (final se in secenekler)
                         Padding(
                           padding: const EdgeInsets.only(bottom: 8),
-                          child: OutlinedButton(
-                            onPressed: () {},
-                            child: Align(
-                              alignment: AlignmentDirectional.centerStart,
-                              child: Text(s),
-                            ),
+                          child: OlaySecenekSatiri(
+                            etiket: se,
+                            renk: turRengi(context, tur),
+                            onSecildi: () {},
                           ),
                         ),
                     ],

@@ -1,53 +1,69 @@
-// Haberci çizimini PNG'ye basar — emülatör açmadan görsel kontrol için.
+// Haberci sahnesini PNG'ye basar — emülatör açmadan görsel kontrol için.
 //
 //   flutter test tool/haberci_onizleme_test.dart
 //
 // Çıktı: scratch/haberci.png (gitignore'da; depoya girmez)
+//
+// Zemin de çiziliyor: figürü tek başına bakıp onaylamak yanıltıcıydı,
+// asıl soru koyu sahnede nasıl durduğu.
 import 'dart:io';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hayat_kariyer/shared/animasyon/haberci.dart';
+import 'package:hayat_kariyer/shared/animasyon/haberci_sahnesi.dart';
+import 'package:hayat_kariyer/shared/tema.dart';
 
 void main() {
   test('haberci önizleme', () async {
-    const kare = Size(230, 215);
-    // Satırlar: yürüyüşün ortası ve eşyayı uzatmış hali.
-    const evreler = [
-      (0.25, 0.0),
-      (0.75, 0.0),
-      (1.0, 1.0),
-    ];
-    final genislik = kare.width * HaberciTipi.values.length;
-    final yukseklik = kare.height * evreler.length * 2;
+    // Telefon genişliğinde bir bant: sahne oyunda böyle görünüyor.
+    const kare = Size(360, 210);
+    const evreler = [(0.30, 0.0), (0.80, 0.0), (1.0, 1.0)];
+
+    final sema = Tema.oyun().colorScheme;
+    final genislik = kare.width * evreler.length;
+    final yukseklik = kare.height * HaberciTipi.values.length;
 
     final kaydedici = ui.PictureRecorder();
     final tuval = Canvas(kaydedici);
+    tuval.drawRect(
+      Rect.fromLTWH(0, 0, genislik, yukseklik),
+      Paint()..color = Tema.dipRengi,
+    );
 
     var y = 0.0;
-    for (final karanlik in [false, true]) {
-      tuval.drawRect(
-        Rect.fromLTWH(0, y, genislik, kare.height * evreler.length),
-        Paint()
-          ..color = karanlik ? const Color(0xFF14201C) : const Color(0xFFF2F7F4),
-      );
+    for (final tip in HaberciTipi.values) {
+      var x = 0.0;
       for (final (yurume, uzatma) in evreler) {
-        var x = 0.0;
-        for (final tip in HaberciTipi.values) {
-          tuval.save();
-          tuval.translate(x, y);
-          HaberciCizimi(
-            tip: tip,
-            yurume: yurume,
-            uzatma: uzatma,
-            karanlik: karanlik,
-          ).paint(tuval, kare);
-          tuval.restore();
-          x += kare.width;
-        }
-        y += kare.height;
+        tuval
+          ..save()
+          ..translate(x + 8, y + 8)
+          ..clipRRect(
+            RRect.fromRectAndRadius(
+              Rect.fromLTWH(0, 0, kare.width - 16, kare.height - 16),
+              const Radius.circular(20),
+            ),
+          );
+        final ic = Size(kare.width - 16, kare.height - 16);
+        sahneZemini(
+          taban: sema.surfaceContainerLowest,
+          ust: sema.surfaceContainerHigh,
+          siluet: sema.surfaceContainerLow,
+          isik: sema.primary,
+          kaydir: yurume.clamp(0.0, 1.0),
+          isikGucu: uzatma,
+        ).paint(tuval, ic);
+        HaberciCizimi(
+          tip: tip,
+          yurume: yurume,
+          uzatma: uzatma,
+          karanlik: true,
+        ).paint(tuval, ic);
+        tuval.restore();
+        x += kare.width;
       }
+      y += kare.height;
     }
 
     final resim = await kaydedici

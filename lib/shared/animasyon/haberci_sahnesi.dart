@@ -23,8 +23,7 @@ class HaberciSahnesi extends StatefulWidget {
   final VoidCallback onTamamlandi;
 
   /// Sahne bandının yüksekliği. Figür yüksekliğe göre ölçekleniyor, yani
-  /// bu değer doğrudan figürün boyu demek; 172'de bant içinde küçük
-  /// kalıyordu.
+  /// bu değer doğrudan figürün boyu demek.
   final double yukseklik;
 
   @override
@@ -75,96 +74,236 @@ class _HaberciSahnesiDurumu extends State<HaberciSahnesi>
 
   @override
   Widget build(BuildContext context) {
-    // Oyunun tek teması koyu; haberci paletini de ona göre alıyor.
-    const karanlik = true;
+    final tema = Theme.of(context);
+    final vurgu = tema.colorScheme.primary;
 
     return GestureDetector(
       onTap: _atla,
       behavior: HitTestBehavior.opaque,
-      child: SizedBox(
-        height: widget.yukseklik,
-        child: AnimatedBuilder(
-          animation: _denetim,
-          builder: (context, _) {
-            final t = _denetim.value;
-            // Girişin bittiği an: buradan sonra kol uzanmaya başlıyor.
-            const girisSonu = 0.55;
-            final giris = (t / girisSonu).clamp(0.0, 1.0);
-            final uzatma =
-                ((t - girisSonu) / (1 - girisSonu)).clamp(0.0, 1.0);
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: SizedBox(
+          height: widget.yukseklik,
+          child: AnimatedBuilder(
+            animation: _denetim,
+            builder: (context, _) {
+              final t = _denetim.value;
+              // Girişin bittiği an: buradan sonra kol uzanmaya başlıyor.
+              const girisSonu = 0.55;
+              final giris = (t / girisSonu).clamp(0.0, 1.0);
+              final uzatma =
+                  ((t - girisSonu) / (1 - girisSonu)).clamp(0.0, 1.0);
 
-            final kayma = (1 - Curves.easeOutCubic.transform(giris)) * -0.85;
-            // Yürüyüş yalnız girişte; sonra ayaklar sabit.
-            final yurume = giris < 1 ? giris * 2 : 0.0;
+              final ilerleme = Curves.easeOutCubic.transform(giris);
+              final kayma = (1 - ilerleme) * -0.85;
+              // Yürüyüş yalnız girişte; sonra ayaklar sabit.
+              final yurume = giris < 1 ? giris * 2 : 0.0;
 
-            return Stack(
-              fit: StackFit.expand,
-              children: [
-                _Zemin(karanlik: karanlik),
-                FractionalTranslation(
-                  translation: Offset(kayma, 0),
-                  child: Opacity(
-                    opacity: giris.clamp(0.0, 1.0),
-                    child: CustomPaint(
-                      painter: HaberciCizimi(
-                        tip: widget.tip,
-                        yurume: yurume,
-                        uzatma: Curves.easeOutBack.transform(uzatma).clamp(0.0, 1.0),
-                        karanlik: karanlik,
+              return Stack(
+                fit: StackFit.expand,
+                children: [
+                  CustomPaint(
+                    painter: _SahneZemini(
+                      taban: tema.colorScheme.surfaceContainerLowest,
+                      ust: tema.colorScheme.surfaceContainerHigh,
+                      siluet: tema.colorScheme.surfaceContainerLow,
+                      isik: vurgu,
+                      // Şehir hattı figürden yavaş kayıyor: derinlik
+                      // hissini paralaks veriyor, ayrı bir katman değil.
+                      kaydir: ilerleme,
+                      isikGucu: uzatma,
+                    ),
+                  ),
+                  // Alt boşluk: figürün tabanı bandın en alt pikseline
+                  // oturuyordu ve gölgesiyle ayakkabısı yuvarlatılmış
+                  // köşeye kırpılıyordu.
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 14),
+                    child: FractionalTranslation(
+                      translation: Offset(kayma, 0),
+                      child: Opacity(
+                        opacity: giris.clamp(0.0, 1.0),
+                        child: CustomPaint(
+                          painter: HaberciCizimi(
+                            tip: widget.tip,
+                            yurume: yurume,
+                            uzatma: Curves.easeOutBack
+                                .transform(uzatma)
+                                .clamp(0.0, 1.0),
+                            karanlik: true,
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
-            );
-          },
-        ),
-      ),
-    );
-  }
-}
-
-/// Karakterin üstünde durduğu zemin. Düz beyaz yerine derinlik veriyor.
-class _Zemin extends StatelessWidget {
-  const _Zemin({required this.karanlik});
-
-  final bool karanlik;
-
-  @override
-  Widget build(BuildContext context) {
-    final tema = Theme.of(context);
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            // Oyunun ana rengiyle hafifçe tonlanıyor: nötr gri bir kutu
-            // sahneden çok yer tutucu gibi duruyordu.
-            Color.lerp(
-              tema.colorScheme.surfaceContainerHighest,
-              tema.colorScheme.primary,
-              karanlik ? 0.14 : 0.10,
-            )!,
-            Color.lerp(
-              tema.colorScheme.surfaceContainerHighest,
-              tema.colorScheme.primary,
-              karanlik ? 0.05 : 0.02,
-            )!,
-          ],
-        ),
-      ),
-      child: Align(
-        alignment: const Alignment(0, 0.86),
-        child: FractionallySizedBox(
-          widthFactor: 0.86,
-          child: Container(
-            height: 1.5,
-            color: tema.colorScheme.onSurfaceVariant.withValues(alpha: 0.18),
+                ],
+              );
+            },
           ),
         ),
       ),
     );
   }
 }
+
+/// Habercinin arkasındaki sahne: gökyüzü, şehir silueti, ışık havuzu.
+///
+/// Önceki sürüm düz bir gradyan kutuydu ve figür boşlukta duruyordu.
+/// Sahnenin işi figürü bir yere KOYMAK: şehir hattı Türkiye'de geçen bir
+/// oyun olduğunu, ışık havuzu da olayın oyuncuya doğru geldiğini söylüyor.
+class _SahneZemini extends CustomPainter {
+  const _SahneZemini({
+    required this.taban,
+    required this.ust,
+    required this.siluet,
+    required this.isik,
+    required this.kaydir,
+    required this.isikGucu,
+  });
+
+  final Color taban;
+  final Color ust;
+  final Color siluet;
+  final Color isik;
+
+  /// Şehir hattının paralaks kayması (0-1).
+  final double kaydir;
+
+  /// Eşya uzatılırken ışık havuzu güçleniyor (0-1).
+  final double isikGucu;
+
+  /// Binalar gökyüzünden KOYU olmalı: arkadan aydınlanan bir şehir
+  /// hattında siluet karanlıktır. İlk denemede yüzey renginden alınmıştı
+  /// ve binalar gökyüzünden açık kalıp yamalı görünüyordu.
+  Color get _binaRengi => Color.lerp(siluet, const Color(0xFF03110D), 0.55)!;
+
+  /// Bina yükseklikleri ve genişlikleri. SABİT liste: her karede rastgele
+  /// üretilseydi şehir titrerdi.
+  /// İlk denemede en yükseği 56 pikseldi; bantta kutucuk gibi duruyor,
+  /// şehir okunmuyordu. Yükseklikler bandın yarısına kadar çıkıyor.
+  static const List<double> _binalar = [
+    64, 42, 96, 56, 34, 110, 48, 78, 38, 88, 52, 70, 44, 102, 60,
+  ];
+
+  @override
+  void paint(Canvas tuval, Size boyut) {
+    final kutu = Offset.zero & boyut;
+    final ufuk = boyut.height * 0.86;
+
+    // Gökyüzü.
+    tuval.drawRect(
+      kutu,
+      Paint()
+        ..shader = LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [ust, taban],
+        ).createShader(kutu),
+    );
+
+    // Işık havuzu: figürün arkasından gelen sıcak halka.
+    final odak = Offset(boyut.width * 0.26, ufuk);
+    final yaricap = boyut.height * 0.85;
+    tuval.drawCircle(
+      odak,
+      yaricap,
+      Paint()
+        ..shader = RadialGradient(
+          colors: [
+            isik.withValues(alpha: 0.16 + 0.10 * isikGucu),
+            isik.withValues(alpha: 0),
+          ],
+        ).createShader(Rect.fromCircle(center: odak, radius: yaricap)),
+    );
+
+    _sehir(tuval, boyut, ufuk);
+
+    // Zemin ve ufuk çizgisi.
+    tuval
+      ..drawRect(
+        Rect.fromLTRB(0, ufuk, boyut.width, boyut.height),
+        Paint()..color = taban,
+      )
+      ..drawRect(
+        Rect.fromLTWH(0, ufuk - 1, boyut.width, 1.5),
+        Paint()..color = isik.withValues(alpha: 0.22),
+      );
+
+    // Vinyet: kenarlar koyulaşınca bant bir kutu değil bir sahne oluyor.
+    tuval.drawRect(
+      kutu,
+      Paint()
+        ..shader = RadialGradient(
+          radius: 0.85,
+          colors: [
+            const Color(0x00000000),
+            Colors.black.withValues(alpha: 0.35),
+          ],
+        ).createShader(kutu),
+    );
+  }
+
+  void _sehir(Canvas tuval, Size boyut, double ufuk) {
+    final boya = Paint()..color = _binaRengi;
+    final pencere = Paint()..color = isik.withValues(alpha: 0.30);
+    final genislik = boyut.width / 7;
+    // Paralaks: figür bir tam ekran gelirken şehir yalnız yarım bina
+    // kayıyor. Aynı hızda kaysaydı derinlik değil kayma hissi olurdu.
+    final ofset = (1 - kaydir) * genislik * 0.5;
+
+    for (var i = 0; i < _binalar.length; i++) {
+      final yukseklik = _binalar[i];
+      final x = i * genislik - genislik + ofset;
+      if (x > boyut.width) break;
+      final bina = Rect.fromLTWH(x, ufuk - yukseklik, genislik * 0.86, yukseklik);
+      tuval.drawRect(bina, boya);
+
+      // Birkaç aydınlık pencere: şehrin yaşadığını gösteren tek detay.
+      final sira = (yukseklik / 14).floor();
+      for (var s = 0; s < sira; s++) {
+        for (var k = 0; k < 2; k++) {
+          // Belirlenimli desen: (i, s, k) üçlüsünden türüyor, rastgele değil.
+          if ((i * 7 + s * 3 + k * 5) % 4 != 0) continue;
+          tuval.drawRect(
+            Rect.fromLTWH(
+              bina.left + 6 + k * (bina.width - 16) / 1.6,
+              bina.top + 7 + s * 13.0,
+              5,
+              6,
+            ),
+            pencere,
+          );
+        }
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(_SahneZemini eski) =>
+      eski.kaydir != kaydir ||
+      eski.isikGucu != isikGucu ||
+      eski.taban != taban ||
+      eski.isik != isik;
+}
+
+/// Sahne zeminini tek başına çizen boyacı.
+///
+/// Açık: `tool/haberci_onizleme_test.dart` sahneyi widget ağacı kurmadan
+/// PNG'ye basıyor. `@visibleForTesting` denendi ama `tool/` dizini test
+/// sayılmıyor ve analiz uyarı veriyordu.
+CustomPainter sahneZemini({
+  required Color taban,
+  required Color ust,
+  required Color siluet,
+  required Color isik,
+  required double kaydir,
+  required double isikGucu,
+}) =>
+    _SahneZemini(
+      taban: taban,
+      ust: ust,
+      siluet: siluet,
+      isik: isik,
+      kaydir: kaydir,
+      isikGucu: isikGucu,
+    );

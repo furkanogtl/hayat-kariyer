@@ -201,10 +201,12 @@ void main() {
 
     // Bütün kartları ilk seçenekle cevapla.
     while (kap.read(oyunProvider)!.kararBekliyor) {
-      // Seçenekler OutlinedButton, sonuç ekranındaki "Devam" FilledButton.
+      // Seçenekler anahtarla bulunuyor: Material düğmesi olmaktan çıkıp
+      // elle kurulmuş satıra dönüştüler, tip araması boşa düşüyordu.
+      // Sonuç ekranındaki "Devam" hâlâ FilledButton.
       await tester.tap(find.descendant(
         of: find.byKey(olayKartiAnahtari),
-        matching: find.byType(OutlinedButton),
+        matching: find.byKey(olaySecenekAnahtari(0)),
       ).first);
       await tester.pumpAndSettle();
       await tester.tap(find.descendant(

@@ -148,6 +148,7 @@ class _KartGovdesiDurumu extends ConsumerState<_KartGovdesi> {
                         for (var i = 0; i < kart.secenekler.length; i++)
                           _SecenekDugmesi(
                             etiket: kart.secenekler[i].etiket,
+                            renk: turRengi(context, kart.tur),
                             sira: i,
                             acik: _teslimEdildi,
                             onSecildi: () => _sec(i),
@@ -174,12 +175,18 @@ class _KartGovdesiDurumu extends ConsumerState<_KartGovdesi> {
 class _SecenekDugmesi extends StatelessWidget {
   const _SecenekDugmesi({
     required this.etiket,
+    required this.renk,
     required this.sira,
     required this.acik,
     required this.onSecildi,
   });
 
   final String etiket;
+
+  /// Kartın türünü taşıyan renk. Şeritte ve okta görünüyor: oyuncu neye
+  /// dokunduğunu etiketi okumadan da anlıyor.
+  final Color renk;
+
   final int sira;
   final bool acik;
   final VoidCallback onSecildi;
@@ -198,12 +205,95 @@ class _SecenekDugmesi extends StatelessWidget {
         child: AnimatedOpacity(
           opacity: acik ? 1 : 0,
           duration: Hareket.sure(context, Hareket.orta) + gecikme,
-          child: OutlinedButton(
-            onPressed: acik ? onSecildi : null,
-            child: Align(
-              alignment: AlignmentDirectional.centerStart,
-              child: Text(etiket),
+          // Material'ın varsayılan düğmesi yerine elle kurulmuş satır:
+          // kartın en önemli anı bir formun "Gönder" düğmesi gibi
+          // durmamalı. Sol şerit türün rengini taşıyor, sağdaki ok
+          // dokunulabilir olduğunu söylüyor.
+          child: OlaySecenekSatiri(
+            key: olaySecenekAnahtari(sira),
+            etiket: etiket,
+            renk: renk,
+            onSecildi: acik ? onSecildi : null,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Kartın seçenek satırı.
+///
+/// AÇIK: `tool/kart_onizleme_test.dart` kompozisyonu emülatörsüz basıyor
+/// ve önizleme bunu kendi `OutlinedButton`'ıyla taklit ediyordu. Taklit
+/// eden önizleme yanlış güven veriyor — gerçek ekran değişince önizleme
+/// eski hâli göstermeye devam ediyordu.
+class OlaySecenekSatiri extends StatelessWidget {
+  const OlaySecenekSatiri({
+    super.key,
+    required this.etiket,
+    required this.renk,
+    required this.onSecildi,
+  });
+
+  final String etiket;
+  final Color renk;
+  final VoidCallback? onSecildi;
+
+  @override
+  Widget build(BuildContext context) {
+    final tema = Theme.of(context);
+    return Material(
+      color: Colors.transparent,
+      borderRadius: BorderRadius.circular(14),
+      child: InkWell(
+        onTap: onSecildi,
+        borderRadius: BorderRadius.circular(14),
+        child: Ink(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: renk.withValues(alpha: 0.35)),
+            gradient: LinearGradient(
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+              colors: [
+                Color.lerp(
+                  tema.colorScheme.surfaceContainerHigh,
+                  renk,
+                  0.16,
+                )!,
+                tema.colorScheme.surfaceContainerLow,
+              ],
             ),
+          ),
+          child: Row(
+            children: [
+              // Sol şerit: satırı bir kutudan bir seçeneğe çeviren şey.
+              Container(
+                width: 4,
+                height: 46,
+                decoration: BoxDecoration(
+                  color: renk,
+                  borderRadius: const BorderRadius.horizontal(
+                    left: Radius.circular(14),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Text(
+                  etiket,
+                  style: tema.textTheme.bodyLarge?.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              Icon(
+                Icons.chevron_right,
+                size: 20,
+                color: renk.withValues(alpha: 0.8),
+              ),
+              const SizedBox(width: 10),
+            ],
           ),
         ),
       ),
@@ -252,6 +342,25 @@ class _SonucGovdesi extends ConsumerWidget {
   }
 }
 
+/// Seçenek satırının test anahtarı.
+///
+/// Widget testi metin değil WIDGET arıyor; seçenekler Material düğmesi
+/// olmaktan çıkınca `find.byType(OutlinedButton)` boşa düştü. Anahtar
+/// biçime bağlı olmayan tek tutamak.
+Key olaySecenekAnahtari(int sira) => Key('olaySecenek_$sira');
+
+/// Kart türünün rengi. Rozet ve seçenek şeridi AYNI kaynaktan okuyor;
+/// iki yerde ayrı yazılsaydı biri değişince diğeri sessizce ayrışırdı.
+Color turRengi(BuildContext context, OlayTuru tur) {
+  final tema = Theme.of(context);
+  return switch (tur) {
+    OlayTuru.firsat => tema.oyun.kazanc,
+    OlayTuru.kriz => tema.oyun.kayip,
+    OlayTuru.teklif => tema.colorScheme.primary,
+    OlayTuru.hayat => tema.oyun.notr,
+  };
+}
+
 class _TurRozeti extends StatelessWidget {
   const _TurRozeti({required this.tur});
 
@@ -261,12 +370,7 @@ class _TurRozeti extends StatelessWidget {
   Widget build(BuildContext context) {
     final m = UygulamaMetinleri.of(context);
     final tema = Theme.of(context);
-    final renk = switch (tur) {
-      OlayTuru.firsat => tema.oyun.kazanc,
-      OlayTuru.kriz => tema.oyun.kayip,
-      OlayTuru.teklif => tema.colorScheme.primary,
-      OlayTuru.hayat => tema.oyun.notr,
-    };
+    final renk = turRengi(context, tur);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
